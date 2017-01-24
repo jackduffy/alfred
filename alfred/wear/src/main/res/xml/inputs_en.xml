@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INPUTS_EN>
+    <GREETINGS>
+        <HELLO_THERE_FRIEND_></HELLO_THERE_FRIEND_>
+        <HELLO_FRIEND_></HELLO_FRIEND_>
+        <HELLO_THERE_></HELLO_THERE_>
+        <HELLO_ALFRED_></HELLO_ALFRED_>
+        <HELLO_></HELLO_>
+
+        <HI_DUDE_></HI_DUDE_>
+        <HI_GIRL_></HI_GIRL_>
+        <HI_PAL_></HI_PAL_>
+        <HI_MAN_></HI_MAN_>
+        <HI_ALFRED_></HI_ALFRED_>
+        <HI_></HI_>
+
+        <HEY_GIRL_></HEY_GIRL_>
+        <HEY_MAN_></HEY_MAN_>
+        <HEY_DUDE_></HEY_DUDE_>
+        <HEY_PAL_></HEY_PAL_>
+        <HEY_UP_></HEY_UP_>
+        <HEY_ALFRED_></HEY_ALFRED_>
+        <HEY_></HEY_>
+
+        <HOWDY_STRANGER_></HOWDY_STRANGER_>
+        <HOWDY_CAMPER_></HOWDY_CAMPER_>
+        <HOWDY_ALFRED_></HOWDY_ALFRED_>
+        <HOWDY_></HOWDY_>
+
+        <WELL_HELLO_THERE_></WELL_HELLO_THERE_>
+        <WELL_HELLO_THERE_ALFRED_></WELL_HELLO_THERE_ALFRED_>    
+    </GREETINGS>
+
+    <FAREWELLS>
+        <GOODBYE_ALFRED_></GOODBYE_ALFRED_>
+        <GOODBYE_FRIEND_></GOODBYE_FRIEND_>
+        <GOODBYE_></GOODBYE_>
+        
+        <SEE_YOU_LATER_ALFRED_></SEE_YOU_LATER_ALFRED_>
+        <SEE_YOU_LATER_FRIEND_></SEE_YOU_LATER_FRIEND_>
+        <SEE_YOU_LATER_MATE_></SEE_YOU_LATER_MATE_>
+        <SEE_YOU_LATER_PAL_></SEE_YOU_LATER_PAL_>
+        <SEE_YOU_LATER_></SEE_YOU_LATER_>
+        
+        <CYA_LATER_ALFRED_></CYA_LATER_ALFRED_>
+        <CYA_LATER_FRIEND_></CYA_LATER_FRIEND_>
+        <CYA_LATER_MATE_></CYA_LATER_MATE_>
+        <CYA_LATER_PAL_></CYA_LATER_PAL_>
+        <CYA_LATER_></CYA_LATER_>             
+    </FAREWELLS>
+    
+    <SMALLTALK_1>
+        <HOW_ARE_YOU_DOING_TODAY_></HOW_ARE_YOU_DOING_TODAY_>
+        <HOW_ARE_YOU_DOING_></HOW_ARE_YOU_DOING_>
+        <HOW_ARE_YOU_TODAY></HOW_ARE_YOU_TODAY>
+        <HOW_ARE_YOU_></HOW_ARE_YOU_>
+        
+        <HOW_YOU_DOING_TODAY_></HOW_YOU_DOING_TODAY_>
+        <HOW_YOU_DOING_></HOW_YOU_DOING_>
+        <HOW_YOU_TODAY_></HOW_YOU_TODAY_>
+        <HOW_YOU_></HOW_YOU_>
+        
+        <HOW_IS_IT_GOING_></HOW_IS_IT_GOING_>
+        <HOW_IS_GOING></HOW_IS_GOING>
+        <HOW_IT_GOING_></HOW_IT_GOING_>
+        <HOW_GOING_></HOW_GOING_>
+    </SMALLTALK_1>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</INPUTS_EN>

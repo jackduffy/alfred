@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ALFRED_RESPONSES_EN>
+    <GREETINGS> <!--"Hello etc."-->
+          <one>Hello,</one>
+          <two>Hello Master Bruce, ah, force of habit.</two>
+          <three>Greetings to you, </three>
+          <four>Pleasure to see you Sir, </four>
+          <five>Charmed to see you again Sir, </five>
+    </GREETINGS>
+    
+    <FAREWELLS> <!--"Goodbye etc."-->
+            <one>Goodbye Sir</one>
+            <two>Goodbye for now</two>
+            <three>Goodbye Master</three>
+            <four>Good Day</four>
+            <five>Good Day to you Sir</five>
+    </FAREWELLS>
+    
+    <SMALLTALK_1> <!--"How are you? etc."-->
+            <one>I feel excellent. How may I assist you today?</one>
+            <two>I've never been better, how can I help?</two>
+            <three>I feel great. How can I help?</three>
+            <four>I feel excellent, thank you for asking. Now how may I help?</four>
+            <five>I'm good, how may I assist you?</five>
+    </SMALLTALK_1>    
+</ALFRED_RESPONSES_EN>

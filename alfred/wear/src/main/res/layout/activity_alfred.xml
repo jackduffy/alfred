@@ -8,18 +8,72 @@
     tools:context="uk.ac.lincoln.jackduffy.alfred.Alfred"
     tools:deviceIds="wear">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:id="@+id/alfred_mustache"
-        android:layout_alignParentEnd="true"
-        android:adjustViewBounds="true"
-        android:src="@drawable/alfred_1"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:clickable="true"
-        android:onClick="voiceDictation"/>
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scroll_view"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:id="@+id/alfred_specs"
+                android:layout_alignParentEnd="true"
+                android:adjustViewBounds="true"
+                android:src="@drawable/alfred_specs"
+                android:layout_marginTop="-60dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:id="@+id/alfred_mustache"
+                android:layout_alignParentEnd="true"
+                android:adjustViewBounds="true"
+                android:src="@drawable/alfred_mustache"
+                android:paddingTop="80dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:clickable="true"
+                android:onClick="voiceDictation"
+                android:hapticFeedbackEnabled="false" />
+
+
+
+            <ImageView
+                android:src="@drawable/response_backdrop"
+                android:layout_width="match_parent"
+                android:id="@+id/imageView"
+                android:paddingTop="30dp"
+                android:layout_height="243dp"
+                android:layout_marginTop="60dp" />
+
+            <TextView
+                android:text="Hello"
+                android:layout_width="120dip"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="-200dp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:id="@+id/response_text"
+                android:textSize="18sp" />
+
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
 
 
 </android.support.wearable.view.BoxInsetLayout>

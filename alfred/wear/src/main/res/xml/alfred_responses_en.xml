@@ -1,26 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ALFRED_RESPONSES_EN>
-    <GREETINGS> <!--"Hello etc."-->
-          <one>Hello,</one>
-          <two>Hello Master Bruce, ah, force of habit.</two>
-          <three>Greetings to you, </three>
-          <four>Pleasure to see you Sir, </four>
-          <five>Charmed to see you again Sir, </five>
+    <GREETINGS> <!--"Hello etc." -->
+        <one>Hello,</one>
+        <two>Hello Master Bru-, ah, force of habit, my apologies.</two>
+        <three>Greetings to you, </three>
+        <four>Pleasure to see you Sir, </four>
+        <five>Charmed to see you again Sir, </five>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>What's the weather like?</C1>
+        <C1_function>WEATHER</C1_function>
+        <C2>What are my upcoming events?</C2>
+        <C2_function>EVENTS</C2_function>
     </GREETINGS>
     
-    <FAREWELLS> <!--"Goodbye etc."-->
-            <one>Goodbye Sir</one>
-            <two>Goodbye for now</two>
-            <three>Goodbye Master</three>
-            <four>Good Day</four>
-            <five>Good Day to you Sir</five>
+    <FAREWELLS> <!--"Goodbye etc." -->
+        <one>Goodbye Sir.</one>
+        <two>Goodbye for now.</two>
+        <three>Goodbye Master.</three>
+        <four>Good Day.</four>
+        <five>Good Day to you Sir.</five>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1></C1>
+        <C1_function></C1_function>
+        <C2></C2>
+        <C2_function></C2_function>
     </FAREWELLS>
     
-    <SMALLTALK_1> <!--"How are you? etc."-->
-            <one>I feel excellent. How may I assist you today?</one>
-            <two>I've never been better, how can I help?</two>
-            <three>I feel great. How can I help?</three>
-            <four>I feel excellent, thank you for asking. Now how may I help?</four>
-            <five>I'm good, how may I assist you?</five>
-    </SMALLTALK_1>    
+    <SMALLTALK_1> <!--"How are you? etc." -->
+        <one>I feel excellent. How may I assist you today?</one>
+        <two>I've never been better, how can I help?</two>
+        <three>I feel great. How can I help?</three>
+        <four>I feel excellent, thank you for asking. Now how may I help?</four>
+        <five>I'm good, how may I assist you?</five>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>What's the weather like?</C1>
+        <C1_function>WEATHER</C1_function>
+        <C2>What are my upcoming events?</C2>
+        <C2_function>EVENTS</C2_function>
+    </SMALLTALK_1>
+    
+    <SMALLTALK_2> <!-- "Who are you? etc." -->
+        <one>I am Alfred. Personal assistant to only the most interesting people.</one>
+        <two>My name is Alfred and I am your personal assistant. </two>
+        <three>I am Alfred and I am your personal assistant, here to help with anything you can think of.</three>
+        <four>I am Alfred. It's always a pleasure to serve you.</four>
+        <five>My name is Alfred and I'm here to help you in your daily life in any way you see fit.</five>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>Tell me a bit about yourself.</C1>
+        <C1_function>SMALLTALK_3</C1_function>
+        <C2>What kind of things can you help me with?</C2>
+        <C2_function>ALFRED_HELP</C2_function>
+    </SMALLTALK_2>
+    
+    <SMALLTALK_3> <!-- "Tell me about yourself" etc. -->
+        <one>Well. My full birth name is Alfred Pennyworth. Born and raised in the United Kingdom but moved to the United States per the wish of my father whom served the wealthy Wayne family in Gotham City.</one>
+        <two>How pleasant of you to enquire sir. I am Alfred Pennyworth, butler and long time assistant to the Wayne family of Gotham City. I live to serve others, including yourself.</two>
+        <three>I have served the Wayne family of Gotham City since the late 1930's and fulfill many roles in and around the estate. It's a more exciting life than you could possibly imagine.</three>
+        <four>The name's Alfred Pennyworth. Former agent of the British Intelligence and current assistant to the heir to the Wayne fortune in Gotham City.</four>
+        <five>I've been working for the Wayne estate for, oh, around 80 years now. I tend to Mr Wayne's every need and assist him in his work and personal hobbies. I enjoy my job, it can be stressful at times but there's never a dull moment here in Gotham City.</five>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>Gotham City?</C1>
+        <C1_function>???</C1_function>
+        <C2>-</C2>
+        <C2_function>-</C2_function>
+    </SMALLTALK_3>
+        
+    <WEATHER>
+        <one>WEATHER_API_CALL</one>
+        <two>WEATHER_API_CALL</two>
+        <three>WEATHER_API_CALL</three>
+        <four>WEATHER_API_CALL</four>
+        <five>WEATHER_API_CALL</five>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>What about tomorrow?</C1>
+        <C1_function>>WEATHER_TOMORROW</C1_function>
+        <C2>>What about the weekend?</C2>
+        <C2_function>>WEATHER_WEEKEND</C2_function>
+    </WEATHER>
+
 </ALFRED_RESPONSES_EN>

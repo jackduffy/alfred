@@ -1,10 +1,12 @@
 package uk.ac.lincoln.jackduffy.alfred;
 
 import android.content.res.XmlResourceParser;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Xml;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -41,11 +43,16 @@ public class Alfred extends WearableActivity {
     Boolean userInputUnderstood = false;
     Boolean wasLastMessageUnderstood = true;
     Integer userInputFunctionNumber = 0;
-    String alfredResponse;
     Boolean alfredResponseReady = false;
 
     Integer userMessageNumber = 0;
     Integer greetingNumber = 0; //log the number of times the user has greeted alfred
+
+    String alfredResponse;
+    String contextualResponse1;
+    String contextualResponse1Function;
+    String contextualResponse2;
+    String contextualResponse2Function;
 
     XmlResourceParser xpp;
 
@@ -54,19 +61,25 @@ public class Alfred extends WearableActivity {
         super.onCreate(savedInstanceState); //create the instance of Alfred
         setContentView(R.layout.activity_alfred); //set the layout
         setAmbientEnabled(); //enable the ambient mode
-
-        ScrollView.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event)
-            {
-
-                return false;
-            }});
     }
 
     public void voiceDictation(View view)
     {
+        alfredResponse = null;
+        contextualResponse1 = null;
+        contextualResponse1Function = null;
+        contextualResponse2 = null;
+        contextualResponse2Function = null;
+
+        ImageView hideContextualResponseIcons = (ImageView) findViewById(R.id.contextualIcon1);
+        hideContextualResponseIcons.setVisibility(View.INVISIBLE);
+        hideContextualResponseIcons = (ImageView) findViewById(R.id.contextualIcon2);
+        hideContextualResponseIcons.setVisibility(View.INVISIBLE);
+
+        TextView hideContextualResponses = (TextView) findViewById(R.id.contextualResponse1);
+        hideContextualResponses.setVisibility(View.INVISIBLE);
+        hideContextualResponses = (TextView) findViewById(R.id.contextualResponse2);
+        hideContextualResponses.setVisibility(View.INVISIBLE);
 
         if(listeningForInput == false)
         {
@@ -92,7 +105,6 @@ public class Alfred extends WearableActivity {
                 }
             }, 600);
         }
-
     }
 
     @Override
@@ -116,7 +128,6 @@ public class Alfred extends WearableActivity {
         if(userInput != "")
         {
             System.out.println("User input is applicable");
-            Toast.makeText(this, userInput, Toast.LENGTH_LONG).show(); //toast to demonstrate the string has been correctly translated
             AnalyseInput();
         }
 
@@ -178,7 +189,7 @@ public class Alfred extends WearableActivity {
 
     public void AnalyseInput()
     {
-        Integer numberOfModules = 4;
+        Integer numberOfModules = 7;
         String moduleName = "";
 
         Boolean module1_ENGAGED = false;
@@ -191,7 +202,6 @@ public class Alfred extends WearableActivity {
         Boolean module8_ENGAGED = false;
         Boolean module9_ENGAGED = false;
         Boolean module10_ENGAGED = false;
-
 
         for(int module = 1; module <= numberOfModules; module++)
         {
@@ -206,9 +216,18 @@ public class Alfred extends WearableActivity {
                     if(module1_ENGAGED != true){moduleName = "GREETINGS";}
                     break;
                 case 3:
-                    if(module3_ENGAGED != true){moduleName = "SMALLTALK_1";}
+                    if(module1_ENGAGED != true){moduleName = "SMALLTALK_1";}
                     break;
                 case 4:
+                    if(module1_ENGAGED != true){moduleName = "SMALLTALK_2";}
+                    break;
+                case 5:
+                    if(module1_ENGAGED != true){moduleName = "SMALLTALK_3";}
+                    break;
+                case 6:
+                    if (module1_ENGAGED != true) {moduleName = "WEATHER";}
+                    break;
+                case 10:
                     if(module1_ENGAGED != true && module2_ENGAGED != true && module3_ENGAGED != true && module4_ENGAGED != true && module5_ENGAGED != true && module6_ENGAGED != true &&  module7_ENGAGED != true && module7_ENGAGED != true && module8_ENGAGED != true && module9_ENGAGED != true && module10_ENGAGED != true)
                     {
                         System.out.println("Input not understood");
@@ -274,82 +293,6 @@ public class Alfred extends WearableActivity {
         displayResponse();
     }
 
-    public void readXML(String targetTag)
-    {
-        //searchingForInputMatch = true;
-        XmlResourceParser xpp = getResources().getXml(R.xml.inputs_en);
-
-        int eventType = 0;
-
-        try
-        {
-            eventType = xpp.getEventType();
-        }
-
-        catch (XmlPullParserException e)
-        {
-            e.printStackTrace();
-        }
-
-        String comparison;
-        Boolean tagReached = false;
-
-        //region Check for tag
-        while (eventType != XmlPullParser.END_DOCUMENT)
-        {
-            if (eventType == XmlPullParser.END_TAG)
-            {
-                comparison = xpp.getName();
-                if (Objects.equals(targetTag, comparison))
-                {
-                    System.out.println("Finished searching tag - " + comparison);
-                    tagReached = false;
-                    break;
-                }
-            }
-
-            if (eventType == XmlPullParser.START_TAG)
-            {
-                comparison = xpp.getName();
-                if (Objects.equals(targetTag, comparison))
-                {
-                    System.out.println("Checking " + targetTag + " for a match.");
-                    tagReached = true;
-                }
-
-                else if(tagReached == true)
-                {
-                    //System.out.println("Does " + userInput + " match :- " + comparison);
-                    if (userInput.contains(comparison))
-                    {
-                        System.out.println("Match! " + userInput + " contains the greeting " + comparison);
-                        //userMessageNumber++;
-                        userInputUnderstood = true;
-                        //userInputFunctionNumber++;
-                        //greetingNumber++;
-                        break;
-                    }
-                }
-            }
-
-            try
-            {
-                eventType = xpp.next();
-            }
-
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        //System.out.println("Exiting search loop");
-        xpp.close();
-        //endregion
-
-        //searchingForInputMatch = false;
-    }
-
     public void formulateResponse(String typeOfResponse)
     {
         Random rand = new Random();
@@ -359,33 +302,6 @@ public class Alfred extends WearableActivity {
         //String moduleName = "";
         String moduleName = typeOfResponse;
         userMessageNumber = 1; //change to increment when ready
-
-//        switch(typeOfResponse)
-//        {
-//            case "GREETING":
-//                if(userInputUnderstood == true)
-//                {
-//                    moduleName = "GREETINGS";
-//                }
-//                break;
-//            case "FAREWELL":
-//                if(userInputUnderstood == true)
-//                {
-//                    moduleName = "FAREWELLS";
-//                }
-//                break;
-//            case "SMALLTALK_1":
-//                if(userInputUnderstood == true)
-//                {
-//                    moduleName = "SMALLTALK_1";
-//                }
-//                break;
-//            case "NOT_UNDERSTOOD":
-//                userInputUnderstood = false;
-//                userInput = "";
-//                inputNotUnderstood();
-//                break;
-//        }
 
         if(userInputUnderstood == true)
         {
@@ -407,8 +323,89 @@ public class Alfred extends WearableActivity {
         }
     }
 
+    public void readXML(String targetTag)
+    {
+        XmlResourceParser xpp = getResources().getXml(R.xml.inputs_en);
+        int eventType = 0;
+
+        try
+        {
+            eventType = xpp.getEventType();
+        }
+
+        catch (XmlPullParserException e)
+        {
+            e.printStackTrace();
+        }
+
+        String comparison;
+        Boolean continueRunning = true;
+        Boolean tagReached = false;
+
+        //region Check for tag
+        while(continueRunning == true)
+        {
+            while (eventType != XmlPullParser.END_DOCUMENT)
+            {
+                if (eventType == XmlPullParser.END_TAG)
+                {
+                    comparison = xpp.getName();
+                    if (Objects.equals(targetTag, comparison))
+                    {
+                        System.out.println("Finished searching tag - " + comparison);
+                        tagReached = false;
+                        break;
+                    }
+                }
+
+                if (eventType == XmlPullParser.START_TAG)
+                {
+                    comparison = xpp.getName();
+                    if (Objects.equals(targetTag, comparison))
+                    {
+                        System.out.println("Checking " + targetTag + " for a match.");
+                        tagReached = true;
+                    }
+
+                    else if(tagReached == true)
+                    {
+
+                        if (userInput.contains(comparison)) {
+                            System.out.println("Match! " + userInput + " contains " + comparison);
+                            userInputUnderstood = true;
+                            continueRunning = false;
+                            break;
+                        }
+                    }
+                }
+
+                try
+                {
+                    eventType = xpp.next();
+                }
+
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
+            if(eventType == XmlPullParser.END_DOCUMENT)
+            {
+                continueRunning = false;
+            }
+
+            xpp.close();
+        }
+
+        //endregion
+
+    }
+
     public void readResponseXML(String responseCriteria, int randomStatement)
     {
+        xpp = getResources().getXml(R.xml.alfred_responses_en);
+
         Boolean tagReached = false;
         Boolean responseFound = false;
         Boolean continueSearching = true;
@@ -428,21 +425,27 @@ public class Alfred extends WearableActivity {
             e.printStackTrace();
         }
 
-        //region Fetch alfred's response
+
+
+
+
+
+
         while (continueSearching == true)
         {
             while (eventType != XmlPullParser.END_DOCUMENT)
             {
-                if(continueSearching == false)
+                if (continueSearching == false)
                 {
                     break;
                 }
 
                 comparison = xpp.getText();
-                if(responseFound == true && ("null" != comparison.intern()))
+                if (responseFound == true && ("null" != comparison.intern()))
                 {
                     comparison = xpp.getText();
-                    if(alfredResponse == null)
+                    System.out.println("Response found! - " + comparison);
+                    if (alfredResponse == null)
                     {
                         alfredResponse = comparison;
                     }
@@ -451,6 +454,7 @@ public class Alfred extends WearableActivity {
                     {
                         alfredResponse = alfredResponse + " " + comparison;
                     }
+
                     tagReached = false;
                     continueSearching = false;
                     break;
@@ -458,7 +462,6 @@ public class Alfred extends WearableActivity {
 
                 else
                 {
-                    //System.out.println("Searching...");
                     if (eventType == XmlPullParser.END_TAG)
                     {
                         comparison = xpp.getName();
@@ -480,33 +483,6 @@ public class Alfred extends WearableActivity {
                             responseCriteriaReached = true;
                         }
 
-//                        if(responseCriteriaReached == true)
-//                        {
-//                            switch (alfredFormality)
-//                            {
-//                                case 1:
-//                                    if (Objects.equals("FORMALITY_1", comparison)) {
-//                                        System.out.println("Formality Level 1:");
-//                                        tagReached = true;
-//                                    }
-//                                    break;
-//                                case 2:
-//                                    if (Objects.equals("FORMALITY_2", comparison)) {
-//                                        System.out.println("Formality Level 2:");
-//                                        tagReached = true;
-//                                    }
-//                                    break;
-//                                case 3:
-//                                    if (Objects.equals("FORMALITY_3", comparison)) {
-//                                        System.out.println("Formality Level 3:");
-//                                        tagReached = true;
-//                                    }
-//                                    break;
-//                                default:
-//                                    break;
-//                            }
-//                        }
-
                         if (responseCriteriaReached == true)
                         {
                             if (Integer.toString(formalityList).equals(Integer.toString(randomStatement)))
@@ -520,6 +496,119 @@ public class Alfred extends WearableActivity {
                 }
 
                 try {
+                    eventType = xpp.next();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (eventType == XmlPullParser.END_DOCUMENT) {
+                    System.out.println("No response found");
+                    continueSearching = false;
+                    break;
+                }
+            }
+            xpp.close();
+        }
+
+        alfredResponseReady = true;
+        readContextualOptions(responseCriteria);
+    }
+
+    public void readContextualOptions(String responseCriteria)
+    {
+        System.out.println("Checking for contextual options");
+        System.out.println("The response criteria is: " + responseCriteria);
+        xpp = getResources().getXml(R.xml.alfred_responses_en);
+        Boolean valuePositionsCalculated = false;
+        Boolean continueSearching = true;
+
+        String comparison;
+        int eventType = 0;
+        int targetPositionCounter = 0;
+        int currentPositionCounter = 0;
+
+        try
+        {
+            eventType = xpp.getEventType();
+        }
+
+        catch (XmlPullParserException e)
+        {
+            e.printStackTrace();
+        }
+
+        while (continueSearching == true)
+        {
+            while (eventType != XmlPullParser.END_DOCUMENT)
+            {
+                //region Emergency break
+                if (continueSearching == false)
+                {
+                    break;
+                }
+                //endregion
+
+                comparison = xpp.getName();
+                currentPositionCounter++;
+
+                if(valuePositionsCalculated != true)
+                {
+                    if (responseCriteria.equals(comparison) && eventType == XmlPullParser.END_TAG)
+                    {
+                        System.out.println(comparison + " end tag located");
+                        xpp = getResources().getXml(R.xml.alfred_responses_en);
+                        targetPositionCounter = currentPositionCounter;
+                        currentPositionCounter = 0;
+                        valuePositionsCalculated = true;
+                    }
+                }
+
+                else
+                {
+                    if(currentPositionCounter == (targetPositionCounter - 3))
+                    {
+                        comparison = xpp.getText();
+                        if(comparison != "null")
+                        {
+                            System.out.println("C2 Function = " + comparison);
+                            contextualResponse2Function = comparison;
+                            continueSearching = false;
+                        }
+                    }
+
+                    if(currentPositionCounter == (targetPositionCounter - 6))
+                    {
+                        comparison = xpp.getText();
+                        if(comparison != "null")
+                        {
+                            System.out.println("C2 = " + comparison);
+                            contextualResponse2 = comparison;
+                        }
+                    }
+
+                    if(currentPositionCounter == (targetPositionCounter - 9))
+                    {
+                        comparison = xpp.getText();
+                        if(comparison != "null")
+                        {
+                            System.out.println("C1 Function = " + comparison);
+                            contextualResponse1Function = comparison;
+                        }
+                    }
+
+                    if(currentPositionCounter == (targetPositionCounter - 12))
+                    {
+                        comparison = xpp.getText();
+                        if(comparison != "null")
+                        {
+                            System.out.println("C1 = " + comparison);
+                            contextualResponse1 = comparison;
+                        }
+                    }
+                }
+
+                try
+                {
                     eventType = xpp.next();
                 }
 
@@ -535,12 +624,8 @@ public class Alfred extends WearableActivity {
                     break;
                 }
             }
-
             xpp.close();
         }
-        //endregion
-
-        alfredResponseReady = true;
     }
 
     public void inputNotUnderstood()
@@ -625,6 +710,8 @@ public class Alfred extends WearableActivity {
             }
         }
 
+        contextualResponse1 = "Ok, I'll ask again...";
+        contextualResponse1Function = "VOICE_DICTATION";
         alfredResponseReady = true;
     }
 
@@ -635,20 +722,138 @@ public class Alfred extends WearableActivity {
         {
             public void run()
             {
-                final TextView responseText = (TextView) findViewById(R.id.response_text);
-                responseText.setText(alfredResponse);
+                if(alfredResponse != null || alfredResponse != "")
+                {
+                    final TextView responseText = (TextView) findViewById(R.id.response_text);
+                    responseText.setText(alfredResponse);
+                }
 
-                final ScrollView myScroller = (ScrollView) findViewById(R.id.scroll_view);
-                myScroller.smoothScrollTo( 0, myScroller.getChildAt( 0 ).getBottom() );
+                if(contextualResponse1 == null && contextualResponse2 == null)
+                {
+                    System.out.println("Module not using contextual responses");
+                }
 
-                userInput = "";
-                alfredResponse = "";
+                else
+                {
+                    if(contextualResponse1 != null)
+                    {
+                        final TextView applyContextualResponse = (TextView) findViewById(R.id.contextualResponse1);
+                        applyContextualResponse.setText(contextualResponse1);
+                        applyContextualResponse.setVisibility(View.VISIBLE);
+
+                        final ImageView displayContextualResponseIcon = (ImageView) findViewById(R.id.contextualIcon1);
+                        displayContextualResponseIcon.setVisibility(View.VISIBLE);
+
+                    }
+
+                    if(contextualResponse2 != null)
+                    {
+                        final TextView applyContextualResponse = (TextView) findViewById(R.id.contextualResponse2);
+                        applyContextualResponse.setText(contextualResponse2);
+                        applyContextualResponse.setVisibility(View.VISIBLE);
+
+                        final ImageView displayContextualResponseIcon = (ImageView) findViewById(R.id.contextualIcon2);
+                        displayContextualResponseIcon.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                if(alfredResponse != null || alfredResponse != "")
+                {
+                    final ScrollView myScroller = (ScrollView) findViewById(R.id.scroll_view);
+                    myScroller.smoothScrollTo( 0, myScroller.getChildAt( 0 ).getBottom() );
+                }
+
+                userInput = null;
+                alfredResponse = null;
+                contextualResponse1 = null;
+                contextualResponse2 = null;
+
                 alfredResponseReady = false;
                 userInputUnderstood = false;
                 listeningForInput = false;
             }
         }, 1000);
     }
+
+    public void contextualResponse1(View view)
+    {
+        performContextualAction(contextualResponse1Function);
+    }
+
+    public void contextualResponse2(View view)
+    {
+        performContextualAction(contextualResponse2Function);
+    }
+
+    public void performContextualAction(String function)
+    {
+        Random rand = new Random();
+        int max = 6; //max 5
+        int min = 2; //min 1
+        int randomStatement = rand.nextInt((6 - 2) + 1) + min;
+
+        if(function != null)
+        {
+            switch(function)
+            {
+                case "VOICE_DICTATION":
+                    ScrollView myScroller = (ScrollView) findViewById(R.id.scroll_view);
+                    myScroller.smoothScrollTo( 0, myScroller.getChildAt( 0 ).getTop() );
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable()
+                    {
+                        public void run()
+                        {
+                            try
+                            {
+                                ImageView voiceDictationClick = (ImageView) findViewById(R.id.alfred_mustache);
+                                voiceDictationClick.performClick();
+                            }
+
+                            catch(Exception e)
+                            {
+
+                            }
+                        }
+                    }, 300);
+                    break;
+                case "WEATHER":
+                    break;
+                case "EVENTS":
+                    break;
+                case "SMALLTALK_1":
+                    break;
+                case "SMALLTALK_2":
+                    break;
+                case "SMALLTALK_3":
+                    readResponseXML("SMALLTALK_3", randomStatement);
+                    contextualRefresh();
+                    break;
+                case "ALFRED_HELP":
+                    break;
+            }
+        }
+    }
+
+    public void contextualRefresh()
+    {
+        ScrollView myScroller = (ScrollView) findViewById(R.id.scroll_view);
+        myScroller.smoothScrollTo( 0, myScroller.getChildAt( 0 ).getTop() );
+        displayResponse();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public void onEnterAmbient(Bundle ambientDetails) {

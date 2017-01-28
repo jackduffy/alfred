@@ -13,12 +13,20 @@
         android:layout_height="wrap_content"
         android:id="@+id/scroll_view"
         android:scrollbars="none"
-        android:layout_marginBottom="-131dp">
+        android:layout_marginBottom="-340dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:background="#333333"
+            android:id="@+id/alfred_layout">
+
+            <ImageView
+                android:id="@+id/background"
+                android:layout_width="match_parent"
+                android:scaleType="fitXY"
+                android:layout_height="214dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -28,7 +36,7 @@
                 android:layout_alignParentEnd="true"
                 android:adjustViewBounds="true"
                 android:src="@drawable/alfred_specs"
-                android:layout_marginTop="-60dp"
+                android:layout_marginTop="-274dp"
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp"
                 android:visibility="invisible" />
@@ -48,19 +56,11 @@
                 android:onClick="voiceDictation"
                 android:hapticFeedbackEnabled="false" />
 
-            <ImageView
-                android:src="@drawable/response_backdrop"
-                android:layout_width="match_parent"
-                android:id="@+id/backgroundArea"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:paddingTop="30dp"
-                android:layout_marginBottom="-54dp" />
-
             <TextView
-                android:layout_width="120dip"
+                android:layout_width="150dip"
                 android:layout_height="fill_parent"
-                android:layout_marginTop="-200dp"
+                android:layout_marginTop="100dp"
+                android:paddingBottom="240dp"
                 android:layout_gravity="center"
                 android:textAlignment="center"
                 android:textColor="@color/white"
@@ -73,7 +73,7 @@
                 android:id="@+id/contextualIcon1"
                 android:layout_height="30dp"
                 android:layout_marginLeft="31dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="-220dp"
                 android:layout_gravity="left"
                 android:visibility="invisible"
                 android:onClick="contextualResponse1" />

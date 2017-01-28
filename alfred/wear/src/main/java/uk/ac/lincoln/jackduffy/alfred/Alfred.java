@@ -56,7 +56,10 @@ public class Alfred extends WearableActivity {
     Boolean criticalErrorDetected = false;
     XmlResourceParser xpp;
     String[] modules = new String[100];
-    Boolean testingMode = true;
+
+
+    Boolean testingMode = false;
+    //Boolean testingMode = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -113,7 +116,7 @@ public class Alfred extends WearableActivity {
 
                 if (eventType == XmlPullParser.END_DOCUMENT)
                 {
-                    System.out.println("Finished searching");
+                    //System.out.println("Finished searching");
                     continueSearching = false;
                     break;
                 }
@@ -161,20 +164,18 @@ public class Alfred extends WearableActivity {
     public void voiceDictation(View view)
     {
         resetResponseInterface();
-
         if(listeningForInput == false)
         {
-            //region Call the voice dictation tool
             listeningForInput = true;
             alfredFaceAnimation(1, 1);
-
-            //region Standard Operation
-            if(testingMode != true)
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable()
             {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable()
+                public void run()
                 {
-                    public void run()
+                    //region Call the voice dictation tool
+                    //region Standard Operation
+                    if(testingMode == false)
                     {
                         try
                         {
@@ -188,20 +189,12 @@ public class Alfred extends WearableActivity {
 
                         }
                     }
-                }, 600);
-            }
-            //endregion
+                    //endregion
 
-            //region Debugging Enabled
-            else
-            {
-                userInput = "WHO_ARE_YOU_";
-                //region Debugging Delay
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable()
-                {
-                    public void run()
+                    //region Debugging Enabled
+                    else
                     {
+                        userInput = "WHO_ARE_YOU_";
                         try
                         {
                             alfredFaceAnimation(1, 2);
@@ -212,12 +205,12 @@ public class Alfred extends WearableActivity {
                         {
 
                         }
+                        //endregion
                     }
-                }, 600);
-                //endregion
-            }
-            //endregion
-            //endregion
+                    //endregion
+                    //endregion
+                }
+            }, 600);
         }
     }
 
@@ -311,12 +304,12 @@ public class Alfred extends WearableActivity {
     public void AnalyseInput()
     {
         int numberOfModules = 0;
-        System.out.println("AVAILABLE MODULES :-");
+        //System.out.println("AVAILABLE MODULES :-");
         for (int i = 0; i < modules.length; i ++)
         {
             if (modules[i] != null)
             {
-                System.out.println("Module " + numberOfModules + ": " + modules[i]);
+                //System.out.println("Module " + numberOfModules + ": " + modules[i]);
                 numberOfModules++;
             }
         }
@@ -335,118 +328,127 @@ public class Alfred extends WearableActivity {
         Boolean module10_ENGAGED = false;
         //endregion
 
-        for(int module = 1; module <= (numberOfModules + 1); module++)
+        try
         {
-            if(module <= numberOfModules)
+            for(int module = 1; module <= (numberOfModules + 1); module++)
             {
-                moduleName = null;
-                userInputUnderstood = false;
-                switch(module)
-                {
-                    case 1:
-                        moduleName = modules[0];
-                        break;
-                    case 2:
-                        if(module1_ENGAGED != true){moduleName = modules[1];}
-                        break;
-                    case 3:
-                        if(module1_ENGAGED != true){moduleName = modules[2];}
-                        break;
-                    case 4:
-                        if(module1_ENGAGED != true){moduleName = modules[3];}
-                        break;
-                    case 5:
-                        if(module1_ENGAGED != true){moduleName = modules[4];}
-                        break;
-                    case 6:
-                        if (module1_ENGAGED != true) {moduleName = modules[5];}
-                        break;
-                    case 7:
-                        if (module1_ENGAGED != true) {moduleName = modules[6];}
-                        break;
-                    case 8:
-                        if (module1_ENGAGED != true) {moduleName = modules[7];}
-                        break;
-                    case 9:
-                        if (module1_ENGAGED != true) {moduleName = modules[8];}
-                        break;
-                    case 10:
-                        if (module1_ENGAGED != true) {moduleName = modules[9];}
-                        break;
-                }
-            }
-
-            else if (module == (numberOfModules + 1))
-            {
-                if(module1_ENGAGED != true && module2_ENGAGED != true && module3_ENGAGED != true && module4_ENGAGED != true && module5_ENGAGED != true && module6_ENGAGED != true &&  module7_ENGAGED != true && module7_ENGAGED != true && module8_ENGAGED != true && module9_ENGAGED != true && module10_ENGAGED != true)
-                {
-                    System.out.println("* Input not understood *");
-                    moduleName = null;
-                    inputNotUnderstood();
-                }
-
-                else
+                if(module <= numberOfModules)
                 {
                     moduleName = null;
-                }
-            }
-
-            if(moduleName != null)
-            {
-                readXML(moduleName);
-                if(userInputUnderstood == true)
-                {
-                    wasLastMessageUnderstood = true;
+                    userInputUnderstood = false;
                     switch(module)
                     {
                         case 1:
-                            module1_ENGAGED = true;
+                            moduleName = modules[0];
                             break;
                         case 2:
-                            module2_ENGAGED = true;
+                            if(module1_ENGAGED != true){moduleName = modules[1];}
                             break;
                         case 3:
-                            module3_ENGAGED = true;
+                            if(module1_ENGAGED != true){moduleName = modules[2];}
                             break;
                         case 4:
-                            module4_ENGAGED = true;
+                            if(module1_ENGAGED != true){moduleName = modules[3];}
                             break;
                         case 5:
-                            module5_ENGAGED = true;
+                            if(module1_ENGAGED != true){moduleName = modules[4];}
                             break;
                         case 6:
-                            module6_ENGAGED = true;
+                            if (module1_ENGAGED != true) {moduleName = modules[5];}
                             break;
                         case 7:
-                            module7_ENGAGED = true;
+                            if (module1_ENGAGED != true) {moduleName = modules[6];}
                             break;
                         case 8:
-                            module8_ENGAGED = true;
+                            if (module1_ENGAGED != true) {moduleName = modules[7];}
                             break;
                         case 9:
-                            module9_ENGAGED = true;
+                            if (module1_ENGAGED != true) {moduleName = modules[8];}
                             break;
                         case 10:
-                            module10_ENGAGED = true;
+                            if (module1_ENGAGED != true) {moduleName = modules[9];}
                             break;
                     }
+                }
 
-                    formulateResponse(moduleName);
-
-                    if(moduleName == "FAREWELLS")
+                else if (module == (numberOfModules + 1))
+                {
+                    if(module1_ENGAGED != true && module2_ENGAGED != true && module3_ENGAGED != true && module4_ENGAGED != true && module5_ENGAGED != true && module6_ENGAGED != true &&  module7_ENGAGED != true && module7_ENGAGED != true && module8_ENGAGED != true && module9_ENGAGED != true && module10_ENGAGED != true)
                     {
-                        module = 10;
-                        break;
+                        System.out.println("* Input not understood *");
+                        moduleName = null;
+                        inputNotUnderstood();
+                    }
+
+                    else
+                    {
+                        moduleName = null;
                     }
                 }
 
-                else
+                if(moduleName != null)
                 {
+                    readXML(moduleName);
+                    if(userInputUnderstood == true)
+                    {
+                        wasLastMessageUnderstood = true;
+                        switch(module)
+                        {
+                            case 1:
+                                module1_ENGAGED = true;
+                                break;
+                            case 2:
+                                module2_ENGAGED = true;
+                                break;
+                            case 3:
+                                module3_ENGAGED = true;
+                                break;
+                            case 4:
+                                module4_ENGAGED = true;
+                                break;
+                            case 5:
+                                module5_ENGAGED = true;
+                                break;
+                            case 6:
+                                module6_ENGAGED = true;
+                                break;
+                            case 7:
+                                module7_ENGAGED = true;
+                                break;
+                            case 8:
+                                module8_ENGAGED = true;
+                                break;
+                            case 9:
+                                module9_ENGAGED = true;
+                                break;
+                            case 10:
+                                module10_ENGAGED = true;
+                                break;
+                        }
 
+                        formulateResponse(moduleName);
+
+                        if(moduleName == "FAREWELLS")
+                        {
+                            module = 10;
+                            break;
+                        }
+                    }
+
+                    else
+                    {
+
+                    }
                 }
             }
+            displayResponse();
         }
-        displayResponse();
+
+        catch (Exception e)
+        {
+            //System.out.println("CRITICAL ERROR DETECTED: User input is invalid, if this occurs after manually closing the voice dictation tool, ignore this warning!");
+        }
+
     }
 
     public void formulateResponse(String typeOfResponse)
@@ -521,7 +523,7 @@ public class Alfred extends WearableActivity {
                     {
 
                         if (userInput.contains(comparison)) {
-                            System.out.println("* Match in Module: " + targetTag + "*");
+                            //System.out.println("* Match in Module: " + targetTag + "*");
                             userInputUnderstood = true;
                             continueRunning = false;
                             break;
@@ -774,7 +776,7 @@ public class Alfred extends WearableActivity {
 
                         else if(comparison != null)
                         {
-                            System.out.println("C2 Function = " + comparison);
+                            //System.out.println("C2 Function = " + comparison);
                             contextualResponse2Function = comparison;
                             continueSearching = false;
                         }
@@ -791,7 +793,7 @@ public class Alfred extends WearableActivity {
 
                         else if(comparison != null)
                         {
-                            System.out.println("C2 = " + comparison);
+                            //System.out.println("C2 = " + comparison);
                             contextualResponse2 = comparison;
                         }
                     }
@@ -807,7 +809,7 @@ public class Alfred extends WearableActivity {
 
                         else if(comparison != null)
                         {
-                            System.out.println("C1 Function = " + comparison);
+                            //System.out.println("C1 Function = " + comparison);
                             contextualResponse1Function = comparison;
                         }
                     }
@@ -823,7 +825,7 @@ public class Alfred extends WearableActivity {
 
                         else if(comparison != null)
                         {
-                            System.out.println("C1 = " + comparison);
+                            //System.out.println("C1 = " + comparison);
                             contextualResponse1 = comparison;
                         }
                     }
@@ -841,7 +843,7 @@ public class Alfred extends WearableActivity {
 
                 if (eventType == XmlPullParser.END_DOCUMENT)
                 {
-                    System.out.println("No dialogue options found");
+                    //System.out.println("No dialogue options found");
                     continueSearching = false;
                     break;
                 }
@@ -950,11 +952,6 @@ public class Alfred extends WearableActivity {
                     {
                         final TextView responseText = (TextView) findViewById(R.id.response_text);
                         responseText.setText(alfredResponse);
-
-                        responseText.measure(0, 0);       //must call measure!
-                        int textHeight = responseText.getMeasuredHeight(); //get height
-
-                        System.out.println("The height of the text view will be " + textHeight);
                     }
 
                     if(contextualResponse1 == null && contextualResponse2 == null)

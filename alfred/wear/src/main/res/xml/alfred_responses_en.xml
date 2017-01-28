@@ -22,7 +22,7 @@
         <six>Hello there, </six>
         <!-- CONTEXTUAL FUNCTIONS -->
         <C1>What's the weather like?</C1>
-        <C1_function>AL-WEATHER_NOW</C1_function>
+        <C1_function>AL-WEATHER</C1_function>
         <C2>What are my upcoming events?</C2>
         <C2_function>AL-EVENTS</C2_function>
     </AL-GREETINGS>
@@ -48,7 +48,7 @@
         <five>I'm good, how may I assist you?</five>
         <!-- CONTEXTUAL FUNCTIONS -->
         <C1>What's the weather like?</C1>
-        <C1_function>AL-WEATHER_NOW</C1_function>
+        <C1_function>AL-WEATHER</C1_function>
         <C2>What are my upcoming events?</C2>
         <C2_function>AL-EVENTS</C2_function>
     </AL-SMALLTALK_1>
@@ -91,10 +91,10 @@
     <AL-FEATURE_LIST>
         <one>Here goes:&#13;&#10;&#13;&#10;Conversations,</one>
         <!-- CONTEXTUAL FUNCTIONS -->
-        <C1></C1>
-        <C1_function></C1_function>
-        <C2></C2>
-        <C2_function></C2_function>
+        <C1>-</C1>
+        <C1_function>-</C1_function>
+        <C2>-</C2>
+        <C2_function>-</C2_function>
     </AL-FEATURE_LIST>
     
 </ALFRED_RESPONSES_EN>

@@ -26,13 +26,18 @@
         <C2>What are my upcoming events?</C2>
         <C2_function>AL-EVENTS</C2_function>
     </AL-GREETINGS>
+    
+    <AL-MATHMATICS>
+        <one>SF-MATHMATICS</one>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>I've got another question</C1>
+        <C1_function>VOICE_DICTATION</C1_function>
+        <C2>-</C2>
+        <C2_function>-</C2_function>
+    </AL-MATHMATICS>
             
     <AL-WEATHER>
         <one>WEATHER_API_CALL</one>
-        <two>WEATHER_API_CALL</two>
-        <three>WEATHER_API_CALL</three>
-        <four>WEATHER_API_CALL</four>
-        <five>WEATHER_API_CALL</five>
         <!-- CONTEXTUAL FUNCTIONS -->
         <C1>What about tomorrow?</C1>
         <C1_function>AL-WEATHER_TOMORROW</C1_function>

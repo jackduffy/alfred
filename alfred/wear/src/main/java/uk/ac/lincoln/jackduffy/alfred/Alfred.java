@@ -37,6 +37,8 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Alfred extends WearableActivity {
 
@@ -194,10 +196,12 @@ public class Alfred extends WearableActivity {
                     //region Debugging Enabled
                     else
                     {
-                        userInput = "WHO_ARE_YOU_";
+                        userInput = "WHAT_IS_1_+_1_";
+                        System.out.println(userInput);
                         try
                         {
                             alfredFaceAnimation(1, 2);
+                            optimiseInput();
                             AnalyseInput();
                         }
 
@@ -224,8 +228,9 @@ public class Alfred extends WearableActivity {
             //region Bind the returned value from the dictation tool to a string (and perform some alterations for readability)
             List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS); //get each word detected from the speech recognition
             String voiceInput = results.get(0); //concatenate these into a single string
-            userInput = voiceInput.replaceAll(" ", "_").toUpperCase(); //transform that string into upper case, replaces spaces with underscores and assign to a global value string
-            userInput = userInput + "_";
+
+            userInput = voiceInput;
+            optimiseInput();
             //endregion
         }
 
@@ -244,6 +249,35 @@ public class Alfred extends WearableActivity {
         }
 
         listeningForInput = false;
+    }
+
+    public void optimiseInput()
+    {
+        userInput = userInput.replaceAll(" ", "_").toUpperCase(); //transform that string into upper case, replaces spaces with underscores and assign to a global value string
+        //System.out.println("RAW INPUT: "+ userInput);
+
+        if(userInput.contains("_+_"))
+        {
+            userInput = userInput.replaceAll("\\+", "SF-PLUS");
+        }
+
+        if(userInput.contains("_-_"))
+        {
+            userInput = userInput.replaceAll("\\-", "SF-MINUS");
+        }
+
+        if(userInput.contains("_X_"))
+        {
+            userInput = userInput.replaceAll("_X_", "_SF-MULTIPLY_");
+        }
+
+        if(userInput.contains("_÷_"))
+        {
+            userInput = userInput.replaceAll("_÷_", "_SF-DIVIDE_");
+        }
+
+        userInput = userInput + "_";
+        //System.out.println("FINAL INPUT: "+ userInput);
     }
 
     public void alfredFaceAnimation(int toggle, int mode)
@@ -702,6 +736,12 @@ public class Alfred extends WearableActivity {
             alfredResponseReady = true;
             readContextualOptions(responseCriteria);
             //endregion
+
+            if(alfredResponse.contains("SF-"))
+            {
+                System.out.println("Special function(s) detected");
+                specialFunctions();
+            }
         }
 
         catch (Exception e)
@@ -712,6 +752,238 @@ public class Alfred extends WearableActivity {
             ScrollView myScroller = (ScrollView) findViewById(R.id.scroll_view);
             myScroller.smoothScrollTo( 0, myScroller.getChildAt( 0 ).getTop() );
             //endregion
+        }
+    }
+
+    public void specialFunctions() {
+        if (alfredResponse != "" || alfredResponse != null || alfredResponse != "null") {
+
+            if (alfredResponse.contains("SF-MATHMATICS"))
+            {
+                //region Mathmatic Functions
+                alfredResponse = alfredResponse.replaceAll("SF-MATHMATICS", "");
+
+                //region Count functions in input string
+                Integer numberOfFunctions = 0;
+                Pattern functionSearch = Pattern.compile("SF-");
+                Matcher functionMatch = functionSearch.matcher(userInput);
+
+                while (functionMatch.find()) {
+                    numberOfFunctions++;
+                }
+                //endregion
+
+                //region Create and Initialise Values
+                String[] userInputArray = userInput.split("_");
+                String[] mathmaticalFunctions = {"SF-PLUS", "SF-MINUS", "SF-MULTIPLY", "SF-DIVIDE"};
+                Boolean continueSearching = true;
+                Integer functionsFound = 0;
+
+                String function1 = "";
+                String function2 = "";
+                String function3 = "";
+                String function4 = "";
+                String function5 = "";
+
+                Integer function1Position = 0;
+                Integer function2Position = 0;
+                Integer function3Position = 0;
+                Integer function4Position = 0;
+                Integer function5Position = 0;
+                //endregion
+
+                while (continueSearching == true) {
+                    for (int i = 0; i < userInputArray.length; i++) {
+                        for (int x = 0; x < mathmaticalFunctions.length; x++) {
+                            if (userInputArray[i].equals(mathmaticalFunctions[x])) {
+                                functionsFound++;
+                                //region Assign functions and locations
+                                switch (functionsFound) {
+                                    case 1:
+                                        function1Position = i;
+                                        function1 = userInputArray[i];
+                                        break;
+                                    case 2:
+                                        function2Position = i;
+                                        function2 = userInputArray[i];
+                                        break;
+                                    case 3:
+                                        function3Position = i;
+                                        function3 = userInputArray[i];
+                                        break;
+                                    case 4:
+                                        function4Position = i;
+                                        function4 = userInputArray[i];
+                                        break;
+                                    case 5:
+                                        function5Position = i;
+                                        function5 = userInputArray[i];
+                                        break;
+                                }
+                                //endregion
+
+                                if (functionsFound == numberOfFunctions) {
+                                    //System.out.println("All functions found");
+                                    continueSearching = false;
+                                }
+                            } else {
+
+                            }
+                        }
+                    }
+                    continueSearching = false;
+                }
+
+                Integer output1 = 0;
+                alfredResponse = alfredResponse + "I think I've got it:\n";
+                String symbol1 = "";
+
+                Integer value1 = Integer.parseInt(userInputArray[function1Position - 1]);
+                Integer value2 = Integer.parseInt(userInputArray[function1Position + 1]);
+                switch (function1) {
+                    case "SF-PLUS":
+                        output1 = (value1 + value2);
+                        symbol1 = " + ";
+                        break;
+                    case "SF-MINUS":
+                        output1 = (value1 - value2);
+                        symbol1 = " - ";
+                        break;
+                    case "SF-MULTIPLY":
+                        output1 = (value1 * value2);
+                        symbol1 = " × ";
+                        break;
+                    case "SF-DIVIDE":
+                        output1 = (value1 / value2);
+                        symbol1 = " ÷ ";
+                        break;
+                }
+
+                if (numberOfFunctions > 1)
+                {
+                    String symbol2 = "";
+                    Integer output2 = 0;
+                    Integer value3 = Integer.parseInt(userInputArray[function2Position + 1]);
+                    switch (function2) {
+                        case "SF-PLUS":
+                            output2 = (output1 + value3);
+                            symbol2 = " + ";
+                            break;
+                        case "SF-MINUS":
+                            output2 = (output1 - value3);
+                            symbol2 = " - ";
+                            break;
+                        case "SF-MULTIPLY":
+                            output2 = (output1 * value3);
+                            symbol2 = " × ";
+                            break;
+                        case "SF-DIVIDE":
+                            output2 = (output1 / value3);
+                            symbol2 = " ÷ ";
+                            break;
+                    }
+
+                    if (numberOfFunctions > 2)
+                    {
+                        String symbol3 = "";
+                        Integer output3 = 0;
+                        Integer value4 = Integer.parseInt(userInputArray[function3Position + 1]);
+                        switch (function2) {
+                            case "SF-PLUS":
+                                output3 = (output2 + value4);
+                                symbol3 = " + ";
+                                break;
+                            case "SF-MINUS":
+                                output3 = (output2 - value4);
+                                symbol3 = " - ";
+                                break;
+                            case "SF-MULTIPLY":
+                                output3 = (output2 * value4);
+                                symbol3 = " × ";
+                                break;
+                            case "SF-DIVIDE":
+                                output3 = (output2 / value4);
+                                symbol3 = " ÷ ";
+                                break;
+                        }
+
+                        if (numberOfFunctions > 3)
+                        {
+                            String symbol4 = "";
+                            Integer output4 = 0;
+                            Integer value5 = Integer.parseInt(userInputArray[function4Position + 1]);
+                            switch (function2) {
+                                case "SF-PLUS":
+                                    output4 = (output3 + value5);
+                                    symbol4 = " + ";
+                                    break;
+                                case "SF-MINUS":
+                                    output4 = (output3 - value5);
+                                    symbol4 = " - ";
+                                    break;
+                                case "SF-MULTIPLY":
+                                    output4 = (output3 * value5);
+                                    symbol4 = " × ";
+                                    break;
+                                case "SF-DIVIDE":
+                                    output4 = (output3 / value5);
+                                    symbol4 = " ÷ ";
+                                    break;
+                            }
+
+                            if (numberOfFunctions > 4)
+                            {
+                                String symbol5 = "";
+                                Integer output5 = 0;
+                                Integer value6 = Integer.parseInt(userInputArray[function5Position + 1]);
+                                switch (function2)
+                                {
+                                    case "SF-PLUS":
+                                        output5 = (output4 + value6);
+                                        symbol5 = " + ";
+                                        break;
+                                    case "SF-MINUS":
+                                        output5 = (output4 - value6);
+                                        symbol5 = " - ";
+                                        break;
+                                    case "SF-MULTIPLY":
+                                        output5 = (output4 * value6);
+                                        symbol5 = " × ";
+                                        break;
+                                    case "SF-DIVIDE":
+                                        output5 = (output4 / value6);
+                                        symbol4 = " ÷ ";
+                                        break;
+                                }
+
+                                alfredResponse = alfredResponse + value1 + symbol1 + value2 + symbol2 + value3 + symbol3 + value4 + symbol4 + value5 + symbol5 + value6 + " = " + output5;
+                            }
+
+                            else
+                            {
+                                alfredResponse = alfredResponse + value1 + symbol1 + value2 + symbol2 + value3 + symbol3 + value4 + symbol4 + value5 + " = " + output4;
+                            }
+                        }
+
+                        else
+                        {
+                            alfredResponse = alfredResponse + value1 + symbol1 + value2 + symbol2 + value3 + symbol3 + value4 + " = " + output3;
+                        }
+
+                    }
+
+                    else
+                    {
+                        alfredResponse = alfredResponse + value1 + symbol1 + value2 + symbol2 + value3 + " = " + output2;
+                    }
+                }
+
+                else
+                {
+                    alfredResponse = alfredResponse + value1 + symbol1 + value2 + " = " + output1;
+                }
+                //endregion
+            }
         }
     }
 
@@ -1020,7 +1292,7 @@ public class Alfred extends WearableActivity {
 
     public void performContextualAction(String function)
     {
-        if(function == "VOICE_DICTATION")
+        if(function.equals("VOICE_DICTATION"))
         {
             resetResponseInterface();
             ScrollView myScroller = (ScrollView) findViewById(R.id.scroll_view);

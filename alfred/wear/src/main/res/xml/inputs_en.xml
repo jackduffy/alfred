@@ -49,7 +49,7 @@
         <WELL_HELLO_THERE_ALFRED_></WELL_HELLO_THERE_ALFRED_>    
     </AL-GREETINGS>
     
-    <AL-MATHMATICS>
+    <AL-MATHMATICS> <!-- These are for the software to read only, no voice recognition is possible -->
         <SF-PLUS_></SF-PLUS_>
         <SF-MINUS_></SF-MINUS_>
         <SF-MULTIPLY_></SF-MULTIPLY_>

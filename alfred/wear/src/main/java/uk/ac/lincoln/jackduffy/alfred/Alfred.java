@@ -1,6 +1,7 @@
 package uk.ac.lincoln.jackduffy.alfred;
 
 import android.content.res.XmlResourceParser;
+import android.graphics.Color;
 import android.graphics.drawable.LayerDrawable;
 import android.media.Image;
 import android.os.AsyncTask;
@@ -8,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.util.Xml;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,6 +32,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.wearable.WearableListenerService;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -40,8 +51,8 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Alfred extends WearableActivity {
-
+public class Alfred extends WearableActivity
+{
     private static final SimpleDateFormat AMBIENT_DATE_FORMAT = new SimpleDateFormat("HH:mm", Locale.US);
     private static final int SPEECH_RECOGNIZER_REQUEST_CODE = 0;
     Boolean listeningForInput = false;
@@ -61,6 +72,8 @@ public class Alfred extends WearableActivity {
 
 
     Boolean testingMode = false;
+
+
     //Boolean testingMode = true;
 
     @Override
@@ -74,6 +87,14 @@ public class Alfred extends WearableActivity {
         ImageView background_image = (ImageView)findViewById(R.id.background);
         Glide.with(this).load(R.drawable.background_a).asGif().into(background_image);
     }
+
+
+
+
+
+
+
+
 
     public void readModules()
     {
@@ -755,9 +776,10 @@ public class Alfred extends WearableActivity {
         }
     }
 
-    public void specialFunctions() {
-        if (alfredResponse != "" || alfredResponse != null || alfredResponse != "null") {
-
+    public void specialFunctions()
+    {
+        if (alfredResponse != "" || alfredResponse != null || alfredResponse != "null")
+        {
             if (alfredResponse.contains("SF-MATHMATICS"))
             {
                 //region Mathmatic Functions

@@ -1,12 +1,19 @@
 package uk.ac.lincoln.jackduffy.alfred;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,6 +25,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.google.android.gms.common.data.FreezableUtils;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.vision.text.Element;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEvent;
@@ -41,13 +49,22 @@ import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -55,6 +72,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
 {
     GoogleApiClient googleClient;
+    String apiService = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -83,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .build();
     }
 
-
     public void sendTestMessage(View view)
     {
         String DATA_PATH = "/data_from_phone";
@@ -95,9 +112,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     public void sendWeatherDetails(View view)
     {
-        APIAccess(1);
+        apiService = "weather";
         retrieveWebData webData = new retrieveWebData();
-        webData.execute(1);
+        webData.execute();
     }
 
     private class retrieveWebData extends AsyncTask<Integer, Void, String>
@@ -106,18 +123,64 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         protected String doInBackground(Integer[] service)
         {
             String serviceURL = "";
-//            switch(service)
-//            {
-//                case 1: //weather
-                    serviceURL = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/xml/3840?res=3hourly&key=b2133d57-87fc-49f8-9381-6d3498a0595a";
-//                    break;
-//            }
+            switch(apiService)
+            {
+                case "":
+                    break;
+                case "weather":
 
-            try {
-                URL url = new URL(serviceURL);
-                URLConnection conn = url.openConnection();
-                System.out.println(conn);
+                    System.out.println("Checking permissions");
 
+                    try
+                    {
+                        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+                        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        double longitude = location.getLongitude();
+                        double latitude = location.getLatitude();
+                        serviceURL = "https://api.darksky.net/forecast/87a57fb875fe5b8587e37d88ecfe6290/" + latitude + "," + longitude;
+                        System.out.println(serviceURL);
+                    }
+
+                    catch(Exception e)
+                    {
+                        System.out.println("Error with location sensor");
+                    }
+                    break;
+            }
+
+            try
+            {
+                System.out.println("RETRIEVING DATA");
+                httpConnect jParser = new httpConnect();
+                JSONObject currentWeatherObject = new JSONObject(jParser.getJSONFromUrl(serviceURL));
+                currentWeatherObject = currentWeatherObject.optJSONObject("currently");
+                System.out.println("DATA RETRIEVED!");
+
+                String[] currentWeather = new String[17];
+                currentWeather[0] = "time: " + currentWeatherObject.optString("time");
+                currentWeather[1] = "summary: " + currentWeatherObject.optString("summary");
+                currentWeather[2] = "icon: " + currentWeatherObject.optString("icon");
+                currentWeather[3] = "nearestStormDistance: " + currentWeatherObject.optString("nearestStormDistance");
+                currentWeather[4] = "nearestStormBearing: " + currentWeatherObject.optString("nearestStormBearing");
+                currentWeather[5] = "precipIntensity: " + currentWeatherObject.optString("precipIntensity");
+                currentWeather[6] = "precipProbability: " + currentWeatherObject.optString("precipProbability");
+                currentWeather[7] = "temperature: " + currentWeatherObject.optString("temperature");
+                currentWeather[8] = "apparentTemperature: " + currentWeatherObject.optString("apparentTemperature");
+                currentWeather[9] = "dewPoint: " + currentWeatherObject.optString("dewPoint");
+                currentWeather[10] = "humidity: " + currentWeatherObject.optString("humidity");
+                currentWeather[11] = "windSpeed: " + currentWeatherObject.optString("windSpeed");
+                currentWeather[12] = "windBearing: " + currentWeatherObject.optString("windBearing");
+                currentWeather[13] = "visibility: " + currentWeatherObject.optString("visibility");
+                currentWeather[14] = "cloudCover: " + currentWeatherObject.optString("cloudCover");
+                currentWeather[15] = "pressure: " + currentWeatherObject.optString("pressure");
+                currentWeather[16] = "ozone: " + currentWeatherObject.optString("ozone");
+
+                //System.out.println(currentWeather.length);
+
+                for(int i = 0; i < currentWeather.length; i++)
+                {
+                    System.out.println(currentWeather[i]);
+                }
 
             }
             catch (Exception e)
@@ -132,11 +195,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         protected void onPostExecute(String message) {
             //process message
         }
-    }
-
-    public void APIAccess(int service)
-    {
-
     }
 
 

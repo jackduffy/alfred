@@ -20,7 +20,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#333333"
-            android:id="@+id/alfred_layout">
+            android:id="@+id/alfred_layout"
+            android:weightSum="1">
 
             <ImageView
                 android:id="@+id/background"
@@ -55,6 +56,15 @@
                 android:clickable="true"
                 android:onClick="voiceDictation"
                 android:hapticFeedbackEnabled="false" />
+
+            <Button
+                android:text="Test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/debuggingButton"
+                android:layout_weight="0.13"
+                android:layout_gravity="center_horizontal"
+                android:onClick="sendTestMessage" />
 
             <TextView
                 android:layout_width="150dip"

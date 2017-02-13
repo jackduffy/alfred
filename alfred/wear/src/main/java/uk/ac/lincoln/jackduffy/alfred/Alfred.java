@@ -1,57 +1,37 @@
 package uk.ac.lincoln.jackduffy.alfred;
 
 import android.content.res.XmlResourceParser;
-import android.graphics.Color;
-import android.graphics.drawable.LayerDrawable;
-import android.media.Image;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
-import android.util.Xml;
-import android.view.MotionEvent;
 import android.view.View;
-
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Locale;
-
 import android.content.Intent;
 import android.speech.RecognizerIntent;
-import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.DataEvent;
-import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataMap;
-import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
-import com.google.android.gms.wearable.WearableListenerService;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Alfred extends WearableActivity
+public class Alfred extends WearableActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
 {
     private static final SimpleDateFormat AMBIENT_DATE_FORMAT = new SimpleDateFormat("HH:mm", Locale.US);
     private static final int SPEECH_RECOGNIZER_REQUEST_CODE = 0;
@@ -69,12 +49,10 @@ public class Alfred extends WearableActivity
     Boolean criticalErrorDetected = false;
     XmlResourceParser xpp;
     String[] modules = new String[100];
-
-
     Boolean testingMode = false;
-
-
     //Boolean testingMode = true;
+
+    GoogleApiClient googleClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -86,6 +64,13 @@ public class Alfred extends WearableActivity
 
         ImageView background_image = (ImageView)findViewById(R.id.background);
         Glide.with(this).load(R.drawable.background_a).asGif().into(background_image);
+
+        // Build a new GoogleApiClient
+        googleClient = new GoogleApiClient.Builder(this)
+                .addApi(Wearable.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
     }
 
 
@@ -1412,4 +1397,121 @@ public class Alfred extends WearableActivity
 //            mClockView.setVisibility(View.GONE);
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Connect to the data layer when the Activity starts
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        googleClient.connect();
+    }
+
+
+    @Override
+    public void onConnected(Bundle bundle)
+    {
+
+    }
+
+    // Disconnect from the data layer when the Activity stops
+    @Override
+    protected void onStop()
+    {
+//        if (null != googleClient && googleClient.isConnected()) {
+//            googleClient.disconnect();
+//        }
+
+        googleClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {}
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult)
+    {
+        System.out.println("Connection has failed");
+    }
+
+    public void sendTestMessage(View view)
+    {
+        String DATA_PATH = "/data_from_watch";
+        DataMap dataMap = new DataMap();
+        dataMap.putString("WATCH2PHONE TEST MESSAGE EVENT!", "1");
+        dataMap.putLong("timestamp", System.nanoTime());
+        new SendToDataLayerThread(DATA_PATH, dataMap).start();
+    }
+
+    class SendToDataLayerThread extends Thread
+    {
+        String path;
+        DataMap dataMap;
+
+        SendToDataLayerThread(String p, DataMap data)
+        {
+            path = p;
+            dataMap = data;
+        }
+
+        public void run()
+        {
+            PutDataMapRequest putDMR = PutDataMapRequest.create(path);
+            putDMR.getDataMap().putAll(dataMap);
+            PutDataRequest request = putDMR.asPutDataRequest();
+            DataApi.DataItemResult result = Wearable.DataApi.putDataItem(googleClient, request).await();
+
+            if (result.getStatus().isSuccess())
+            {
+                Log.v("myTag", "DataMap: " + dataMap + " sent successfully to data layer ");
+            }
+
+            else
+            {
+                // Log an error
+                Log.v("myTag", "ERROR: failed to send DataMap to data layer");
+            }
+        }
+    }
+
 }

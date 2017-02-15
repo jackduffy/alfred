@@ -14,9 +14,13 @@ public class ListenerServiceWear extends WearableListenerService
     public void onDataChanged(DataEventBuffer dataEvents)
     {
         DataMap dataMap;
+        String[] incomingData = new String[100];
+        Integer elementNumber = 0;
         for (DataEvent event : dataEvents)
         {
-            Log.v("myTag", "DataMap received on watch: " + DataMapItem.fromDataItem(event.getDataItem()).getDataMap());
+            DataMapItem dataItem = DataMapItem.fromDataItem (event.getDataItem());
+            incomingData = dataItem.getDataMap().getStringArray("contents"); //?!?!?!?!?!?!?!?!
+            Log.v("myTag", "DataMap item: " + DataMapItem.fromDataItem(event.getDataItem()).getDataMap());
         }
     }
 }

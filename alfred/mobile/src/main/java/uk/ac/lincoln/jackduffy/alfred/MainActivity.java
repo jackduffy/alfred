@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 {
     GoogleApiClient googleClient;
     String apiService = "";
+    Boolean permissionsGranted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -99,6 +100,40 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+
+        //checkAndRequestPermissions();
+
+//        if(permissionsGranted = true)
+//        {
+//            System.out.println("Proceed");
+//        }
+    }
+
+    private void checkAndRequestPermissions()
+    {
+        try
+        {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION))
+                {
+
+                }
+
+                else
+                {
+                    //ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                }
+            }
+
+            permissionsGranted = true;
+        }
+
+        catch(Exception e)
+        {
+            permissionsGranted = false;
+            System.out.println("Permissions not granted");
+        }
     }
 
     public void sendTestMessage(View view)
@@ -113,11 +148,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void sendWeatherDetails(View view)
     {
         apiService = "weather";
-        retrieveWebData webData = new retrieveWebData();
-        webData.execute();
+        accessAPIData api = new accessAPIData();
+        api.execute();
     }
 
-    private class retrieveWebData extends AsyncTask<Integer, Void, String>
+    private class accessAPIData extends AsyncTask<Integer, Void, String>
     {
         @Override
         protected String doInBackground(Integer[] service)
@@ -128,9 +163,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 case "":
                     break;
                 case "weather":
-
-                    System.out.println("Checking permissions");
-
+                    //region Weather API
                     try
                     {
                         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -138,61 +171,94 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         double longitude = location.getLongitude();
                         double latitude = location.getLatitude();
                         serviceURL = "https://api.darksky.net/forecast/87a57fb875fe5b8587e37d88ecfe6290/" + latitude + "," + longitude;
-                        System.out.println(serviceURL);
                     }
 
                     catch(Exception e)
                     {
                         System.out.println("Error with location sensor");
                     }
+                    //endregion
                     break;
             }
 
             try
             {
-                System.out.println("RETRIEVING DATA");
                 httpConnect jParser = new httpConnect();
                 JSONObject currentWeatherObject = new JSONObject(jParser.getJSONFromUrl(serviceURL));
-                currentWeatherObject = currentWeatherObject.optJSONObject("currently");
-                System.out.println("DATA RETRIEVED!");
+                DataMap dataMap = new DataMap();
+                dataMap.putLong("#TIME-STAMP:-", System.nanoTime());
+                dataMap.putLong("#CONTENT:-",  Long.parseLong(apiService));
 
-                String[] currentWeather = new String[17];
-                currentWeather[0] = "time: " + currentWeatherObject.optString("time");
-                currentWeather[1] = "summary: " + currentWeatherObject.optString("summary");
-                currentWeather[2] = "icon: " + currentWeatherObject.optString("icon");
-                currentWeather[3] = "nearestStormDistance: " + currentWeatherObject.optString("nearestStormDistance");
-                currentWeather[4] = "nearestStormBearing: " + currentWeatherObject.optString("nearestStormBearing");
-                currentWeather[5] = "precipIntensity: " + currentWeatherObject.optString("precipIntensity");
-                currentWeather[6] = "precipProbability: " + currentWeatherObject.optString("precipProbability");
-                currentWeather[7] = "temperature: " + currentWeatherObject.optString("temperature");
-                currentWeather[8] = "apparentTemperature: " + currentWeatherObject.optString("apparentTemperature");
-                currentWeather[9] = "dewPoint: " + currentWeatherObject.optString("dewPoint");
-                currentWeather[10] = "humidity: " + currentWeatherObject.optString("humidity");
-                currentWeather[11] = "windSpeed: " + currentWeatherObject.optString("windSpeed");
-                currentWeather[12] = "windBearing: " + currentWeatherObject.optString("windBearing");
-                currentWeather[13] = "visibility: " + currentWeatherObject.optString("visibility");
-                currentWeather[14] = "cloudCover: " + currentWeatherObject.optString("cloudCover");
-                currentWeather[15] = "pressure: " + currentWeatherObject.optString("pressure");
-                currentWeather[16] = "ozone: " + currentWeatherObject.optString("ozone");
-
-                //System.out.println(currentWeather.length);
-
-                for(int i = 0; i < currentWeather.length; i++)
+                switch(apiService)
                 {
-                    System.out.println(currentWeather[i]);
+                    case "":
+                        break;
+                    case "weather":
+                        currentWeatherObject = currentWeatherObject.optJSONObject("currently");
+                        String[] currentWeather = new String[17];
+                        //region Populate currentWeather with all elements from the 'current' JSON object
+                        currentWeather[0] = currentWeatherObject.optString("time");
+                        currentWeather[1] = currentWeatherObject.optString("summary");
+                        currentWeather[2] = currentWeatherObject.optString("icon");
+                        currentWeather[3] = currentWeatherObject.optString("nearestStormDistance");
+                        currentWeather[4] = currentWeatherObject.optString("nearestStormBearing");
+                        currentWeather[5] = currentWeatherObject.optString("precipIntensity");
+                        currentWeather[6] = currentWeatherObject.optString("precipProbability");
+                        currentWeather[7] = currentWeatherObject.optString("temperature");
+                        currentWeather[8] = currentWeatherObject.optString("apparentTemperature");
+                        currentWeather[9] = currentWeatherObject.optString("dewPoint");
+                        currentWeather[10] =currentWeatherObject.optString("humidity");
+                        currentWeather[11] = currentWeatherObject.optString("windSpeed");
+                        currentWeather[12] =  currentWeatherObject.optString("windBearing");
+                        currentWeather[13] = currentWeatherObject.optString("visibility");
+                        currentWeather[14] =  currentWeatherObject.optString("cloudCover");
+                        currentWeather[15] = currentWeatherObject.optString("pressure");
+                        currentWeather[16] = currentWeatherObject.optString("ozone");
+                        //endregion
+                        //region Put all the weather data into a dataMap packet
+                        dataMap.putString("time:-", currentWeather[0]);
+                        dataMap.putString("summary:-", currentWeather[1]);
+                        dataMap.putString("icon:-", currentWeather[2]);
+                        dataMap.putString("nearestStormDistance:-", currentWeather[3]);
+                        dataMap.putString("nearestStormBEaring:-", currentWeather[4]);
+                        dataMap.putString("precipIntensity:-", currentWeather[5]);
+                        dataMap.putString("precipPRobability:-", currentWeather[6]);
+                        dataMap.putString("temperature:-", currentWeather[7]);
+                        dataMap.putString("apparentTemperature:-", currentWeather[8]);
+                        dataMap.putString("dewPoint:-", currentWeather[9]);
+                        dataMap.putString("humidity:-", currentWeather[10]);
+                        dataMap.putString("windSpeed:-", currentWeather[11]);
+                        dataMap.putString("windBearing:-", currentWeather[12]);
+                        dataMap.putString("visibility:-", currentWeather[13]);
+                        dataMap.putString("cloudCover:-", currentWeather[14]);
+                        dataMap.putString("pressure:-", currentWeather[15]);
+                        dataMap.putString("ozone:-", currentWeather[16]);
+                        //endregion
+                        break;
                 }
 
+                try
+                {
+                    new SendToDataLayerThread("/data_from_phone", dataMap).start();
+                }
+
+                catch(Exception e)
+                {
+                    System.out.println("Error sending data to watch");
+                }
             }
+
             catch (Exception e)
             {
-                System.out.println("ERROR ERROR ERROR ERROR");
-                e.printStackTrace();
+                System.out.println("General error with API data");
             }
+
             return null;
         }
 
         @Override
-        protected void onPostExecute(String message) {
+        protected void onPostExecute(String message)
+        {
             //process message
         }
     }

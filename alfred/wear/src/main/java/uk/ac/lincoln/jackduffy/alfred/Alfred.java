@@ -1,8 +1,11 @@
 package uk.ac.lincoln.jackduffy.alfred;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.XmlResourceParser;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
@@ -41,7 +44,11 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
     Boolean wasLastMessageUnderstood = true;
     Boolean alfredResponseReady = false;
     Integer userMessageNumber = 0;
+
+    String[] dataFromPhone;
     String alfredResponse;
+
+
     String contextualResponse1;
     String contextualResponse1Function;
     String contextualResponse2;
@@ -1405,7 +1412,33 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
 
 
 
+    public void readSharedPrefs(View view)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+//        for(int i = 0; i < 1000; i++)
+//        {
+//            try
+//            {
+//                System.out.println(preferences.getString(Integer.toString(i), ""));
+//            }
+//
+//            catch(Exception e)
+//            {
+//                break;
+//            }
+//        }
+//
+//        for(int i = 0; i < dataFromPhone.length; i++)
+//        {
+//            System.out.println(dataFromPhone[i]);
+//        }
+
+//        if(!name.equalsIgnoreCase(""))
+//        {
+//            name = name + "  Sethi";  /* Edit the value here*/
+//        }
+    }
 
 
 

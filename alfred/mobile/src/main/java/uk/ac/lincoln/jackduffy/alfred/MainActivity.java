@@ -185,9 +185,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             {
                 httpConnect jParser = new httpConnect();
                 JSONObject currentWeatherObject = new JSONObject(jParser.getJSONFromUrl(serviceURL));
+                System.out.println("Retrieved data from " + serviceURL);
                 DataMap dataMap = new DataMap();
-                dataMap.putLong("#TIME-STAMP:-", System.nanoTime());
-                dataMap.putLong("#CONTENT:-",  Long.parseLong(apiService));
+                dataMap.putLong("#-TIME-STAMP:", System.nanoTime());
 
                 switch(apiService)
                 {
@@ -216,29 +216,31 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         currentWeather[16] = currentWeatherObject.optString("ozone");
                         //endregion
                         //region Put all the weather data into a dataMap packet
-                        dataMap.putString("time:-", currentWeather[0]);
-                        dataMap.putString("summary:-", currentWeather[1]);
-                        dataMap.putString("icon:-", currentWeather[2]);
-                        dataMap.putString("nearestStormDistance:-", currentWeather[3]);
-                        dataMap.putString("nearestStormBEaring:-", currentWeather[4]);
-                        dataMap.putString("precipIntensity:-", currentWeather[5]);
-                        dataMap.putString("precipPRobability:-", currentWeather[6]);
-                        dataMap.putString("temperature:-", currentWeather[7]);
-                        dataMap.putString("apparentTemperature:-", currentWeather[8]);
-                        dataMap.putString("dewPoint:-", currentWeather[9]);
-                        dataMap.putString("humidity:-", currentWeather[10]);
-                        dataMap.putString("windSpeed:-", currentWeather[11]);
-                        dataMap.putString("windBearing:-", currentWeather[12]);
-                        dataMap.putString("visibility:-", currentWeather[13]);
-                        dataMap.putString("cloudCover:-", currentWeather[14]);
-                        dataMap.putString("pressure:-", currentWeather[15]);
-                        dataMap.putString("ozone:-", currentWeather[16]);
+                        dataMap.putLong("#-CONTENT:", 0);
+                        dataMap.putString("00-time", currentWeather[0]);
+                        dataMap.putString("01-summary", currentWeather[1]);
+                        dataMap.putString("02-icon", currentWeather[2]);
+                        dataMap.putString("03-nearestStormDistance", currentWeather[3]);
+                        dataMap.putString("04-nearestStormBEaring", currentWeather[4]);
+                        dataMap.putString("05-precipIntensity", currentWeather[5]);
+                        dataMap.putString("06-precipPRobability", currentWeather[6]);
+                        dataMap.putString("07-temperature", currentWeather[7]);
+                        dataMap.putString("08-apparentTemperature", currentWeather[8]);
+                        dataMap.putString("09-dewPoint", currentWeather[9]);
+                        dataMap.putString("10-humidity", currentWeather[10]);
+                        dataMap.putString("11-windSpeed", currentWeather[11]);
+                        dataMap.putString("12-windBearing", currentWeather[12]);
+                        dataMap.putString("13-visibility", currentWeather[13]);
+                        dataMap.putString("14-cloudCover", currentWeather[14]);
+                        dataMap.putString("15-pressure", currentWeather[15]);
+                        dataMap.putString("16-ozone", currentWeather[16]);
                         //endregion
                         break;
                 }
 
                 try
                 {
+                    System.out.println("Attempting to send to data layer");
                     new SendToDataLayerThread("/data_from_phone", dataMap).start();
                 }
 

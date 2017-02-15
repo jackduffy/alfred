@@ -58,13 +58,21 @@
                 android:hapticFeedbackEnabled="false" />
 
             <Button
-                android:text="Test"
+                android:text="Message Test"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/debuggingButton"
                 android:layout_weight="0.13"
                 android:layout_gravity="center_horizontal"
                 android:onClick="sendTestMessage" />
+
+            <Button
+                android:text="SharedPrefs Test"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/button2"
+                android:layout_gravity="center_horizontal"
+                android:onClick="readSharedPrefs" />
 
             <TextView
                 android:layout_width="150dip"

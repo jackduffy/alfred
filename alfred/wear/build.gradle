@@ -24,4 +24,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-wearable:9.6.1'
     provided 'com.google.android.wearable:wearable:2.0.0-alpha3'
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.google.code.gson:gson:2.2.4'
 }

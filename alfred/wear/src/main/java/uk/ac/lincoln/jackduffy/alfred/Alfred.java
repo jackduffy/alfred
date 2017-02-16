@@ -46,7 +46,9 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
     Integer userMessageNumber = 0;
 
     String[] dataFromPhone;
+    String dataFromPhoneSubject;
     String alfredResponse;
+    Boolean readingSharedPreferences = false;
 
 
     String contextualResponse1;
@@ -56,8 +58,8 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
     Boolean criticalErrorDetected = false;
     XmlResourceParser xpp;
     String[] modules = new String[100];
-    Boolean testingMode = false;
-    //Boolean testingMode = true;
+    //Boolean testingMode = false;
+    Boolean testingMode = true;
 
     GoogleApiClient googleClient;
 
@@ -79,14 +81,6 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
                 .addOnConnectionFailedListener(this)
                 .build();
     }
-
-
-
-
-
-
-
-
 
     public void readModules()
     {
@@ -209,7 +203,7 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
                     //region Debugging Enabled
                     else
                     {
-                        userInput = "WHAT_IS_1_+_1_";
+                        userInput = "WEATHER";
                         System.out.println(userInput);
                         try
                         {
@@ -351,12 +345,12 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
     public void AnalyseInput()
     {
         int numberOfModules = 0;
-        //System.out.println("AVAILABLE MODULES :-");
+        System.out.println("AVAILABLE MODULES :-");
         for (int i = 0; i < modules.length; i ++)
         {
             if (modules[i] != null)
             {
-                //System.out.println("Module " + numberOfModules + ": " + modules[i]);
+                System.out.println("Module " + numberOfModules + ": " + modules[i]);
                 numberOfModules++;
             }
         }
@@ -770,10 +764,8 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
 
     public void specialFunctions()
     {
-        if (alfredResponse != "" || alfredResponse != null || alfredResponse != "null")
-        {
-            if (alfredResponse.contains("SF-MATHMATICS"))
-            {
+        if (alfredResponse != "" || alfredResponse != null || alfredResponse != "null") {
+            if (alfredResponse.contains("SF-MATHMATICS")) {
                 //region Mathmatic Functions
                 alfredResponse = alfredResponse.replaceAll("SF-MATHMATICS", "");
 
@@ -873,8 +865,7 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
                         break;
                 }
 
-                if (numberOfFunctions > 1)
-                {
+                if (numberOfFunctions > 1) {
                     String symbol2 = "";
                     Integer output2 = 0;
                     Integer value3 = Integer.parseInt(userInputArray[function2Position + 1]);
@@ -897,8 +888,7 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
                             break;
                     }
 
-                    if (numberOfFunctions > 2)
-                    {
+                    if (numberOfFunctions > 2) {
                         String symbol3 = "";
                         Integer output3 = 0;
                         Integer value4 = Integer.parseInt(userInputArray[function3Position + 1]);
@@ -921,8 +911,7 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
                                 break;
                         }
 
-                        if (numberOfFunctions > 3)
-                        {
+                        if (numberOfFunctions > 3) {
                             String symbol4 = "";
                             Integer output4 = 0;
                             Integer value5 = Integer.parseInt(userInputArray[function4Position + 1]);
@@ -945,13 +934,11 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
                                     break;
                             }
 
-                            if (numberOfFunctions > 4)
-                            {
+                            if (numberOfFunctions > 4) {
                                 String symbol5 = "";
                                 Integer output5 = 0;
                                 Integer value6 = Integer.parseInt(userInputArray[function5Position + 1]);
-                                switch (function2)
-                                {
+                                switch (function2) {
                                     case "SF-PLUS":
                                         output5 = (output4 + value6);
                                         symbol5 = " + ";
@@ -971,34 +958,122 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
                                 }
 
                                 alfredResponse = alfredResponse + value1 + symbol1 + value2 + symbol2 + value3 + symbol3 + value4 + symbol4 + value5 + symbol5 + value6 + " = " + output5;
-                            }
-
-                            else
-                            {
+                            } else {
                                 alfredResponse = alfredResponse + value1 + symbol1 + value2 + symbol2 + value3 + symbol3 + value4 + symbol4 + value5 + " = " + output4;
                             }
-                        }
-
-                        else
-                        {
+                        } else {
                             alfredResponse = alfredResponse + value1 + symbol1 + value2 + symbol2 + value3 + symbol3 + value4 + " = " + output3;
                         }
 
-                    }
-
-                    else
-                    {
+                    } else {
                         alfredResponse = alfredResponse + value1 + symbol1 + value2 + symbol2 + value3 + " = " + output2;
                     }
-                }
-
-                else
-                {
+                } else {
                     alfredResponse = alfredResponse + value1 + symbol1 + value2 + " = " + output1;
                 }
                 //endregion
             }
+
+            if (alfredResponse.contains("SF-WEATHER_API")) {
+                //request data from phone... to be added
+
+                readSharedPrefs();
+
+
+                while (dataFromPhoneSubject == null)
+                {
+                    //do nothing
+                }
+
+                if (dataFromPhoneSubject != null) {
+                    System.out.println("Proceeding...");
+                    System.out.println("Data Subject is:- " + dataFromPhoneSubject);
+
+                    if (dataFromPhoneSubject.equals("WEATHER"))
+                    {
+                        for (int i = 0; i < dataFromPhone.length; i++) {
+                            dataFromPhone[i] = (dataFromPhone[i].substring(dataFromPhone[i].indexOf("=") + 1)).replaceAll("(\\p{Ll})(\\p{Lu})", "$1 $2");
+                        }
+
+                        if(alfredResponse.contains("SF-WEATHER_API_FULL"))
+                        {
+                            alfredResponse = "Ah. Here are the full weather details for today sir." +
+                                    "\n\nSummary:\n" + dataFromPhone[1] +
+                                    "\n\nTemperature:\n" + dataFromPhone[7] + "°F" +
+                                    "\n\nFeels Like:\n" + dataFromPhone[8] + "°F" +
+                                    "\n\nHumidity:\n" + dataFromPhone[10] + "%" +
+                                    "\n\nWind:\n" + dataFromPhone[11] + "mph" +
+                                    "\n\nVisibility:\n" + dataFromPhone[13] + "ft" +
+                                    "\n\nCloud Cover:\n" + dataFromPhone[14] +
+                                    "\n\nPressure:\n" + dataFromPhone[15] + " psi" +
+                                    "\n\nPrecipitation Probability:\n" + dataFromPhone[6] + "%" +
+                                    "\n\nPrecipitation Intensity:\n" + dataFromPhone[5] + "";
+
+                            if(dataFromPhone[3] != "")
+                            {
+                                alfredResponse = alfredResponse + "\n\nNearest Storm Distance:\n" + dataFromPhone[3] + " miles";
+                            }
+
+                            alfredResponse = alfredResponse + "\n\nDew Point\n: " + dataFromPhone[9] + "°F" +
+                                                              "\n\nOzone:\n" + dataFromPhone[16];
+
+                        }
+
+                        else if (alfredResponse.contains("SF-WEATHER_API"))
+                        {
+                            alfredResponse = "Certainly sir. It is currently " + dataFromPhone[1] + " with the temperature of " + dataFromPhone[7] + "°F";
+                        }
+                    }
+                }
+            }
         }
+    }
+
+    public void readSharedPrefs()
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        dataFromPhone = new String[0];
+        dataFromPhoneSubject = null;
+        String[] sharedPrefsData = new String[100];
+        int numberOfElements = 0;
+        String temp;
+        String temp2;
+        for(int i = 0; i <= 1000; i++)
+        {
+            try
+            {
+                temp = (preferences.getString(Integer.toString(i), ""));
+                if(temp != "")
+                {
+                    temp2 = temp.substring(0, 2);
+                    if(temp2.equals("##"))
+                    {
+                        temp2 = temp.substring(3);
+                        dataFromPhoneSubject = temp2;
+                    }
+
+                    else
+                    {
+                        sharedPrefsData[i] = temp;
+                        numberOfElements++;
+                    }
+                }
+            }
+
+            catch(Exception e)
+            {
+                break;
+            }
+        }
+
+        dataFromPhone = new String[(sharedPrefsData.length-(100 - numberOfElements))];
+        for(int i = 0; i < dataFromPhone.length; i++)
+        {
+            dataFromPhone[i] = sharedPrefsData[i];
+            //System.out.println(dataFromPhone[i]);
+        }
+
+        //System.out.println("Done");
     }
 
     public void readContextualOptions(String responseCriteria)
@@ -1412,33 +1487,7 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
 
 
 
-    public void readSharedPrefs(View view)
-    {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-//        for(int i = 0; i < 1000; i++)
-//        {
-//            try
-//            {
-//                System.out.println(preferences.getString(Integer.toString(i), ""));
-//            }
-//
-//            catch(Exception e)
-//            {
-//                break;
-//            }
-//        }
-//
-//        for(int i = 0; i < dataFromPhone.length; i++)
-//        {
-//            System.out.println(dataFromPhone[i]);
-//        }
-
-//        if(!name.equalsIgnoreCase(""))
-//        {
-//            name = name + "  Sethi";  /* Edit the value here*/
-//        }
-    }
 
 
 

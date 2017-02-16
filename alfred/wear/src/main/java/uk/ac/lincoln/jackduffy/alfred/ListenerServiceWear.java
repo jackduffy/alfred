@@ -82,20 +82,25 @@ public class ListenerServiceWear extends WearableListenerService
                 System.out.println("Preparing to write to Shared Preferences");
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.apply();
                 editor.putInt("contentArray_size", sortedData.length);
 
                 System.out.println("Writing to Shared Preferences");
-                for(int i = 0; i < sortedData.length; i++)
+                int i;
+                for(i = 0; i < sortedData.length; i++)
                 {
                     editor.putString(Integer.toString(i), sortedData[i]);
                     //System.out.println(sortedData[i]);
                 }
+
+                editor.putString(Integer.toString(i), "##-WEATHER");
+                editor.apply();
             }
 
             else
             {
                 System.out.println("Error, do not pass data");
-
             }
         }
 

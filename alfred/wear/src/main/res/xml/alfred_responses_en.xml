@@ -39,7 +39,7 @@
     <AL-WEATHER>
         <one>SF-WEATHER_API</one>
         <!-- CONTEXTUAL FUNCTIONS -->
-        <C1>Tell me more</C1>
+        <C1>Show me more details</C1>
         <C1_function>AL-WEATHER_FULL</C1_function>
         <C2>What about tomorrow?</C2>
         <C2_function>AL-WEATHER_TOMORROW</C2_function>
@@ -48,11 +48,20 @@
     <AL-WEATHER_FULL>
         <one>SF-WEATHER_API_FULL</one>
         <!-- CONTEXTUAL FUNCTIONS -->
-        <C1>Tell me more</C1>
-        <C1_function>AL-WEATHER_FULL</C1_function>
-        <C2>What about tomorrow?</C2>
-        <C2_function>AL-WEATHER_TOMORROW</C2_function>
+        <C1>What about tomorrow?</C1>
+        <C1_function>AL-WEATHER_TOMORROW</C1_function>
+        <C2>-</C2>
+        <C2_function>-</C2_function>
     </AL-WEATHER_FULL>
+    
+    <AL-WEATHER_TOMORROW>
+        <one>SF-WEATHER_API_TOMORROW</one>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>Show me more details</C1>
+        <C1_function>AL-WEATHER_FULL_TOMORROW</C1_function>
+        <C2>-</C2>
+        <C2_function>-</C2_function>
+    </AL-WEATHER_TOMORROW>
     
     <AL-SMALLTALK_1> <!--"How are you? etc." -->
         <one>I feel excellent. How may I assist you today?</one>

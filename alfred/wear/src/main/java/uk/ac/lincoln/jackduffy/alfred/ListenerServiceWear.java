@@ -108,6 +108,5 @@ public class ListenerServiceWear extends WearableListenerService
         {
             System.out.println("The data packet is not properly configured. Did not send");
         }
-
     }
 }

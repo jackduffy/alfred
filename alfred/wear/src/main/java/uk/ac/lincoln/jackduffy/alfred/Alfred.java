@@ -19,10 +19,11 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
@@ -31,37 +32,49 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Alfred extends WearableActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
+public class Alfred extends WearableActivity
 {
-    private static final SimpleDateFormat AMBIENT_DATE_FORMAT = new SimpleDateFormat("HH:mm", Locale.US);
-    private static final int SPEECH_RECOGNIZER_REQUEST_CODE = 0;
+    //region Initialize Values
+    //region Booleans
     Boolean listeningForInput = false;
-    String userInput;
     Boolean userInputUnderstood = false;
     Boolean wasLastMessageUnderstood = true;
     Boolean alfredResponseReady = false;
-    Integer userMessageNumber = 0;
-
-    String[] dataFromPhone;
+    Boolean criticalErrorDetected = false;
+    Boolean testingMode = true;
+    //endregion
+    //region Strings
+    String userInput;
     String dataFromPhoneSubject;
     String alfredResponse;
-    Boolean readingSharedPreferences = false;
-
-
     String contextualResponse1;
     String contextualResponse1Function;
     String contextualResponse2;
     String contextualResponse2Function;
-    Boolean criticalErrorDetected = false;
-    XmlResourceParser xpp;
+    //endregion
+    //region String Arrays
+    String[] dataFromPhone;
     String[] modules = new String[100];
-    //Boolean testingMode = false;
-    Boolean testingMode = true;
-
+    private String nodeId;
+    //endregion
+    //region Integers
+    Integer userMessageNumber = 0;
+    //endregion
+    //region Private Statics
+    private static final SimpleDateFormat AMBIENT_DATE_FORMAT = new SimpleDateFormat("HH:mm", Locale.US);
+    private static final int SPEECH_RECOGNIZER_REQUEST_CODE = 0;
+    private static final long CONNECTION_TIME_OUT_MS = 1000;
+    private static String MESSAGE = "default";
+    //endregion
+    //region Miscelanious Values
+    XmlResourceParser xpp;
     GoogleApiClient googleClient;
+    //endregion
+    //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -70,17 +83,90 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
         setContentView(R.layout.activity_alfred); //set the layout
         setAmbientEnabled(); //enable the ambient mode
         readModules(); //read the available modules
+        ImageView background_image = (ImageView)findViewById(R.id.background); //set background gif
+        Glide.with(this).load(R.drawable.background_a).asGif().into(background_image); //apply background gif with Glide
+        initApi(); //initialize the google client
+    }
 
-        ImageView background_image = (ImageView)findViewById(R.id.background);
-        Glide.with(this).load(R.drawable.background_a).asGif().into(background_image);
+    private void initApi() //initialize the google client api for watch -> phone communication
+    {
+        googleClient = getGoogleApiClient(this); //initialize it
+        retrieveDeviceNode();
+    }
 
-        // Build a new GoogleApiClient
-        googleClient = new GoogleApiClient.Builder(this)
+    private GoogleApiClient getGoogleApiClient(Context context) //build a new google client
+    {
+        return new GoogleApiClient.Builder(context)
                 .addApi(Wearable.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
                 .build();
     }
+
+    private void retrieveDeviceNode() //retrieve the node id of everything connected to the wearable
+    {
+        new Thread(new Runnable() //run it on a new thread
+        {
+            @Override
+            public void run()
+            {
+                googleClient.blockingConnect(CONNECTION_TIME_OUT_MS, TimeUnit.MILLISECONDS); //set timeout limit
+                NodeApi.GetConnectedNodesResult result = Wearable.NodeApi.getConnectedNodes(googleClient).await(); //wait for connection
+                List<Node> nodes = result.getNodes(); //if connection is successful, retrieve nodes
+
+                if (nodes.size() > 0) //if there is at least one node active
+                {
+                    nodeId = nodes.get(0).getId(); //get its id
+                }
+
+                googleClient.disconnect(); //disconnect from the client
+            }
+        }).start();
+    }
+
+    private void sendMessageToPhone(String inputPhrase)
+    {
+        if (nodeId != null)
+        {
+            MESSAGE = inputPhrase;
+            new Thread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    googleClient.blockingConnect(CONNECTION_TIME_OUT_MS, TimeUnit.MILLISECONDS);
+                    Wearable.MessageApi.sendMessage(googleClient, nodeId, MESSAGE, null);
+                    googleClient.disconnect();
+                }
+            }).start();
+        }
+
+        else
+        {
+            System.out.println("Message failed to send");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void readModules()
     {
@@ -975,7 +1061,10 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
             }
 
             if (alfredResponse.contains("SF-WEATHER_API")) {
-                //request data from phone... to be added
+
+                sendMessageToPhone("SF-WEATHER");
+
+                //wait
 
                 readSharedPrefs();
 
@@ -1520,80 +1609,7 @@ public class Alfred extends WearableActivity implements GoogleApiClient.Connecti
 
 
 
-    // Connect to the data layer when the Activity starts
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-        googleClient.connect();
-    }
 
 
-    @Override
-    public void onConnected(Bundle bundle)
-    {
-
-    }
-
-    // Disconnect from the data layer when the Activity stops
-    @Override
-    protected void onStop()
-    {
-//        if (null != googleClient && googleClient.isConnected()) {
-//            googleClient.disconnect();
-//        }
-
-        googleClient.disconnect();
-        super.onStop();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {}
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult)
-    {
-        System.out.println("Connection has failed");
-    }
-
-    public void sendTestMessage(View view)
-    {
-        String DATA_PATH = "/data_from_watch";
-        DataMap dataMap = new DataMap();
-        dataMap.putString("WATCH2PHONE TEST MESSAGE EVENT!", "1");
-        dataMap.putLong("timestamp", System.nanoTime());
-        new SendToDataLayerThread(DATA_PATH, dataMap).start();
-    }
-
-    class SendToDataLayerThread extends Thread
-    {
-        String path;
-        DataMap dataMap;
-
-        SendToDataLayerThread(String p, DataMap data)
-        {
-            path = p;
-            dataMap = data;
-        }
-
-        public void run()
-        {
-            PutDataMapRequest putDMR = PutDataMapRequest.create(path);
-            putDMR.getDataMap().putAll(dataMap);
-            PutDataRequest request = putDMR.asPutDataRequest();
-            DataApi.DataItemResult result = Wearable.DataApi.putDataItem(googleClient, request).await();
-
-            if (result.getStatus().isSuccess())
-            {
-                Log.v("myTag", "DataMap: " + dataMap + " sent successfully to data layer ");
-            }
-
-            else
-            {
-                // Log an error
-                Log.v("myTag", "ERROR: failed to send DataMap to data layer");
-            }
-        }
-    }
 
 }

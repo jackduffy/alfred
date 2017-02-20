@@ -26,6 +26,14 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".apiService"
+            android:theme="@style/Theme.AppCompat.Light"
+
+            android:noHistory="true"
+            android:excludeFromRecents="true">
+        </activity>
+
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
         <meta-data android:name="com.google.android.gms.version"
@@ -37,9 +45,5 @@
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>
         </service>
-
     </application>
-
-
-
 </manifest>

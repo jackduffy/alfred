@@ -96,6 +96,9 @@ public class ListenerServiceWear extends WearableListenerService
 
                 editor.putString(Integer.toString(i), "##-WEATHER");
                 editor.apply();
+
+                Alfred.sharedPreferencesReady();
+
             }
 
             else

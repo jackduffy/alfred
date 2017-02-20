@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.wearable.activity.WearableActivity;
-import android.util.Log;
 import android.view.View;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -20,12 +19,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -44,6 +39,7 @@ public class Alfred extends WearableActivity
     Boolean userInputUnderstood = false;
     Boolean wasLastMessageUnderstood = true;
     Boolean alfredResponseReady = false;
+    Boolean sharedPreferencesReady = false;
     Boolean criticalErrorDetected = false;
     Boolean testingMode = true;
     //endregion
@@ -144,29 +140,6 @@ public class Alfred extends WearableActivity
             System.out.println("Message failed to send");
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public void readModules()
     {
@@ -1064,16 +1037,20 @@ public class Alfred extends WearableActivity
 
                 sendMessageToPhone("SF-WEATHER");
 
-                //wait
+                //wait here until ready
+//                while(sharedPreferencesReady == false)
+//                {
+//                    //do nothing
+//                }
+
 
                 readSharedPrefs();
-
-
                 while (dataFromPhoneSubject == null)
                 {
                     //do nothing
                 }
 
+                //region Generate Response from retrieved data
                 if (dataFromPhoneSubject != null) {
                     System.out.println("Proceeding...");
                     System.out.println("Data Subject is:- " + dataFromPhoneSubject);
@@ -1084,6 +1061,7 @@ public class Alfred extends WearableActivity
                             dataFromPhone[i] = (dataFromPhone[i].substring(dataFromPhone[i].indexOf("=") + 1)).replaceAll("(\\p{Ll})(\\p{Lu})", "$1 $2");
                         }
 
+                        //region Full Weather Details Response
                         if(alfredResponse.contains("SF-WEATHER_API_FULL"))
                         {
                             alfredResponse = "Ah. Here are the full weather details for today sir." +
@@ -1107,13 +1085,17 @@ public class Alfred extends WearableActivity
                                                               "\n\nOzone:\n" + dataFromPhone[16];
 
                         }
+                        //endregion
 
+                        //region Partial Weather Details Response
                         else if (alfredResponse.contains("SF-WEATHER_API"))
                         {
                             alfredResponse = "Certainly sir. It is currently " + dataFromPhone[1] + " with the temperature of " + dataFromPhone[7] + "°F";
                         }
+                        //endregion
                     }
                 }
+                //endregion
             }
         }
     }
@@ -1163,6 +1145,12 @@ public class Alfred extends WearableActivity
         }
 
         //System.out.println("Done");
+    }
+
+    public static void sharedPreferencesReady()
+    {
+        System.out.println("proceed to read");
+        //sharedPreferencesReady = true;
     }
 
     public void readContextualOptions(String responseCriteria)

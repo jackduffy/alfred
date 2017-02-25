@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.String.valueOf;
+
 public class ListenerServiceWear extends WearableListenerService
 {
     @Override
@@ -97,7 +99,8 @@ public class ListenerServiceWear extends WearableListenerService
                 editor.putString(Integer.toString(i), "##-WEATHER");
                 editor.apply();
 
-                Alfred.sharedPreferencesReady();
+                System.out.println("Data Transfer Complete");
+                Alfred.sharedPreferencesReady = true;
 
             }
 

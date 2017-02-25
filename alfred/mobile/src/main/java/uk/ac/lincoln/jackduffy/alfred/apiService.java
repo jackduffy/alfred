@@ -49,18 +49,16 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
             //googleApiClientBuilt = false;
         }
 
-        APIController("WEATHER");
+        //APIController("WEATHER");
+        APIController(ListenerService.apiRequest);
 
     }
 
-
-
     public void APIController(String input)
     {
-        System.out.println("I'm here, and the input is: " + input);
+        System.out.println("Input: " + input);
         apiService = input;
         accessAPIData api = new accessAPIData();
-        System.out.println("Initiating API access");
         api.execute();
 
     }
@@ -74,8 +72,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
         protected String doInBackground(Integer[] service)
         {
             String serviceURL = "";
-
-            System.out.println("Searching for " + apiService);
+            //System.out.println("Searching for " + apiService);
             switch(apiService)
             {
                 case "":
@@ -88,7 +85,6 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                         double longitude = location.getLongitude();
                         double latitude = location.getLatitude();
-                        System.out.println("creating url");
                         serviceURL = "https://api.darksky.net/forecast/87a57fb875fe5b8587e37d88ecfe6290/" + latitude + "," + longitude;
                     }
 
@@ -105,7 +101,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
             {
                 httpConnect jParser = new httpConnect();
                 JSONObject currentWeatherObject = new JSONObject(jParser.getJSONFromUrl(serviceURL));
-                System.out.println("Retrieved data from " + serviceURL);
+                //System.out.println("Retrieved data from " + serviceURL);
                 DataMap dataMap = new DataMap();
                 dataMap.putLong("#-TIME-STAMP:", System.nanoTime());
 
@@ -160,7 +156,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
 
                 try
                 {
-                    System.out.println("Attempting to send to data layer");
+                    //System.out.println("Attempting to send to data layer");
                     new SendToDataLayerThread("/data_from_phone", dataMap).start();
                 }
 
@@ -241,13 +237,11 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
 
             if (result.getStatus().isSuccess())
             {
-                Log.v("myTag", "DataMap: " + dataMap + " sent successfully to data layer ");
-
+                //Log.v("myTag", "DataMap: " + dataMap + " sent successfully to data layer ");
             }
 
             else
             {
-                // Log an error
                 Log.v("myTag", "ERROR: failed to send DataMap to data layer");
             }
 

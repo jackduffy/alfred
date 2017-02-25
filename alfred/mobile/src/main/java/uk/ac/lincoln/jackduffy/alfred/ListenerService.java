@@ -7,6 +7,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 
 public class ListenerService extends WearableListenerService
 {
+    public static String apiRequest = "";
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent)
@@ -23,7 +24,7 @@ public class ListenerService extends WearableListenerService
         {
             case "SF-":
                 System.out.println("SPECIAL FUNCTION DETECTED");
-                input = input.substring(3);
+                apiRequest = input.substring(3);
                 startActivity(new Intent(ListenerService.this, apiService.class));
                 break;
         }

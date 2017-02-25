@@ -81,14 +81,14 @@ public class ListenerServiceWear extends WearableListenerService
                     sortedData[(i-2)] = tempData[i];
                 }
 
-                System.out.println("Preparing to write to Shared Preferences");
+                //System.out.println("Preparing to write to Shared Preferences");
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.clear();
                 editor.apply();
                 editor.putInt("contentArray_size", sortedData.length);
 
-                System.out.println("Writing to Shared Preferences");
+                //System.out.println("Writing to Shared Preferences");
                 int i;
                 for(i = 0; i < sortedData.length; i++)
                 {

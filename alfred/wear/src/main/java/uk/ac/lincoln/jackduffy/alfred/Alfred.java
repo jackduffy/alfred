@@ -987,11 +987,15 @@ public class Alfred extends WearableActivity {
                 }
 
                 //region Full Weather Details Response
-                if (alfredResponse.contains("SF-WEATHER_API_FULL")) {
+                if (alfredResponse.contains("SF-WEATHER_API_FULL"))
+                {
+
+                    Integer tempCelsius1 = (((Integer.parseInt(dataFromPhone[7].substring(0, dataFromPhone[7].length()-3))) - 32)*5)/9;
+                    Integer tempCelsius2 = (((Integer.parseInt(dataFromPhone[8].substring(0, dataFromPhone[8].length()-3))) - 32)*5)/9;
                     alfredResponse = "Ah. Here are the full weather details for today sir." +
                             "\n\nSummary:\n" + dataFromPhone[1] +
-                            "\n\nTemperature:\n" + dataFromPhone[7] + "°F" +
-                            "\n\nFeels Like:\n" + dataFromPhone[8] + "°F" +
+                            "\n\nTemperature:\n" + tempCelsius1 + "°C/" + dataFromPhone[7] + "°F" +
+                            "\n\nFeels Like:\n" + tempCelsius2 + "°C/" + dataFromPhone[8] + "°F" +
                             "\n\nHumidity:\n" + dataFromPhone[10] + "%" +
                             "\n\nWind:\n" + dataFromPhone[11] + "mph" +
                             "\n\nVisibility:\n" + dataFromPhone[13] + "ft" +

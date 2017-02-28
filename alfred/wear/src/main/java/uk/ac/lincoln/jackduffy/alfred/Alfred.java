@@ -15,6 +15,9 @@ import java.util.Arrays;
 import java.util.Locale;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -115,7 +118,7 @@ public class Alfred extends WearableActivity {
                 if (nodes.size() > 0) //if there is at least one node active
                 {
                     nodeId = nodes.get(0).getId(); //get its id
-                    System.out.println("Node Detected: " + nodeId);
+                    //System.out.println("Node Detected: " + nodeId);
                 }
 
                 googleClient.disconnect(); //disconnect from the client
@@ -123,7 +126,8 @@ public class Alfred extends WearableActivity {
         }).start();
     }
 
-    private void sendMessageToPhone(String inputPhrase) {
+    private void sendMessageToPhone(String inputPhrase)
+    {
         if (nodeId != null) {
             MESSAGE = inputPhrase;
             new Thread(new Runnable() {
@@ -132,11 +136,11 @@ public class Alfred extends WearableActivity {
                     googleClient.blockingConnect(CONNECTION_TIME_OUT_MS, TimeUnit.MILLISECONDS);
                     Wearable.MessageApi.sendMessage(googleClient, nodeId, MESSAGE, null);
                     googleClient.disconnect();
-                    System.out.println("Message sent");
+                    //System.out.println("Message sent");
                 }
             }).start();
         } else {
-            System.out.println("Message failed to send");
+            System.out.println("Message - '" + inputPhrase + "' failed to send");
         }
     }
 
@@ -222,7 +226,10 @@ public class Alfred extends WearableActivity {
         resetResponseInterface();
         if (listeningForInput == false) {
             listeningForInput = true;
-            alfredFaceAnimation(1, 1);
+
+            //alfredFaceAnimation(1, 1);
+            alfredThinking();
+
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
@@ -244,7 +251,8 @@ public class Alfred extends WearableActivity {
                         userInput = "WEATHER";
                         System.out.println(userInput);
                         try {
-                            alfredFaceAnimation(1, 2);
+                            //alfredFaceAnimation(1, 2);
+                            alfredThinking();
                             optimiseInput();
                             AnalyseInput();
                         } catch (Exception e) {
@@ -261,7 +269,7 @@ public class Alfred extends WearableActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        alfredFaceAnimation(1, 2);
+        //alfredFaceAnimation(1, 2);
 
         try {
             //region Bind the returned value from the dictation tool to a string (and perform some alterations for readability)
@@ -310,56 +318,78 @@ public class Alfred extends WearableActivity {
         //System.out.println("FINAL INPUT: "+ userInput);
     }
 
-    public void alfredFaceAnimation(int toggle, int mode) {
-        switch (toggle) {
-            case 1: //Animation 1 - Listening for input
-                //region Animation code
-                ImageView mustache = (ImageView) findViewById(R.id.alfred_mustache);
-                ImageView specs = (ImageView) findViewById(R.id.alfred_specs);
+//    public void alfredFaceAnimation(int toggle, int mode) {
+//        switch (toggle) {
+//            case 1: //Animation 1 - Listening for input
+//                //region Animation code
+//                ImageView mustache = (ImageView) findViewById(R.id.alfred_mustache);
+//                ImageView specs = (ImageView) findViewById(R.id.alfred_specs);
+//
+//                TranslateAnimation mustache_animation;
+//                TranslateAnimation specs_animation;
+//                switch (mode) {
+//                    case 1: //reveal alfred
+//                        specs.setVisibility(View.VISIBLE);
+//
+//                        mustache_animation = new TranslateAnimation(0.0f, 0.0f, 0.0f, 75.0f);
+//                        mustache_animation.setDuration(500);
+//                        mustache_animation.setRepeatCount(0);
+//                        mustache_animation.setRepeatMode(0);
+//                        mustache_animation.setFillAfter(true);
+//                        mustache.startAnimation(mustache_animation);
+//
+//                        specs_animation = new TranslateAnimation(0.0f, 0.0f, 0.0f, 150.0f);
+//                        specs_animation.setDuration(500);
+//                        specs_animation.setRepeatCount(0);
+//                        specs_animation.setRepeatMode(0);
+//                        specs_animation.setFillAfter(true);
+//
+//                        specs.startAnimation(specs_animation);
+//                        break;
+//                    case 2: //hide him
+//                        specs.setVisibility(View.INVISIBLE);
+//
+//                        mustache_animation = new TranslateAnimation(0.0f, 0.0f, 75.0f, 0.0f);
+//                        mustache_animation.setDuration(500);
+//                        mustache_animation.setRepeatCount(0);
+//                        mustache_animation.setRepeatMode(0);
+//                        mustache_animation.setFillAfter(true);
+//                        mustache.startAnimation(mustache_animation);
+//
+//                        specs_animation = new TranslateAnimation(0.0f, 0.0f, 150.0f, 0.0f);
+//                        specs_animation.setDuration(500);
+//                        specs_animation.setRepeatCount(0);
+//                        specs_animation.setRepeatMode(0);
+//                        specs_animation.setFillAfter(true);
+//
+//                        specs.startAnimation(specs_animation);
+//                        break;
+//                }
+//                //endregion
+//                break;
+//        }
+//    }
 
-                TranslateAnimation mustache_animation;
-                TranslateAnimation specs_animation;
-                switch (mode) {
-                    case 1: //reveal alfred
-                        specs.setVisibility(View.VISIBLE);
+    public void alfredThinking()
+    {
+        //region Mustache (reduce)
+        final ImageView mustache = (ImageView) findViewById(R.id.alfred_mustache);
+        Animation mustacheReduce = new AlphaAnimation(1, 0);
+        mustacheReduce.setInterpolator(new AccelerateInterpolator());
+        mustacheReduce.setDuration(1000);
 
-                        mustache_animation = new TranslateAnimation(0.0f, 0.0f, 0.0f, 75.0f);
-                        mustache_animation.setDuration(500);
-                        mustache_animation.setRepeatCount(0);
-                        mustache_animation.setRepeatMode(0);
-                        mustache_animation.setFillAfter(true);
-                        mustache.startAnimation(mustache_animation);
+        mustacheReduce.setAnimationListener(new Animation.AnimationListener()
+        {
+            public void onAnimationEnd(Animation animation)
+            {
+                mustache.setVisibility(View.GONE);
+            }
+            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationStart(Animation animation) {}
+        });
+        //endregion
 
-                        specs_animation = new TranslateAnimation(0.0f, 0.0f, 0.0f, 150.0f);
-                        specs_animation.setDuration(500);
-                        specs_animation.setRepeatCount(0);
-                        specs_animation.setRepeatMode(0);
-                        specs_animation.setFillAfter(true);
-
-                        specs.startAnimation(specs_animation);
-                        break;
-                    case 2: //hide him
-                        specs.setVisibility(View.INVISIBLE);
-
-                        mustache_animation = new TranslateAnimation(0.0f, 0.0f, 75.0f, 0.0f);
-                        mustache_animation.setDuration(500);
-                        mustache_animation.setRepeatCount(0);
-                        mustache_animation.setRepeatMode(0);
-                        mustache_animation.setFillAfter(true);
-                        mustache.startAnimation(mustache_animation);
-
-                        specs_animation = new TranslateAnimation(0.0f, 0.0f, 150.0f, 0.0f);
-                        specs_animation.setDuration(500);
-                        specs_animation.setRepeatCount(0);
-                        specs_animation.setRepeatMode(0);
-                        specs_animation.setFillAfter(true);
-
-                        specs.startAnimation(specs_animation);
-                        break;
-                }
-                //endregion
-                break;
-        }
+        mustache.startAnimation(mustacheReduce);
     }
 
     public void AnalyseInput() {
@@ -1519,48 +1549,4 @@ public class Alfred extends WearableActivity {
 //            mClockView.setVisibility(View.GONE);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

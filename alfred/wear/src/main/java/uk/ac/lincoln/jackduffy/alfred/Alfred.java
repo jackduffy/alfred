@@ -20,6 +20,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -252,7 +253,7 @@ public class Alfred extends WearableActivity {
                         System.out.println(userInput);
                         try {
                             //alfredFaceAnimation(1, 2);
-                            alfredThinking();
+                            //alfredThinking();
                             optimiseInput();
                             AnalyseInput();
                         } catch (Exception e) {
@@ -372,24 +373,78 @@ public class Alfred extends WearableActivity {
 
     public void alfredThinking()
     {
-        //region Mustache (reduce)
         final ImageView mustache = (ImageView) findViewById(R.id.alfred_mustache);
-        Animation mustacheReduce = new AlphaAnimation(1, 0);
-        mustacheReduce.setInterpolator(new AccelerateInterpolator());
-        mustacheReduce.setDuration(1000);
+        final ProgressBar progress_spinner = (ProgressBar) findViewById(R.id.alfred_progress);
 
-        mustacheReduce.setAnimationListener(new Animation.AnimationListener()
+        if (mustache.getVisibility() == View.VISIBLE)
         {
-            public void onAnimationEnd(Animation animation)
-            {
-                mustache.setVisibility(View.GONE);
-            }
-            public void onAnimationRepeat(Animation animation) {}
-            public void onAnimationStart(Animation animation) {}
-        });
-        //endregion
+            Animation mustacheAnimation = new AlphaAnimation(1, 0);
+            mustacheAnimation.setInterpolator(new AccelerateInterpolator());
+            mustacheAnimation.setDuration(1000);
 
-        mustache.startAnimation(mustacheReduce);
+            mustacheAnimation.setAnimationListener(new Animation.AnimationListener()
+            {
+                public void onAnimationEnd(Animation animation)
+                {
+                    mustache.setVisibility(View.INVISIBLE);
+                }
+                public void onAnimationRepeat(Animation animation) {}
+                public void onAnimationStart(Animation animation) {}
+            });
+
+            mustache.startAnimation(mustacheAnimation);
+
+            Animation spinnerAnimation = new AlphaAnimation(0, 1);
+            spinnerAnimation.setInterpolator(new AccelerateInterpolator());
+            spinnerAnimation.setDuration(1000);
+
+            spinnerAnimation.setAnimationListener(new Animation.AnimationListener()
+            {
+                public void onAnimationEnd(Animation animation)
+                {
+                    progress_spinner.setVisibility(View.VISIBLE);
+                }
+                public void onAnimationRepeat(Animation animation) {}
+                public void onAnimationStart(Animation animation) {}
+            });
+
+            progress_spinner.startAnimation(spinnerAnimation);
+        }
+
+        else
+        {
+            Animation mustacheReduce = new AlphaAnimation(0, 1);
+            mustacheReduce.setInterpolator(new AccelerateInterpolator());
+            mustacheReduce.setDuration(1000);
+
+            mustacheReduce.setAnimationListener(new Animation.AnimationListener()
+            {
+                public void onAnimationEnd(Animation animation)
+                {
+                    mustache.setVisibility(View.VISIBLE);
+                }
+                public void onAnimationRepeat(Animation animation) {}
+                public void onAnimationStart(Animation animation) {}
+            });
+            mustache.startAnimation(mustacheReduce);
+
+            Animation spinnerAnimation = new AlphaAnimation(1, 0);
+            spinnerAnimation.setInterpolator(new AccelerateInterpolator());
+            spinnerAnimation.setDuration(1000);
+
+            spinnerAnimation.setAnimationListener(new Animation.AnimationListener()
+            {
+                public void onAnimationEnd(Animation animation)
+                {
+                    progress_spinner.setVisibility(View.INVISIBLE);
+                }
+                public void onAnimationRepeat(Animation animation) {}
+                public void onAnimationStart(Animation animation) {}
+            });
+
+            progress_spinner.startAnimation(spinnerAnimation);
+        }
+
     }
 
     public void AnalyseInput() {
@@ -1133,7 +1188,7 @@ public class Alfred extends WearableActivity {
         catch(Exception e)
         {
             System.out.println("Critical Error reading Shared Preferences. Operation aborted");
-            //System.out.println(e);
+            System.out.println(e);
         }
     }
 
@@ -1414,17 +1469,25 @@ public class Alfred extends WearableActivity {
                             }
                         }
 
-                        if(alfredResponse != null || alfredResponse != "")
+                        alfredThinking();
+
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable()
                         {
-                            final ScrollView myScroller = (ScrollView) findViewById(R.id.scroll_view);
-                            myScroller.smoothScrollTo(5, 321);
-                        }
+                            public void run()
+                            {
+                                if(alfredResponse != null || alfredResponse != "")
+                                {
+                                    final ScrollView myScroller = (ScrollView) findViewById(R.id.scroll_view);
+                                    myScroller.smoothScrollTo(5, 321);
+                                }
+                            }
+                        }, 1000);
 
                         userInput = null;
                         alfredResponse = null;
                         contextualResponse1 = null;
                         contextualResponse2 = null;
-
                         alfredResponseReady = false;
                         userInputUnderstood = false;
                         listeningForInput = false;

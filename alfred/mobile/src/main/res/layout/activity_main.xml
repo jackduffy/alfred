@@ -45,13 +45,13 @@
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
     <Button
-        android:text="Weather API"
+        android:text="test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/weatherApiButton"
+        android:id="@+id/testButton"
         app:layout_anchor="@+id/include"
         app:layout_anchorGravity="center_vertical|left"
         android:layout_gravity="bottom|right"
-        android:onClick="sendWeatherDetails" />
+        android:onClick="testProcess" />
 
 </android.support.design.widget.CoordinatorLayout>

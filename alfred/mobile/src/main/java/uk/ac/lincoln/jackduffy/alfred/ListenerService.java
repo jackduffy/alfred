@@ -24,8 +24,19 @@ public class ListenerService extends WearableListenerService
         {
             case "SF-":
                 System.out.println("SPECIAL FUNCTION DETECTED");
-                apiRequest = input.substring(3);
-                startActivity(new Intent(ListenerService.this, apiService.class));
+
+                if(input.contains("GOOGLE"))
+                {
+                    apiRequest = input.substring(7);
+                    startActivity(new Intent(ListenerService.this, googleCalendar.class));
+                }
+
+                else
+                {
+                    apiRequest = input.substring(3);
+                    startActivity(new Intent(ListenerService.this, apiService.class));
+                }
+
                 break;
         }
     }

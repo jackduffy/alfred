@@ -67,11 +67,14 @@ public class ListenerServiceWear extends WearableListenerService
             switch(tempData[0].substring(11))
             {
                 case "0":
-                {
                     apiService = "weather";
                     break;
-                }
+                case "1":
+                    apiService = "calendar";
+                    break;
             }
+
+            System.out.println("I've just recieved some " + apiService + " data!");
 
             if(apiService != null)
             {
@@ -93,10 +96,18 @@ public class ListenerServiceWear extends WearableListenerService
                 for(i = 0; i < sortedData.length; i++)
                 {
                     editor.putString(Integer.toString(i), sortedData[i]);
-                    //System.out.println(sortedData[i]);
                 }
 
-                editor.putString(Integer.toString(i), "##-WEATHER");
+                switch(apiService)
+                {
+                    case "weather":
+                        editor.putString(Integer.toString(i), "##-WEATHER");
+                        break;
+                    case "calendar":
+                        editor.putString(Integer.toString(i), "##-CALENDAR");
+                        break;
+                }
+
                 editor.apply();
 
                 System.out.println("Data Transfer Complete");

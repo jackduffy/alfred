@@ -249,7 +249,7 @@ public class Alfred extends WearableActivity {
 
                     //region Debugging Enabled
                     else {
-                        userInput = "WEATHER";
+                        userInput = "what events do I have today";
                         System.out.println(userInput);
                         try {
                             //alfredFaceAnimation(1, 2);
@@ -316,60 +316,9 @@ public class Alfred extends WearableActivity {
         }
 
         userInput = userInput + "_";
-        //System.out.println("FINAL INPUT: "+ userInput);
-    }
 
-//    public void alfredFaceAnimation(int toggle, int mode) {
-//        switch (toggle) {
-//            case 1: //Animation 1 - Listening for input
-//                //region Animation code
-//                ImageView mustache = (ImageView) findViewById(R.id.alfred_mustache);
-//                ImageView specs = (ImageView) findViewById(R.id.alfred_specs);
-//
-//                TranslateAnimation mustache_animation;
-//                TranslateAnimation specs_animation;
-//                switch (mode) {
-//                    case 1: //reveal alfred
-//                        specs.setVisibility(View.VISIBLE);
-//
-//                        mustache_animation = new TranslateAnimation(0.0f, 0.0f, 0.0f, 75.0f);
-//                        mustache_animation.setDuration(500);
-//                        mustache_animation.setRepeatCount(0);
-//                        mustache_animation.setRepeatMode(0);
-//                        mustache_animation.setFillAfter(true);
-//                        mustache.startAnimation(mustache_animation);
-//
-//                        specs_animation = new TranslateAnimation(0.0f, 0.0f, 0.0f, 150.0f);
-//                        specs_animation.setDuration(500);
-//                        specs_animation.setRepeatCount(0);
-//                        specs_animation.setRepeatMode(0);
-//                        specs_animation.setFillAfter(true);
-//
-//                        specs.startAnimation(specs_animation);
-//                        break;
-//                    case 2: //hide him
-//                        specs.setVisibility(View.INVISIBLE);
-//
-//                        mustache_animation = new TranslateAnimation(0.0f, 0.0f, 75.0f, 0.0f);
-//                        mustache_animation.setDuration(500);
-//                        mustache_animation.setRepeatCount(0);
-//                        mustache_animation.setRepeatMode(0);
-//                        mustache_animation.setFillAfter(true);
-//                        mustache.startAnimation(mustache_animation);
-//
-//                        specs_animation = new TranslateAnimation(0.0f, 0.0f, 150.0f, 0.0f);
-//                        specs_animation.setDuration(500);
-//                        specs_animation.setRepeatCount(0);
-//                        specs_animation.setRepeatMode(0);
-//                        specs_animation.setFillAfter(true);
-//
-//                        specs.startAnimation(specs_animation);
-//                        break;
-//                }
-//                //endregion
-//                break;
-//        }
-//    }
+        System.out.println("FINAL INPUT: "+ userInput);
+    }
 
     public void alfredThinking()
     {
@@ -447,7 +396,8 @@ public class Alfred extends WearableActivity {
 
     }
 
-    public void AnalyseInput() {
+    public void AnalyseInput()
+    {
         int numberOfModules = 0;
         System.out.println("AVAILABLE MODULES :-");
         for (int i = 0; i < modules.length; i++) {
@@ -591,7 +541,8 @@ public class Alfred extends WearableActivity {
 
     }
 
-    public void formulateResponse(String typeOfResponse) {
+    public void formulateResponse(String typeOfResponse)
+    {
         String moduleName = typeOfResponse;
         userMessageNumber = 1; //change to increment when ready
 
@@ -609,7 +560,8 @@ public class Alfred extends WearableActivity {
         }
     }
 
-    public void readXML(String targetTag) {
+    public void readXML(String targetTag)
+    {
         XmlResourceParser xpp = getResources().getXml(R.xml.inputs_en);
         int eventType = 0;
 
@@ -672,7 +624,8 @@ public class Alfred extends WearableActivity {
 
     }
 
-    public void readResponseXML(String responseCriteria) {
+    public void readResponseXML(String responseCriteria)
+    {
         try
         {
             //region Initialize values and XML file
@@ -1056,61 +1009,103 @@ public class Alfred extends WearableActivity {
                 sharedPreferencesReady = false;
                 new waitForResponse().execute();
             }
+
+            if (alfredResponse.contains("SF-GOOGLE_CALENDAR"))
+            {
+                systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
+                sendMessageToPhone("SF-GOOGLE_CALENDAR");
+                sharedPreferencesReady = false;
+                new waitForResponse().execute();
+            }
         }
     }
 
-    public void specialFunctionsController() {
+    public void specialFunctionsController()
+    {
         //region Generate Response from retrieved data
-        if (dataFromPhoneSubject != null) {
-            System.out.println("Current Time: " + systemCallTimestamp + " :: Packet Time: " + dataFromPhone[0].substring(8));
-
-            if (dataFromPhoneSubject.equals("WEATHER"))
+        if (dataFromPhoneSubject != null)
+        {
+            //System.out.println("Current Time: " + systemCallTimestamp + " :: Packet Time: " + dataFromPhone[0].substring(8));
+            System.out.println("The data packet has the subject: " + dataFromPhoneSubject);
+            switch(dataFromPhoneSubject)
             {
-                //region Weather Function
-                for (int i = 0; i < dataFromPhone.length; i++) {
-                    dataFromPhone[i] = (dataFromPhone[i].substring(dataFromPhone[i].indexOf("=") + 1)).replaceAll("(\\p{Ll})(\\p{Lu})", "$1 $2");
-                }
-
-                //region Full Weather Details Response
-                if (alfredResponse.contains("SF-WEATHER_API_FULL"))
-                {
-
-                    Integer tempCelsius1 = (((Integer.parseInt(dataFromPhone[7].substring(0, dataFromPhone[7].length()-3))) - 32)*5)/9;
-                    Integer tempCelsius2 = (((Integer.parseInt(dataFromPhone[8].substring(0, dataFromPhone[8].length()-3))) - 32)*5)/9;
-                    alfredResponse = "Ah. Here are the full weather details for today sir." +
-                            "\n\nSummary:\n" + dataFromPhone[1] +
-                            "\n\nTemperature:\n" + tempCelsius1 + "°C/" + dataFromPhone[7] + "°F" +
-                            "\n\nFeels Like:\n" + tempCelsius2 + "°C/" + dataFromPhone[8] + "°F" +
-                            "\n\nHumidity:\n" + dataFromPhone[10] + "%" +
-                            "\n\nWind:\n" + dataFromPhone[11] + "mph" +
-                            "\n\nVisibility:\n" + dataFromPhone[13] + "ft" +
-                            "\n\nCloud Cover:\n" + dataFromPhone[14] +
-                            "\n\nPressure:\n" + dataFromPhone[15] + " psi" +
-                            "\n\nPrecipitation Probability:\n" + dataFromPhone[6] + "%" +
-                            "\n\nPrecipitation Intensity:\n" + dataFromPhone[5] + "";
-
-                    if (dataFromPhone[3] != "") {
-                        alfredResponse = alfredResponse + "\n\nNearest Storm Distance:\n" + dataFromPhone[3] + " miles";
+                case "WEATHER":
+                    //region Weather Function
+                    for (int i = 0; i < dataFromPhone.length; i++) {
+                        dataFromPhone[i] = (dataFromPhone[i].substring(dataFromPhone[i].indexOf("=") + 1)).replaceAll("(\\p{Ll})(\\p{Lu})", "$1 $2");
                     }
 
-                    alfredResponse = alfredResponse + "\n\nDew Point\n: " + dataFromPhone[9] + "°F" +
-                            "\n\nOzone:\n" + dataFromPhone[16];
+                    //region Full Weather Details Response
+                    if (alfredResponse.contains("SF-WEATHER_API_FULL"))
+                    {
+                        Integer tempCelsius1 = (((Integer.parseInt(dataFromPhone[7].substring(0, dataFromPhone[7].length()-3))) - 32)*5)/9;
+                        Integer tempCelsius2 = (((Integer.parseInt(dataFromPhone[8].substring(0, dataFromPhone[8].length()-3))) - 32)*5)/9;
+                        alfredResponse = "Ah. Here are the full weather details for today sir." +
+                                "\n\nSummary:\n" + dataFromPhone[1] +
+                                "\n\nTemperature:\n" + tempCelsius1 + "°C/" + dataFromPhone[7] + "°F" +
+                                "\n\nFeels Like:\n" + tempCelsius2 + "°C/" + dataFromPhone[8] + "°F" +
+                                "\n\nHumidity:\n" + dataFromPhone[10] + "%" +
+                                "\n\nWind:\n" + dataFromPhone[11] + "mph" +
+                                "\n\nVisibility:\n" + dataFromPhone[13] + "ft" +
+                                "\n\nCloud Cover:\n" + dataFromPhone[14] +
+                                "\n\nPressure:\n" + dataFromPhone[15] + " psi" +
+                                "\n\nPrecipitation Probability:\n" + dataFromPhone[6] + "%" +
+                                "\n\nPrecipitation Intensity:\n" + dataFromPhone[5] + "";
 
-                }
-                //endregion
+                        if (dataFromPhone[3] != "") {
+                            alfredResponse = alfredResponse + "\n\nNearest Storm Distance:\n" + dataFromPhone[3] + " miles";
+                        }
 
-                //region Partial Weather Details Response
-                else if (alfredResponse.contains("SF-WEATHER_API"))
-                {
-                    Integer tempCelsius = (((Integer.parseInt(dataFromPhone[7].substring(0, dataFromPhone[7].length()-3))) - 32)*5)/9;
-                    alfredResponse = "Certainly sir. It is currently " + dataFromPhone[1] + " with the temperature of " + tempCelsius + "°C";
-                }
-                //endregion
-                //endregion
+                        alfredResponse = alfredResponse + "\n\nDew Point\n: " + dataFromPhone[9] + "°F" +
+                                "\n\nOzone:\n" + dataFromPhone[16];
+
+                    }
+                    //endregion
+
+                    //region Partial Weather Details Response
+                    else if (alfredResponse.contains("SF-WEATHER_API"))
+                    {
+                        Integer tempCelsius = (((Integer.parseInt(dataFromPhone[7].substring(0, dataFromPhone[7].length()-3))) - 32)*5)/9;
+                        alfredResponse = "Certainly sir. It is currently " + dataFromPhone[1] + " with the temperature of " + tempCelsius + "°C";
+                    }
+                    //endregion
+                    //endregion
+                    break;
+                case "CALENDAR":
+                    alfredResponse = "Most certainly sir. Your upcoming calendar events are as follows:";
+
+                    //region Cleans up the data
+                    for (int i = 0; i < dataFromPhone.length; i++)
+                    {
+                        //System.out.println("I am on loop " + i + " - there are " + dataFromPhone.length + " loops in total");
+                        dataFromPhone[i] = dataFromPhone[i].replaceAll("([A-Z])", " $1");
+                        dataFromPhone[i] = dataFromPhone[i].substring(3);
+
+                        if(dataFromPhone[i].substring(0, 1).contains(" "))
+                        {
+                            dataFromPhone[i] = dataFromPhone[i].substring(1);
+                        }
+
+                        dataFromPhone[i] = dataFromPhone[i].replaceAll("\\(", "\n");
+                        dataFromPhone[i] = dataFromPhone[i].replaceAll(" T", "\n");
+                        dataFromPhone[i] = dataFromPhone[i].substring(0,dataFromPhone[i].length()-11);
+                        alfredResponse = alfredResponse + "\n\n" + dataFromPhone[i];
+                        System.out.println(dataFromPhone[i]);
+
+                        if(i == 9)
+                        {
+                            break;
+                        }
+
+                    }
+                    //endregion
+
+                    System.out.println("Successfully broken out of loop");
+                    break;
             }
+            displayResponse();
         }
         //endregion
-//        displayResponse();
     }
 
     class waitForResponse extends AsyncTask<Void, Integer, String>
@@ -1420,6 +1415,8 @@ public class Alfred extends WearableActivity {
     {
         if(alfredResponse.contains("AL-") || alfredResponse.contains("SF-"))
         {
+            System.out.println("Not displaying this...");
+            System.out.println(alfredResponse);
             //do nothing
         }
 
@@ -1514,6 +1511,7 @@ public class Alfred extends WearableActivity {
 
     public void performContextualAction(String function)
     {
+        alfredThinking();
         if(function.equals("VOICE_DICTATION"))
         {
             resetResponseInterface();

@@ -104,6 +104,28 @@
         <WEATHER_TOMORROW></WEATHER_TOMORROW>       
     </AL-WEATHER_TOMORROW>
     
+    <AL-CALENDAR_TODAY>
+        <WHAT_EVENTS_DO_I_HAVE_TODAY_></WHAT_EVENTS_DO_I_HAVE_TODAY_>
+        <EVENTS_TODAY_></EVENTS_TODAY_>
+    </AL-CALENDAR_TODAY>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <AL-SMALLTALK_1>
         <HOW_ARE_YOU_DOING_TODAY_></HOW_ARE_YOU_DOING_TODAY_>
         <HOW_ARE_YOU_DOING_></HOW_ARE_YOU_DOING_>

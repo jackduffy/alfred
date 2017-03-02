@@ -63,6 +63,25 @@
         <C2_function>-</C2_function>
     </AL-WEATHER_TOMORROW>
     
+    <AL-CALENDAR_TODAY>
+        <one>SF-GOOGLE_CALENDAR</one>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>-</C1>
+        <C1_function>-</C1_function>
+        <C2>-</C2>
+        <C2_function>-</C2_function>
+    </AL-CALENDAR_TODAY>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <AL-SMALLTALK_1> <!--"How are you? etc." -->
         <one>I feel excellent. How may I assist you today?</one>
         <two>I've never been better, how can I help?</two>

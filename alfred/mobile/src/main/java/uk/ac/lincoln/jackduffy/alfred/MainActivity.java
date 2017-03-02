@@ -1,6 +1,7 @@
 package uk.ac.lincoln.jackduffy.alfred;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -126,6 +127,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void testProcess(View view)
+    {
+        startActivity(new Intent(MainActivity.this, googleCalendar.class));
+    }
 
 
 

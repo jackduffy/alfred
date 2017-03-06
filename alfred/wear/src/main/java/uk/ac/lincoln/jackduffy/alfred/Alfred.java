@@ -46,8 +46,6 @@ public class Alfred extends WearableActivity {
     Boolean userInputUnderstood = false;
     Boolean wasLastMessageUnderstood = true;
     Boolean alfredResponseReady = true;
-    Boolean displayResponse = false;
-    public static Boolean sharedPreferencesReady = false;
     Boolean criticalErrorDetected = false;
     Boolean testingMode = true;
     //endregion
@@ -70,11 +68,13 @@ public class Alfred extends WearableActivity {
     Integer dataFromPhoneTimestamp = 0;
     Integer systemCallTimestamp = 0;
     //endregion
-    //region Private Statics
+    //region Statics
     private static final SimpleDateFormat AMBIENT_DATE_FORMAT = new SimpleDateFormat("HH:mm", Locale.US);
     private static final int SPEECH_RECOGNIZER_REQUEST_CODE = 0;
     private static final long CONNECTION_TIME_OUT_MS = 1000;
     private static String MESSAGE = "default";
+    static final int VERIFY_INPUT_REQUEST = 1;  // The request code
+    public static Boolean sharedPreferencesReady = false;
     //endregion
     //region Miscelanious Values
     XmlResourceParser xpp;
@@ -223,103 +223,6 @@ public class Alfred extends WearableActivity {
         System.out.println("4) You're done. Alfred will take care of the rest. Easy right?");
     }
 
-    public void voiceDictation(View view) {
-        resetResponseInterface();
-        if (listeningForInput == false) {
-            listeningForInput = true;
-
-            //alfredFaceAnimation(1, 1);
-            alfredThinking();
-
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    //region Call the voice dictation tool
-                    //region Standard Operation
-                    if (testingMode == false) {
-                        try {
-                            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                            startActivityForResult(intent, SPEECH_RECOGNIZER_REQUEST_CODE);
-                        } catch (Exception e) {
-
-                        }
-                    }
-                    //endregion
-
-                    //region Debugging Enabled
-                    else {
-                        userInput = "what events do I have today";
-                        System.out.println(userInput);
-                        try {
-                            //alfredFaceAnimation(1, 2);
-                            //alfredThinking();
-                            optimiseInput();
-                            AnalyseInput();
-                        } catch (Exception e) {
-
-                        }
-                        //endregion
-                    }
-                    //endregion
-                    //endregion
-                }
-            }, 600);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //alfredFaceAnimation(1, 2);
-
-        try {
-            //region Bind the returned value from the dictation tool to a string (and perform some alterations for readability)
-            List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS); //get each word detected from the speech recognition
-            String voiceInput = results.get(0); //concatenate these into a single string
-
-            userInput = voiceInput;
-            optimiseInput();
-            //endregion
-        } catch (Exception e) {
-            //region If there's an error detected, wipe the user input
-            userInput = null;
-            //endregion
-        }
-
-        if (userInput != "") {
-            //region If the user input is ok, proceed to analysis
-            AnalyseInput();
-            //endregion
-        }
-
-        listeningForInput = false;
-    }
-
-    public void optimiseInput() {
-        userInput = userInput.replaceAll(" ", "_").toUpperCase(); //transform that string into upper case, replaces spaces with underscores and assign to a global value string
-        //System.out.println("RAW INPUT: "+ userInput);
-
-        if (userInput.contains("_+_")) {
-            userInput = userInput.replaceAll("\\+", "SF-PLUS");
-        }
-
-        if (userInput.contains("_-_")) {
-            userInput = userInput.replaceAll("\\-", "SF-MINUS");
-        }
-
-        if (userInput.contains("_X_")) {
-            userInput = userInput.replaceAll("_X_", "_SF-MULTIPLY_");
-        }
-
-        if (userInput.contains("_÷_")) {
-            userInput = userInput.replaceAll("_÷_", "_SF-DIVIDE_");
-        }
-
-        userInput = userInput + "_";
-
-        System.out.println("FINAL INPUT: "+ userInput);
-    }
-
     public void alfredThinking()
     {
         final ImageView mustache = (ImageView) findViewById(R.id.alfred_mustache);
@@ -394,6 +297,127 @@ public class Alfred extends WearableActivity {
             progress_spinner.startAnimation(spinnerAnimation);
         }
 
+    }
+
+    public void voiceDictation(View view) {
+        resetResponseInterface();
+        if (listeningForInput == false) {
+            listeningForInput = true;
+
+            //alfredFaceAnimation(1, 1);
+            alfredThinking();
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    //region Call the voice dictation tool
+                    //region Standard Operation
+                    if (testingMode == false) {
+                        try {
+                            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                            startActivityForResult(intent, SPEECH_RECOGNIZER_REQUEST_CODE);
+                        } catch (Exception e) {
+
+                        }
+                    }
+                    //endregion
+
+                    //region Debugging Enabled
+                    else {
+                        userInput = "what events do I have today";
+                        System.out.println(userInput);
+                        try {
+
+
+
+                            verifyInput();
+                            //AnalyseInput();
+                        } catch (Exception e) {
+
+                        }
+                        //endregion
+                    }
+                    //endregion
+                    //endregion
+                }
+            }, 600);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode)
+        {
+            case SPEECH_RECOGNIZER_REQUEST_CODE:
+                //region Speech Recogniser
+                try
+                {
+                    //region Bind the returned value from the dictation tool to a string (and perform some alterations for readability)
+                    List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS); //get each word detected from the speech recognition
+                    String voiceInput = results.get(0); //concatenate these into a single string
+
+                    userInput = voiceInput;
+                    optimiseInput();
+                    //endregion
+                } catch (Exception e) {
+                    //region If there's an error detected, wipe the user input
+                    userInput = null;
+                    //endregion
+                }
+
+                if (userInput != "") {
+                    //region If the user input is ok, proceed to verification process
+                    verifyInput();
+                    //endregion
+                }
+
+                listeningForInput = false;
+                //endregion
+                break;
+
+            case VERIFY_INPUT_REQUEST:
+                System.out.println("Returned from verification intent");
+                optimiseInput();
+                AnalyseInput();
+                break;
+        }
+
+    }
+
+    public void optimiseInput() {
+        userInput = userInput.replaceAll(" ", "_").toUpperCase(); //transform that string into upper case, replaces spaces with underscores and assign to a global value string
+        //System.out.println("RAW INPUT: "+ userInput);
+
+        if (userInput.contains("_+_")) {
+            userInput = userInput.replaceAll("\\+", "SF-PLUS");
+        }
+
+        if (userInput.contains("_-_")) {
+            userInput = userInput.replaceAll("\\-", "SF-MINUS");
+        }
+
+        if (userInput.contains("_X_")) {
+            userInput = userInput.replaceAll("_X_", "_SF-MULTIPLY_");
+        }
+
+        if (userInput.contains("_÷_")) {
+            userInput = userInput.replaceAll("_÷_", "_SF-DIVIDE_");
+        }
+
+        userInput = userInput + "_";
+
+        System.out.println("FINAL INPUT: "+ userInput);
+    }
+
+    public void verifyInput()
+    {
+        Intent verifyInputIntent = new Intent(Alfred.this, verifyInput.class);
+        verifyInputIntent.putExtra("DATA:", userInput);
+        startActivityForResult(verifyInputIntent, VERIFY_INPUT_REQUEST);
+
+//        System.out.println("Input is OK. Proceeding to analysis");
+//        AnalyseInput();
     }
 
     public void AnalyseInput()

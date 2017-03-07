@@ -6,7 +6,14 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class verifyInput extends Activity
@@ -28,6 +35,36 @@ public class verifyInput extends Activity
         Intent intent = getIntent();
         Bundle userInputData = intent.getExtras();
 
+        ScrollView scroller = (ScrollView)findViewById(R.id.verify_scroller);
+        scroller.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener()
+        {
+            @Override
+            public void onScrollChanged()
+            {
+                if(verificationInterrupted != true)
+                {
+                    verificationInterrupted = true;
+                    final ProgressBar progress = (ProgressBar) findViewById(R.id.verify_progressbar);
+
+                    Animation fadeOut = new AlphaAnimation(1, 0);
+                    fadeOut.setInterpolator(new AccelerateInterpolator());
+                    fadeOut.setDuration(500);
+
+                    fadeOut.setAnimationListener(new Animation.AnimationListener()
+                    {
+                        public void onAnimationEnd(Animation animation)
+                        {
+                            progress.setVisibility(View.INVISIBLE);
+                        }
+                        public void onAnimationRepeat(Animation animation) {}
+                        public void onAnimationStart(Animation animation) {}
+                    });
+
+                    progress.startAnimation(fadeOut);
+                }
+            }
+        });
+
         if(userInputData != null)
         {
             userData = (String) userInputData.get("DATA:");
@@ -40,7 +77,8 @@ public class verifyInput extends Activity
             inputTextDisplay.setText(userData);
             inputTextDisplay.bringToFront();
 
-            mProgressBar=(ProgressBar)findViewById(R.id.progressbar);
+
+            mProgressBar=(ProgressBar)findViewById(R.id.verify_progressbar);
             mProgressBar.setProgress(i);
             mCountDownTimer=new CountDownTimer(3000,2)
             {
@@ -57,7 +95,11 @@ public class verifyInput extends Activity
                 {
                     i++;
                     mProgressBar.setProgress(i);
-                    //finish();
+
+                    if(verificationInterrupted != true)
+                    {
+                        finish();
+                    }
                 }
             };
             mCountDownTimer.start();

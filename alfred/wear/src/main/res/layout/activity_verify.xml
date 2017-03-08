@@ -18,9 +18,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="0dp"
             android:orientation="vertical"
-            android:background="#2375cd"
+            android:background="#333333"
             android:id="@+id/verify_layout"
             android:weightSum="1">
 
@@ -39,8 +39,8 @@
                 android:max="200"
                 android:progress="0"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:layout_marginTop="-220dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="-202dp"
                 android:layout_above="@+id/bottom_header_relativelayout" />
 
             <TextView
@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
-                android:layout_marginTop="-350dp"
+                android:layout_marginTop="-420dp"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:id="@+id/input_text"
@@ -63,7 +63,8 @@
                 android:layout_marginLeft="31dp"
                 android:layout_marginTop="50dp"
                 android:layout_gravity="left"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:onClick="editorRedo"/>
 
             <ImageView
                 android:src="@drawable/verification_edit"
@@ -73,17 +74,85 @@
                 android:layout_marginLeft="31dp"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="left"
-                android:visibility="visible" />
+                android:onClick="editorEdit" />
 
             <ImageView
-                android:src="@drawable/verification_delete"
+                android:src="@drawable/verification_back"
                 android:layout_width="50dp"
                 android:id="@+id/verification_icon_3"
                 android:layout_height="50dp"
                 android:layout_marginLeft="31dp"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="left"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:onClick="editorBack"/>
+
+            <ImageView
+                android:src="@drawable/verification_delete"
+                android:layout_width="50dp"
+                android:id="@+id/verification_icon_4"
+                android:layout_height="50dp"
+                android:layout_marginLeft="31dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="left"
+                android:visibility="visible"
+                android:onClick="editorCancel"/>
+
+            <TextView
+                android:text="Retry"
+                android:layout_width="120dip"
+                android:layout_height="35dp"
+                android:layout_marginTop="-255dp"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:layout_marginRight="31dp"
+                android:textAlignment="gravity"
+                android:textColor="@color/white"
+                android:id="@+id/verification_retry_text"
+                android:textSize="20sp"
+                android:onClick="editorRedo"/>
+
+            <TextView
+                android:text="Edit"
+                android:layout_width="120dip"
+                android:layout_height="35dp"
+                android:layout_marginTop="35dp"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:layout_marginRight="31dp"
+                android:textAlignment="gravity"
+                android:textColor="@color/white"
+                android:id="@+id/verification_edit_text"
+                android:textSize="20sp"
+                android:onClick="editorEdit"/>
+
+            <TextView
+                android:text="Back"
+                android:layout_width="120dip"
+                android:layout_height="35dp"
+                android:layout_marginTop="35dp"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:layout_marginRight="31dp"
+                android:textAlignment="gravity"
+                android:textColor="@color/white"
+                android:id="@+id/verification_back_text"
+                android:textSize="20sp"
+                android:onClick="editorBack"/>
+
+            <TextView
+                android:text="Cancel"
+                android:layout_width="120dip"
+                android:layout_height="35dp"
+                android:layout_marginTop="35dp"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:layout_marginRight="31dp"
+                android:textAlignment="gravity"
+                android:textColor="@color/white"
+                android:id="@+id/verification_cancel_text"
+                android:textSize="20sp"
+                android:onClick="editorCancel"/>
 
         </LinearLayout>
     </ScrollView>

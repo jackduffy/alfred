@@ -50,7 +50,7 @@ public class Alfred extends WearableActivity {
     Boolean testingMode = true;
     //endregion
     //region Strings
-    String userInput;
+    public static String userInput;
     String dataFromPhoneSubject;
     String alfredResponse;
     String contextualResponse1;
@@ -74,6 +74,7 @@ public class Alfred extends WearableActivity {
     private static final long CONNECTION_TIME_OUT_MS = 1000;
     private static String MESSAGE = "default";
     static final int VERIFY_INPUT_REQUEST = 1;  // The request code
+    public static String editorResponse = null;
     public static Boolean sharedPreferencesReady = false;
     //endregion
     //region Miscelanious Values
@@ -377,9 +378,35 @@ public class Alfred extends WearableActivity {
                 break;
 
             case VERIFY_INPUT_REQUEST:
-                System.out.println("Returned from verification intent");
-                optimiseInput();
-                AnalyseInput();
+                System.out.println("Returned from verification intent with message: " + editorResponse);
+
+                switch(editorResponse)
+                {
+                    case "continue":
+                        optimiseInput();
+                        AnalyseInput();
+                        break;
+                    case "redo":
+                        alfredThinking();
+                        listeningForInput = false;
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                try {
+                                    ImageView voiceDictationClick = (ImageView) findViewById(R.id.alfred_mustache);
+                                    voiceDictationClick.performClick();
+                                } catch (Exception e) {
+                                }
+                            }
+                        }, 300);
+                        break;
+                    case "cancel":
+                        alfredThinking();
+                        resetResponseInterface();
+                        listeningForInput = false;
+                        break;
+                }
+
                 break;
         }
 

@@ -30,51 +30,20 @@ public class verifyInput extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); //create the instance of Alfred
         setContentView(R.layout.activity_verify); //set the layout
-
-
-        Intent intent = getIntent();
-        Bundle userInputData = intent.getExtras();
-
         ScrollView scroller = (ScrollView)findViewById(R.id.verify_scroller);
         scroller.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener()
         {
             @Override
             public void onScrollChanged()
             {
-                if(verificationInterrupted != true)
-                {
-                    verificationInterrupted = true;
-                    final ProgressBar progress = (ProgressBar) findViewById(R.id.verify_progressbar);
-
-                    Animation fadeOut = new AlphaAnimation(1, 0);
-                    fadeOut.setInterpolator(new AccelerateInterpolator());
-                    fadeOut.setDuration(500);
-
-                    fadeOut.setAnimationListener(new Animation.AnimationListener()
-                    {
-                        public void onAnimationEnd(Animation animation)
-                        {
-                            progress.setVisibility(View.INVISIBLE);
-                        }
-                        public void onAnimationRepeat(Animation animation) {}
-                        public void onAnimationStart(Animation animation) {}
-                    });
-
-                    progress.startAnimation(fadeOut);
-                }
+                fadeOutProgressBar();
             }
         });
 
-        if(userInputData != null)
-        {
-            userData = (String) userInputData.get("DATA:");
-        }
-
-        if(userData != null)
+        if(Alfred.userInput != null)
         {
             inputTextDisplay = (TextView)findViewById(R.id.input_text);
-            System.out.println("INPUT = " + userData);
-            inputTextDisplay.setText(userData);
+            inputTextDisplay.setText(Alfred.userInput);
             inputTextDisplay.bringToFront();
 
 
@@ -87,7 +56,6 @@ public class verifyInput extends Activity
                 {
                     i++;
                     mProgressBar.setProgress(i);
-
                 }
 
                 @Override
@@ -98,7 +66,13 @@ public class verifyInput extends Activity
 
                     if(verificationInterrupted != true)
                     {
+                        Alfred.editorResponse = "continue";
                         finish();
+                    }
+
+                    else
+                    {
+                        fadeOutProgressBar();
                     }
                 }
             };
@@ -109,9 +83,54 @@ public class verifyInput extends Activity
         {
             finish();
         }
+    }
 
+    public void fadeOutProgressBar()
+    {
+        if(verificationInterrupted != true)
+        {
+            verificationInterrupted = true;
+            final ProgressBar progress = (ProgressBar) findViewById(R.id.verify_progressbar);
 
+            Animation fadeOut = new AlphaAnimation(1, 0);
+            fadeOut.setInterpolator(new AccelerateInterpolator());
+            fadeOut.setDuration(500);
 
+            fadeOut.setAnimationListener(new Animation.AnimationListener()
+            {
+                public void onAnimationEnd(Animation animation)
+                {
+                    progress.setVisibility(View.INVISIBLE);
+                }
+                public void onAnimationRepeat(Animation animation) {}
+                public void onAnimationStart(Animation animation) {}
+            });
 
+            progress.startAnimation(fadeOut);
+        }
+    }
+
+    public void editorRedo(View view)
+    {
+        Alfred.editorResponse = "redo";
+        finish();
+    }
+
+    public void editorEdit(View view)
+    {
+        ScrollView myScroller = (ScrollView) findViewById(R.id.verify_scroller);
+        myScroller.smoothScrollTo(0, myScroller.getChildAt(0).getTop());
+    }
+
+    public void editorBack(View view)
+    {
+        Alfred.editorResponse = "continue";
+        finish();
+    }
+
+    public void editorCancel(View view)
+    {
+        Alfred.editorResponse = "cancel";
+        finish();
     }
 }

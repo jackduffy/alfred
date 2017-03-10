@@ -2,11 +2,15 @@ package uk.ac.lincoln.jackduffy.alfred;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.speech.RecognizerIntent;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
@@ -15,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class verifyInput extends Activity
 {
@@ -25,6 +30,7 @@ public class verifyInput extends Activity
 
     String userData = null;
     private TextView inputTextDisplay;
+    Integer numberOfSplitWords = 25;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +46,7 @@ public class verifyInput extends Activity
             }
         });
 
+        Alfred.editorResponse = "null";
         if(Alfred.userInput != null)
         {
             inputTextDisplay = (TextView)findViewById(R.id.input_text);
@@ -110,6 +117,100 @@ public class verifyInput extends Activity
         }
     }
 
+    public void transformInterface(String mode, Integer option) {
+        final View linearLayout = findViewById(R.id.verify_layout);
+        final ImageView background = (ImageView) findViewById(R.id.verify_background);
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.verify_progressbar);
+        final ImageView icon1 = (ImageView) findViewById(R.id.verification_icon_1);
+        final ImageView icon2 = (ImageView) findViewById(R.id.verification_icon_2);
+        final ImageView icon3 = (ImageView) findViewById(R.id.verification_icon_3);
+        final ImageView icon4 = (ImageView) findViewById(R.id.verification_icon_4);
+        final TextView label1 = (TextView) findViewById(R.id.verification_retry_text);
+        final TextView label2 = (TextView) findViewById(R.id.verification_edit_text);
+        final TextView label3 = (TextView) findViewById(R.id.verification_back_text);
+        final TextView label4 = (TextView) findViewById(R.id.verification_cancel_text);
+
+        switch (mode) {
+            case "init_editor":
+                //region Initialize Editor
+                if (background.getVisibility() == View.VISIBLE) {
+                    linearLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
+
+                    //region Quick Remove UI
+                    background.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
+                    icon1.setVisibility(View.INVISIBLE);
+                    icon2.setVisibility(View.INVISIBLE);
+                    icon3.setVisibility(View.INVISIBLE);
+                    icon4.setVisibility(View.INVISIBLE);
+                    label1.setVisibility(View.INVISIBLE);
+                    label2.setVisibility(View.INVISIBLE);
+                    label3.setVisibility(View.INVISIBLE);
+                    label4.setVisibility(View.INVISIBLE);
+                    ///endregion
+
+                    String[] userInputSplit = Alfred.userInput.split("\\s+");
+                    System.out.println("User input has been split");
+
+                    for (int i = 0; i < userInputSplit.length; i++) {
+                        TextView splitTextView = (TextView) findViewById(R.id.input_text_split_0);
+                        switch (i) {
+                            case 0:
+                                splitTextView = (TextView) findViewById(R.id.input_text_split_0);
+                                break;
+                            case 1:
+                                splitTextView = (TextView) findViewById(R.id.input_text_split_1);
+                                break;
+                            case 2:
+                                splitTextView = (TextView) findViewById(R.id.input_text_split_2);
+                                break;
+                            case 3:
+                                splitTextView = (TextView) findViewById(R.id.input_text_split_3);
+                                break;
+                            case 4:
+                                splitTextView = (TextView) findViewById(R.id.input_text_split_4);
+                                break;
+                            case 5:
+                                splitTextView = (TextView) findViewById(R.id.input_text_split_5);
+                                break;
+                            case 6:
+                                splitTextView = (TextView) findViewById(R.id.input_text_split_6);
+                                break;
+                            case 7:
+                                splitTextView = (TextView) findViewById(R.id.input_text_split_7);
+                                break;
+                            case 8:
+                                splitTextView = (TextView) findViewById(R.id.input_text_split_8);
+                                break;
+                            case 9:
+                                splitTextView = (TextView) findViewById(R.id.input_text_split_9);
+                                break;
+                            case 10:
+                                splitTextView = (TextView) findViewById(R.id.input_text_split_10);
+                                break;
+                        }
+
+                        splitTextView.setText(userInputSplit[i]);
+                        splitTextView.setVisibility(View.VISIBLE);
+
+                        //Toast.makeText(this, "Tap on the word you want to edit for additional options", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                }
+                //endregion
+                break;
+            case "edit_word":
+
+                for (int i = (option + 1); i < numberOfSplitWords; i++)
+                {
+                    String element = "input_text_split_" + i;
+                    TextView toRemove = (TextView) findViewById(res.getIdentifier(element, "id", getPackageName()));
+
+                }
+
+        }
+    }
+
     public void editorRedo(View view)
     {
         Alfred.editorResponse = "redo";
@@ -118,8 +219,12 @@ public class verifyInput extends Activity
 
     public void editorEdit(View view)
     {
+        final TextView userTextInput = (TextView) findViewById(R.id.input_text);
+        userTextInput.setVisibility(view.INVISIBLE);
+
         ScrollView myScroller = (ScrollView) findViewById(R.id.verify_scroller);
         myScroller.smoothScrollTo(0, myScroller.getChildAt(0).getTop());
+        transformInterface("init_editor", 0);
     }
 
     public void editorBack(View view)
@@ -132,5 +237,12 @@ public class verifyInput extends Activity
     {
         Alfred.editorResponse = "cancel";
         finish();
+    }
+
+    public void editWord(View view)
+    {
+        String wordToEdit = view.getTag().toString();
+        System.out.println("You tapped on word " + wordToEdit);
+        transformInterface("edit_word", Integer.parseInt(wordToEdit));
     }
 }

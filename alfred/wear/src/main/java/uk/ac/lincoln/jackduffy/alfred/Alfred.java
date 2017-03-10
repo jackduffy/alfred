@@ -405,6 +405,11 @@ public class Alfred extends WearableActivity {
                         resetResponseInterface();
                         listeningForInput = false;
                         break;
+                    case "null":
+                        alfredThinking();
+                        resetResponseInterface();
+                        listeningForInput = false;
+                        break;
                 }
 
                 break;

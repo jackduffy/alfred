@@ -27,7 +27,7 @@
             <ImageView
                 android:src="@drawable/verification_background"
                 android:layout_width="match_parent"
-                android:id="@+id/return_tab"
+                android:id="@+id/verify_background"
                 android:layout_marginTop="0dp"
                 android:paddingBottom="45dp"
                 android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
-                android:layout_marginTop="-420dp"
+                android:layout_marginTop="-300dp"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:id="@+id/input_text"
@@ -154,8 +154,159 @@
                 android:textSize="20sp"
                 android:onClick="editorCancel"/>
 
+            <TextView
+                android:text="split0"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="-450dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_0"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="0"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split1"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_1"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="1"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split2"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_2"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="2"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split3"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_3"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="3"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split4"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_4"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="4"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split5"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_5"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="5"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split6"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_6"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="6"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split7"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_7"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="7"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split8"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_8"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="8"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split9"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_9"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="9"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split10"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_10"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
         </LinearLayout>
     </ScrollView>
-
-
 </android.support.wearable.view.BoxInsetLayout>

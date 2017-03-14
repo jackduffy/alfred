@@ -155,7 +155,7 @@
                 android:onClick="editorCancel"/>
 
             <TextView
-                android:text="split0"
+                android:text="split"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -169,7 +169,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split1"
+                android:text="split"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -183,7 +183,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split2"
+                android:text="split"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -197,7 +197,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split3"
+                android:text="split"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -211,7 +211,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split4"
+                android:text="split"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -225,7 +225,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split5"
+                android:text="split"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -239,7 +239,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split6"
+                android:text="split"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -253,7 +253,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split7"
+                android:text="split"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -267,7 +267,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split8"
+                android:text="split"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -281,7 +281,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split9"
+                android:text="split"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -295,7 +295,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split10"
+                android:text="split"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -307,6 +307,273 @@
                 android:onClick="editWord"
                 android:tag="10"
                 android:visibility="invisible" />
+
+            <TextView
+                android:text="split"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_11"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_12"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_13"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_14"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_15"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_16"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_17"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_18"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_19"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_20"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_21"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_22"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_23"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_24"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
+
+            <TextView
+                android:text="split"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:id="@+id/input_text_split_25"
+                android:textSize="23sp"
+                android:onClick="editWord"
+                android:tag="10"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:src="@drawable/editor_background"
+                android:layout_width="match_parent"
+                android:id="@+id/editor_background"
+                android:layout_marginTop="-1475dp"
+                android:layout_height="wrap_content"
+                android:alpha="1"
+                android:visibility="invisible"/>
+
+            <TextView
+                android:text="Suggestions:"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="-750dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:id="@+id/suggestions_title"
+                android:textSize="23sp"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:src="@drawable/verification_redo"
+                android:layout_width="50dp"
+                android:id="@+id/editor_icon_1"
+                android:layout_height="50dp"
+                android:layout_marginTop="50dp"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                android:onClick="editorRedoWord"/>
+
+            <ImageView
+                android:src="@drawable/editor_check"
+                android:layout_width="50dp"
+                android:id="@+id/editor_icon_2"
+                android:layout_height="50dp"
+                android:layout_marginLeft="-50dp"
+                android:layout_marginTop="-100dp"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                android:onClick="editorConfirmChange"/>
+
+            <ImageView
+                android:src="@drawable/editor_cross"
+                android:layout_width="50dp"
+                android:id="@+id/editor_icon_3"
+                android:layout_height="50dp"
+                android:layout_marginRight="-50dp"
+                android:layout_marginTop="-50dp"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                android:onClick="editorRejectChange"/>
+
+
+
+
         </LinearLayout>
     </ScrollView>
 </android.support.wearable.view.BoxInsetLayout>

@@ -359,7 +359,19 @@ public class Alfred extends WearableActivity {
                     String voiceInput = results.get(0); //concatenate these into a single string
 
                     userInput = voiceInput;
-                    optimiseInput();
+                    System.out.println(userInput);
+                    try {
+
+
+
+                        verifyInput();
+                        //AnalyseInput();
+                    }
+
+                    catch (Exception e)
+                    {
+
+                    }
                     //endregion
                 } catch (Exception e) {
                     //region If there's an error detected, wipe the user input

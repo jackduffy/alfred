@@ -326,7 +326,7 @@ public class Alfred extends WearableActivity {
 
                     //region Debugging Enabled
                     else {
-                        userInput = "what cinemas are nearby";
+                        userInput = "what is the latest news";
                         System.out.println(userInput);
                         try {
 
@@ -1098,6 +1098,21 @@ public class Alfred extends WearableActivity {
                 sharedPreferencesReady = false;
                 new waitForResponse().execute();
             }
+
+            if(alfredResponse.contains("SF-NEWS"))
+            {
+                systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
+                sendMessageToPhone(alfredResponse);
+                sharedPreferencesReady = false;
+                new waitForResponse().execute();
+            }
+
+
+
+
+
+
+
 
             if (alfredResponse.contains("SF-TWITTER"))
             {

@@ -118,6 +118,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                         //endregion
                         break;
                     case "CINEMAS_NEARBY":
+                        //region CineList API
                         try
                         {
                             LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -132,6 +133,21 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                             System.out.println("Error with location sensor, using defaults...");
                             serviceURL = "https://api.cinelist.co.uk/search/cinemas/coordinates/50.7200/-1.8800";
                         }
+                        //endregion
+                        break;
+                    case "NEWS_GENERAL":
+                        //region News General
+                        try
+                        {
+                            //https://newsapi.org/bbc-news-api
+                            serviceURL = "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=62d6fc1a705742dba9c9395c903138a7";
+                        }
+
+                        catch(Exception e)
+                        {
+                            System.out.println("Error with news API");
+                        }
+                        //endregion
                         break;
                 }
             }
@@ -272,6 +288,9 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                         //endregion
 
                         //endregion
+                        break;
+                    case "NEWS_GENERAL":
+                        break;
                 }
 
                 try

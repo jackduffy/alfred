@@ -80,6 +80,15 @@
         <C2>-</C2>
         <C2_function>-</C2_function>
     </AL-CINEMAS_NEARBY>
+
+    <AL-NEWS_GENERAL>
+        <one>SF-NEWS_GENERAL</one>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>-</C1>
+        <C1_function>-</C1_function>
+        <C2>-</C2>
+        <C2_function>-</C2_function>
+    </AL-NEWS_GENERAL>
     
     
     

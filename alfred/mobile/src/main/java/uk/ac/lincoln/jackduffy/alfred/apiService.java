@@ -228,46 +228,46 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                         //region Put all the cinema data into a dataMap packet
                         Integer numberOfCinemas = cinemaNames.size();
                         dataMap.putLong("#-CONTENT:", 2);
-                        dataMap.putLong("#-NUMBEROFCINEMAS:", numberOfCinemas);
+                        dataMap.putLong("00-NUMBEROFCINEMAS:", numberOfCinemas);
 
                         if(numberOfCinemas > 0)
                         {
-                            dataMap.putString("00-cinema1Name", cinemaNames.get(0));
-                            dataMap.putString("01-cinema1Location", cinemaLocations.get(0));
-                            dataMap.putString("02-cinema1Distance", cinemaDistances.get(0));
-                            dataMap.putString("03-cinema1ID", cinemaIDs.get(0));
+                            dataMap.putString("01-cinema1Name", cinemaNames.get(0));
+                            dataMap.putString("02-cinema1Location", cinemaLocations.get(0));
+                            dataMap.putString("03-cinema1Distance", cinemaDistances.get(0));
+                            dataMap.putString("04-cinema1ID", cinemaIDs.get(0));
                         }
 
                         if(numberOfCinemas > 1)
                         {
-                            dataMap.putString("04-cinema2Name", cinemaNames.get(1));
-                            dataMap.putString("05-cinema2Location", cinemaLocations.get(1));
-                            dataMap.putString("06-cinema2Distance", cinemaDistances.get(1));
-                            dataMap.putString("07-cinema2ID", cinemaIDs.get(1));
+                            dataMap.putString("05-cinema2Name", cinemaNames.get(1));
+                            dataMap.putString("06-cinema2Location", cinemaLocations.get(1));
+                            dataMap.putString("07-cinema2Distance", cinemaDistances.get(1));
+                            dataMap.putString("08-cinema2ID", cinemaIDs.get(1));
                         }
 
                         if(numberOfCinemas > 2)
                         {
-                            dataMap.putString("08-cinema3Name", cinemaNames.get(2));
-                            dataMap.putString("09-cinema3Location", cinemaLocations.get(2));
-                            dataMap.putString("10-cinema3Distance", cinemaDistances.get(2));
-                            dataMap.putString("11-cinema3ID", cinemaIDs.get(2));
+                            dataMap.putString("09-cinema3Name", cinemaNames.get(2));
+                            dataMap.putString("10-cinema3Location", cinemaLocations.get(2));
+                            dataMap.putString("11-cinema3Distance", cinemaDistances.get(2));
+                            dataMap.putString("12-cinema3ID", cinemaIDs.get(2));
                         }
 
                         if(numberOfCinemas > 3)
                         {
-                            dataMap.putString("08-cinema4Name", cinemaNames.get(3));
-                            dataMap.putString("09-cinema4Location", cinemaLocations.get(3));
-                            dataMap.putString("10-cinema4Distance", cinemaDistances.get(3));
-                            dataMap.putString("11-cinema4ID", cinemaIDs.get(3));
+                            dataMap.putString("13-cinema4Name", cinemaNames.get(3));
+                            dataMap.putString("14-cinema4Location", cinemaLocations.get(3));
+                            dataMap.putString("15-cinema4Distance", cinemaDistances.get(3));
+                            dataMap.putString("16-cinema4ID", cinemaIDs.get(3));
                         }
 
                         if(numberOfCinemas > 4)
                         {
-                            dataMap.putString("12-cinema5Name", cinemaNames.get(4));
-                            dataMap.putString("13-cinema5Location", cinemaLocations.get(4));
-                            dataMap.putString("14-cinema5Distance", cinemaDistances.get(4));
-                            dataMap.putString("15-cinema5ID", cinemaIDs.get(4));
+                            dataMap.putString("17-cinema5Name", cinemaNames.get(4));
+                            dataMap.putString("18-cinema5Location", cinemaLocations.get(4));
+                            dataMap.putString("19-cinema5Distance", cinemaDistances.get(4));
+                            dataMap.putString("20-cinema5ID", cinemaIDs.get(4));
                         }
                         //endregion
 

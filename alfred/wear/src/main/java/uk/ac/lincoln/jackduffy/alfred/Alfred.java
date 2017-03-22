@@ -1193,7 +1193,63 @@ public class Alfred extends WearableActivity {
                     System.out.println("Successfully broken out of loop");
                     //endregion
                     break;
+                case "CINEMAS_NEARBY":
+                    //region Cinemas Nearby
+                    alfredResponse = "Ah. Of course sir. I have found ";
+                    if(dataFromPhone[0].contains("00-"))
+                    {
+                        Integer numberOfCinemas = Integer.parseInt((dataFromPhone[0].substring(20)));
+                        if(numberOfCinemas != 0)
+                        {
+                            alfredResponse = alfredResponse + (dataFromPhone[0].substring(20)) + " cinemas nearby";
+
+                            for(int i = 1; i < dataFromPhone.length; i ++)
+                            {
+                                dataFromPhone[i] = dataFromPhone[i].replaceAll("([A-Z])", " $1");
+                            }
+
+                            alfredResponse = alfredResponse + "\n\n" + (dataFromPhone[1].substring(17));
+                            alfredResponse = alfredResponse + "\n" + (dataFromPhone[2].substring(21));
+                            alfredResponse = alfredResponse + "\n(" + (dataFromPhone[3].substring(21)) + "m)";
+
+                            if(numberOfCinemas > 1)
+                            {
+                                alfredResponse = alfredResponse + "\n\n" + (dataFromPhone[5].substring(17));
+                                alfredResponse = alfredResponse + "\n" + (dataFromPhone[6].substring(21));
+                                alfredResponse = alfredResponse + "\n(" + (dataFromPhone[7].substring(21)) + "m)";
+                            }
+
+                            if(numberOfCinemas > 2)
+                            {
+                                alfredResponse = alfredResponse + "\n\n" + (dataFromPhone[9].substring(17));
+                                alfredResponse = alfredResponse + "\n" + (dataFromPhone[10].substring(21));
+                                alfredResponse = alfredResponse + "\n(" + (dataFromPhone[11].substring(21)) + "m)";
+                            }
+
+                            if(numberOfCinemas > 3)
+                            {
+                                alfredResponse = alfredResponse + "\n\n" + (dataFromPhone[13].substring(17));
+                                alfredResponse = alfredResponse + "\n" + (dataFromPhone[14].substring(21));
+                                alfredResponse = alfredResponse + "\n(" + (dataFromPhone[15].substring(21)) + "m)";
+                            }
+
+                            if(numberOfCinemas > 4)
+                            {
+                                alfredResponse = alfredResponse + "\n\n" + (dataFromPhone[17].substring(17));
+                                alfredResponse = alfredResponse + "\n" + (dataFromPhone[18].substring(21));
+                                alfredResponse = alfredResponse + "\n(" + (dataFromPhone[19].substring(21)) + "m)";
+                            }
+                        }
+
+                        else
+                        {
+                            alfredResponse = "Ah. Unfortunately I did not find any cinemas nearby. Apologies sir.";
+                        }
+                    }
+                    //endregion
+                    break;
                 case "TWITTER":
+                    break;
             }
             displayResponse();
         }
@@ -1252,6 +1308,7 @@ public class Alfred extends WearableActivity {
                         if (temp2.equals("##")) {
                             temp2 = temp.substring(3);
                             dataFromPhoneSubject = temp2;
+                            //System.out.println("Subject data - " + dataFromPhoneSubject);
                         } else {
                             sharedPrefsData[i] = temp;
                             numberOfElements++;

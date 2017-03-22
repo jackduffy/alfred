@@ -109,6 +109,9 @@ public class ListenerServiceWear extends WearableListenerService
                     case "calendar":
                         editor.putString(Integer.toString(i), "##-CALENDAR");
                         break;
+                    case "cinema_nearby":
+                        editor.putString(Integer.toString(i), "##-CINEMAS_NEARBY");
+                        break;
                 }
 
                 editor.apply();

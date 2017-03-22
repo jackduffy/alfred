@@ -72,6 +72,52 @@
         <C2_function>-</C2_function>
     </AL-CALENDAR_TODAY>
     
+    <AL-CINEMAS_NEARBY>
+        <one>SF-CINEMAS_NEARBY</one>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>-</C1>
+        <C1_function>-</C1_function>
+        <C2>-</C2>
+        <C2_function>-</C2_function>
+    </AL-CINEMAS_NEARBY>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <AL-TWITTER_TRENDING_LOCAL>
+        <one>SF-TWITTER_TRENDING_LOCAL</one>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>-</C1>
+        <C1_function>-</C1_function>
+        <C2>-</C2>
+        <C2_function>-</C2_function>
+    </AL-TWITTER_TRENDING_LOCAL>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     

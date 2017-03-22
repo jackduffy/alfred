@@ -72,6 +72,9 @@ public class ListenerServiceWear extends WearableListenerService
                 case "1":
                     apiService = "calendar";
                     break;
+                case "2":
+                    apiService = "cinema_nearby";
+                    break;
             }
 
             System.out.println("I've just recieved some " + apiService + " data!");

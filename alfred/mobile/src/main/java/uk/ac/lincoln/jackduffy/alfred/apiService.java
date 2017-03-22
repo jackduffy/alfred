@@ -16,7 +16,11 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.security.AccessController.getContext;
 
@@ -72,36 +76,71 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
         protected String doInBackground(Integer[] service)
         {
             String serviceURL = "";
-            //System.out.println("Searching for " + apiService);
-            switch(apiService)
-            {
-                case "":
-                    break;
-                case "WEATHER":
-                    //region Weather API
-                    try
-                    {
-                        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-                        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        double longitude = location.getLongitude();
-                        double latitude = location.getLatitude();
-                        serviceURL = "https://api.darksky.net/forecast/87a57fb875fe5b8587e37d88ecfe6290/" + latitude + "," + longitude;
-                    }
 
-                    catch(Exception e)
+
+            if(apiService.contains("TWITTER"))
+            {
+                String twitterTemp = apiService.substring(8);
+                if(twitterTemp.contains("TRENDING"))
+                {
+                    twitterTemp = twitterTemp.substring(9);
+                    switch(twitterTemp)
                     {
-                        System.out.println("Error with location sensor, using defaults...");
-                        serviceURL = "https://api.darksky.net/forecast/87a57fb875fe5b8587e37d88ecfe6290/37.8267,-122.4233";
+                        case "LOCAL":
+                            break;
                     }
-                    //endregion
-                    break;
+                }
+            }
+
+            else
+            {
+                switch(apiService)
+                {
+                    case "":
+                        break;
+                    case "WEATHER":
+                        //region Weather API
+                        try
+                        {
+                            LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+                            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                            double longitude = location.getLongitude();
+                            double latitude = location.getLatitude();
+                            serviceURL = "https://api.darksky.net/forecast/87a57fb875fe5b8587e37d88ecfe6290/" + latitude + "," + longitude;
+                        }
+
+                        catch(Exception e)
+                        {
+                            System.out.println("Error with location sensor, using defaults...");
+                            serviceURL = "https://api.darksky.net/forecast/87a57fb875fe5b8587e37d88ecfe6290/37.8267,-122.4233";
+                        }
+
+                        //endregion
+                        break;
+                    case "CINEMAS_NEARBY":
+                        try
+                        {
+                            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                            double longitude = location.getLongitude();
+                            double latitude = location.getLatitude();
+                            serviceURL = "https://api.cinelist.co.uk/search/cinemas/coordinates/" + latitude + "/" + longitude;
+                        }
+
+                        catch(Exception e)
+                        {
+                            System.out.println("Error with location sensor, using defaults...");
+                            serviceURL = "https://api.cinelist.co.uk/search/cinemas/coordinates/50.7200/-1.8800";
+                        }
+                        break;
+                }
             }
 
             try
             {
                 httpConnect jParser = new httpConnect();
-                JSONObject currentWeatherObject = new JSONObject(jParser.getJSONFromUrl(serviceURL));
-                //System.out.println("Retrieved data from " + serviceURL);
+
+                System.out.println("Retrieved data from " + serviceURL);
                 DataMap dataMap = new DataMap();
                 dataMap.putLong("#-TIME-STAMP:", System.nanoTime());
 
@@ -110,6 +149,8 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                     case "":
                         break;
                     case "WEATHER":
+                        //region Weather Parsing
+                        JSONObject currentWeatherObject = new JSONObject(jParser.getJSONFromUrl(serviceURL));
                         currentWeatherObject = currentWeatherObject.optJSONObject("currently");
                         String[] currentWeather = new String[17];
                         //region Populate currentWeather with all elements from the 'current' JSON object
@@ -151,7 +192,86 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                         dataMap.putString("15-pressure", currentWeather[15]);
                         dataMap.putString("16-ozone", currentWeather[16]);
                         //endregion
+                        //endregion
                         break;
+                    case "CINEMAS_NEARBY":
+                        //region Cinema Nearby Parsing
+                        JSONObject cinemaObject = new JSONObject(jParser.getJSONFromUrl(serviceURL));
+                        JSONArray cinemasARRAY = cinemaObject.getJSONArray("cinemas");
+                        List<String> cinemaNames = new ArrayList<String>(cinemasARRAY.length());
+                        List<String> cinemaLocations = new ArrayList<String>(cinemasARRAY.length());
+                        List<String> cinemaIDs = new ArrayList<String>(cinemasARRAY.length());
+                        List<String> cinemaDistances = new ArrayList<String>(cinemasARRAY.length());
+
+                        //region Cinemas Nearby Parsing
+                        for (int i = 0; i < cinemasARRAY.length(); i++)
+                        {
+                            JSONObject ithObject = cinemasARRAY.getJSONObject(i);
+                            if ((ithObject.has("name")) && (ithObject.has("id")) && (ithObject.has("distance")))
+                            {
+                                String temp = ithObject.getString("name");
+                                String[] temp2 = temp.split(", ", 2);
+                                cinemaNames.add(temp2[0]);
+                                cinemaLocations.add(temp2[1]);
+
+                                cinemaIDs.add(ithObject.getString("id"));
+                                cinemaDistances.add(ithObject.getString("distance"));
+                            }
+
+                            else
+                            {
+                                //do nothing
+                                System.out.println("Warning! A cinema entry has been skipped");
+                            }
+                        }
+                        //endregion
+                        //region Put all the cinema data into a dataMap packet
+                        Integer numberOfCinemas = cinemaNames.size();
+                        dataMap.putLong("#-CONTENT:", 2);
+                        dataMap.putLong("#-NUMBEROFCINEMAS:", numberOfCinemas);
+
+                        if(numberOfCinemas > 0)
+                        {
+                            dataMap.putString("00-cinema1Name", cinemaNames.get(0));
+                            dataMap.putString("01-cinema1Location", cinemaLocations.get(0));
+                            dataMap.putString("02-cinema1Distance", cinemaDistances.get(0));
+                            dataMap.putString("03-cinema1ID", cinemaIDs.get(0));
+                        }
+
+                        if(numberOfCinemas > 1)
+                        {
+                            dataMap.putString("04-cinema2Name", cinemaNames.get(1));
+                            dataMap.putString("05-cinema2Location", cinemaLocations.get(1));
+                            dataMap.putString("06-cinema2Distance", cinemaDistances.get(1));
+                            dataMap.putString("07-cinema2ID", cinemaIDs.get(1));
+                        }
+
+                        if(numberOfCinemas > 2)
+                        {
+                            dataMap.putString("08-cinema3Name", cinemaNames.get(2));
+                            dataMap.putString("09-cinema3Location", cinemaLocations.get(2));
+                            dataMap.putString("10-cinema3Distance", cinemaDistances.get(2));
+                            dataMap.putString("11-cinema3ID", cinemaIDs.get(2));
+                        }
+
+                        if(numberOfCinemas > 3)
+                        {
+                            dataMap.putString("08-cinema4Name", cinemaNames.get(3));
+                            dataMap.putString("09-cinema4Location", cinemaLocations.get(3));
+                            dataMap.putString("10-cinema4Distance", cinemaDistances.get(3));
+                            dataMap.putString("11-cinema4ID", cinemaIDs.get(3));
+                        }
+
+                        if(numberOfCinemas > 4)
+                        {
+                            dataMap.putString("12-cinema5Name", cinemaNames.get(4));
+                            dataMap.putString("13-cinema5Location", cinemaLocations.get(4));
+                            dataMap.putString("14-cinema5Distance", cinemaDistances.get(4));
+                            dataMap.putString("15-cinema5ID", cinemaIDs.get(4));
+                        }
+                        //endregion
+
+                        //endregion
                 }
 
                 try

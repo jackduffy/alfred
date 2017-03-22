@@ -326,7 +326,7 @@ public class Alfred extends WearableActivity {
 
                     //region Debugging Enabled
                     else {
-                        userInput = "what events do I have today";
+                        userInput = "what cinemas are nearby";
                         System.out.println(userInput);
                         try {
 
@@ -1085,6 +1085,27 @@ public class Alfred extends WearableActivity {
                 sharedPreferencesReady = false;
                 new waitForResponse().execute();
             }
+
+
+
+
+
+
+            if(alfredResponse.contains("SF-CINEMAS"))
+            {
+                systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
+                sendMessageToPhone(alfredResponse);
+                sharedPreferencesReady = false;
+                new waitForResponse().execute();
+            }
+
+            if (alfredResponse.contains("SF-TWITTER"))
+            {
+                systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
+                sendMessageToPhone(alfredResponse);
+                sharedPreferencesReady = false;
+                new waitForResponse().execute();
+            }
         }
     }
 
@@ -1140,6 +1161,7 @@ public class Alfred extends WearableActivity {
                     //endregion
                     break;
                 case "CALENDAR":
+                    //region Calendar Function
                     alfredResponse = "Most certainly sir. Your upcoming calendar events are as follows:";
 
                     //region Cleans up the data
@@ -1169,7 +1191,9 @@ public class Alfred extends WearableActivity {
                     //endregion
 
                     System.out.println("Successfully broken out of loop");
+                    //endregion
                     break;
+                case "TWITTER":
             }
             displayResponse();
         }

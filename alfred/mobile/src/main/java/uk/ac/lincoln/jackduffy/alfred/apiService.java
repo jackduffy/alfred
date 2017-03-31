@@ -291,10 +291,66 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                         break;
                     case "NEWS_GENERAL":
                         JSONObject newsObject = new JSONObject(jParser.getJSONFromUrl(serviceURL));
-                        String myString = newsObject.getJSONObject("articles").getJSONObject("0").getJSONArray(i).getString("title");
 
-                        //List<String> new = new ArrayList<String>(newsArray.length());
-                        System.out.println(myString);
+                        JSONArray articlesArray = newsObject.getJSONArray("articles");
+                        String[] articleTitles = new String[5];
+                        String[] articleDescriptions = new String[5];
+
+                        Integer numberOfArticles = 0;
+                        for(int i = 0; i < articlesArray.length(); i++)
+                        {
+                            if(i < 5)
+                            {
+                                JSONObject article = articlesArray.getJSONObject(i);
+                                articleTitles[i] = article.getString("title");
+                                articleDescriptions[i] = article.getString("description");
+                                numberOfArticles++;
+                            }
+                        }
+
+                        dataMap.putLong("#-CONTENT:", 3);
+                        String temp = "";
+
+                        if(numberOfArticles > 0)
+                        {
+                            temp = ((articleTitles[0].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                            dataMap.putString("00-articleTitle", temp);
+                            temp = ((articleDescriptions[0].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                            dataMap.putString("01-articleDescription", temp);
+                        }
+
+                        if(numberOfArticles > 1)
+                        {
+                            temp = ((articleTitles[1].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                            dataMap.putString("02-articleTitle", temp);
+                            temp = ((articleDescriptions[1].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                            dataMap.putString("03-articleDescription", temp);
+                        }
+
+                        if(numberOfArticles > 2)
+                        {
+                            temp = ((articleTitles[2].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                            dataMap.putString("04-articleTitle", temp);
+                            temp = ((articleDescriptions[2].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                            dataMap.putString("05-articleDescription", temp);
+                        }
+
+                        if(numberOfArticles > 3)
+                        {
+                            temp = ((articleTitles[3].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                            dataMap.putString("06-articleTitle", temp);
+                            temp = ((articleDescriptions[3].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                            dataMap.putString("07-articleDescription", temp);
+                        }
+
+                        if(numberOfArticles > 4)
+                        {
+                            temp = ((articleTitles[4].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                            dataMap.putString("08-articleTitle", temp);
+                            temp = ((articleDescriptions[4].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                            dataMap.putString("09-articleDescription", temp);
+                        }
+
                         break;
                 }
 

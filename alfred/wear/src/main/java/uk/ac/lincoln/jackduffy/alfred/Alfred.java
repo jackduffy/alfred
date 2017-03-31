@@ -1130,7 +1130,6 @@ public class Alfred extends WearableActivity {
         //region Generate Response from retrieved data
         if (dataFromPhoneSubject != null)
         {
-            //System.out.println("Current Time: " + systemCallTimestamp + " :: Packet Time: " + dataFromPhone[0].substring(8));
             System.out.println("The data packet has the subject: " + dataFromPhoneSubject);
             switch(dataFromPhoneSubject)
             {
@@ -1264,6 +1263,58 @@ public class Alfred extends WearableActivity {
                     }
                     //endregion
                     break;
+                case "NEWS_GENERAL":
+                    alfredResponse = "I have checked the latest news articles, here are the top stories from the BBC:";
+
+                    int numberOfArticles = 0;
+                    for(int i = 0; i < dataFromPhone.length; i++)
+                    {
+                        if(dataFromPhone[i].contains("-articleTitle"))
+                        {
+                            numberOfArticles++;
+                        }
+                    }
+
+                    for(int i = 0; i < numberOfArticles; i++)
+                    {
+                        if (i == 0)
+                        {
+                            alfredResponse = alfredResponse + ("\n\n" + (((dataFromPhone[0].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(16));
+                            //alfredResponse = alfredResponse + ("\n" + (((dataFromPhone[1].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(22));
+                        }
+
+                        if (i == 1)
+                        {
+                            alfredResponse = alfredResponse + ("\n\n" + (((dataFromPhone[2].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(16));
+                            //alfredResponse = alfredResponse + ("\n" + (((dataFromPhone[3].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(22));
+                        }
+
+                        if (i == 2)
+                        {
+                            alfredResponse = alfredResponse + ("\n\n" + (((dataFromPhone[4].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(16));
+                            //alfredResponse = alfredResponse + ("\n" + (((dataFromPhone[5].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(22));
+                        }
+
+                        if (i == 3)
+                        {
+                            alfredResponse = alfredResponse + ("\n\n" + (((dataFromPhone[6].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(16));
+                            //alfredResponse = alfredResponse + ("\n" + (((dataFromPhone[7].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(22));
+                        }
+
+                        if (i == 4)
+                        {
+                            alfredResponse = alfredResponse + ("\n\n" + (((dataFromPhone[8].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(16));
+                            //alfredResponse = alfredResponse + ("\n" + (((dataFromPhone[9].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(22));
+                        }
+                    }
+
+
+
+                    break;
+
+
+
+
                 case "TWITTER":
                     break;
             }

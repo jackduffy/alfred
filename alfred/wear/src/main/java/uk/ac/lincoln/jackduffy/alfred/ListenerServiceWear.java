@@ -64,6 +64,7 @@ public class ListenerServiceWear extends WearableListenerService
 
             Arrays.sort(tempData);
             String apiService = null;
+
             switch(tempData[0].substring(11))
             {
                 case "0":
@@ -75,11 +76,19 @@ public class ListenerServiceWear extends WearableListenerService
                 case "2":
                     apiService = "cinema_nearby";
                     break;
+                case "3":
+                    apiService = "news_general";
+                    break;
+            }
+
+            for(int i=0; i < tempData.length; i++)
+            {
+                tempData[i] = tempData[i].replaceAll(" ", "");
             }
 
             System.out.println("I've just recieved some " + apiService + " data!");
 
-            if(apiService != null)
+            if (apiService != null)
             {
                 String[] sortedData = new String[(tempData.length - 2)];
                 for(int i = 2; i < tempData.length; i++)
@@ -111,6 +120,9 @@ public class ListenerServiceWear extends WearableListenerService
                         break;
                     case "cinema_nearby":
                         editor.putString(Integer.toString(i), "##-CINEMAS_NEARBY");
+                        break;
+                    case "news_general":
+                        editor.putString(Integer.toString(i), "##-NEWS_GENERAL");
                         break;
                 }
 

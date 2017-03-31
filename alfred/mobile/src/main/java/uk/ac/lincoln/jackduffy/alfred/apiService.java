@@ -290,6 +290,11 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                         //endregion
                         break;
                     case "NEWS_GENERAL":
+                        JSONObject newsObject = new JSONObject(jParser.getJSONFromUrl(serviceURL));
+                        String myString = newsObject.getJSONObject("articles").getJSONObject("0").getJSONArray(i).getString("title");
+
+                        //List<String> new = new ArrayList<String>(newsArray.length());
+                        System.out.println(myString);
                         break;
                 }
 
@@ -308,6 +313,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
             catch (Exception e)
             {
                 System.out.println("General error with API data");
+                System.out.println(e);
             }
 
             return null;

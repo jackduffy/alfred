@@ -358,6 +358,7 @@ public class Alfred extends WearableActivity {
                     List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS); //get each word detected from the speech recognition
                     String voiceInput = results.get(0); //concatenate these into a single string
 
+                    System.out.println("The input was..." + voiceInput);
                     userInput = voiceInput;
                     System.out.println(userInput);
                     try {

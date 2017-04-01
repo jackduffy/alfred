@@ -47,7 +47,7 @@ public class Alfred extends WearableActivity {
     Boolean wasLastMessageUnderstood = true;
     Boolean alfredResponseReady = true;
     Boolean criticalErrorDetected = false;
-    Boolean testingMode = true;
+    Boolean testingMode = false;
     //endregion
     //region Strings
     public static String userInput;
@@ -346,6 +346,13 @@ public class Alfred extends WearableActivity {
         }
     }
 
+    public void cancelOperation(View view)
+    {
+        alfredThinking();
+        resetResponseInterface();
+        listeningForInput = false;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode)
@@ -360,8 +367,9 @@ public class Alfred extends WearableActivity {
 
                     System.out.println("The input was..." + voiceInput);
                     userInput = voiceInput;
-                    System.out.println(userInput);
-                    try {
+                    //System.out.println(userInput);
+                    try
+                    {
 
 
 
@@ -374,17 +382,20 @@ public class Alfred extends WearableActivity {
 
                     }
                     //endregion
-                } catch (Exception e) {
+                }
+
+                catch (Exception e)
+                {
                     //region If there's an error detected, wipe the user input
                     userInput = null;
                     //endregion
                 }
 
-                if (userInput != "") {
-                    //region If the user input is ok, proceed to verification process
-                    verifyInput();
-                    //endregion
-                }
+//                if (userInput != "") {
+//                    //region If the user input is ok, proceed to verification process
+//                    verifyInput();
+//                    //endregion
+//                }
 
                 listeningForInput = false;
                 //endregion
@@ -397,7 +408,7 @@ public class Alfred extends WearableActivity {
                 {
                     case "continue":
                         optimiseInput();
-                        AnalyseInput();
+
                         break;
                     case "redo":
                         alfredThinking();
@@ -430,10 +441,10 @@ public class Alfred extends WearableActivity {
 
     }
 
-    public void optimiseInput() {
+    public void optimiseInput()
+    {
+        System.out.println("RAW INPUT: "+ userInput);
         userInput = userInput.replaceAll(" ", "_").toUpperCase(); //transform that string into upper case, replaces spaces with underscores and assign to a global value string
-        //System.out.println("RAW INPUT: "+ userInput);
-
         if (userInput.contains("_+_")) {
             userInput = userInput.replaceAll("\\+", "SF-PLUS");
         }
@@ -453,6 +464,8 @@ public class Alfred extends WearableActivity {
         userInput = userInput + "_";
 
         System.out.println("FINAL INPUT: "+ userInput);
+
+        AnalyseInput();
     }
 
     public void verifyInput()
@@ -469,7 +482,8 @@ public class Alfred extends WearableActivity {
     {
         int numberOfModules = 0;
         System.out.println("AVAILABLE MODULES :-");
-        for (int i = 0; i < modules.length; i++) {
+        for (int i = 0; i < modules.length; i++)
+        {
             if (modules[i] != null) {
                 System.out.println("Module " + numberOfModules + ": " + modules[i]);
                 numberOfModules++;
@@ -697,6 +711,8 @@ public class Alfred extends WearableActivity {
     {
         try
         {
+            System.out.println("Searching for - " + responseCriteria);
+
             //region Initialize values and XML file
             xpp = getResources().getXml(R.xml.alfred_responses_en);
 
@@ -840,7 +856,9 @@ public class Alfred extends WearableActivity {
 
             if (alfredResponse.contains("SF-"))
             {
-                System.out.println("Special function(s) detected");
+                String[] split = alfredResponse.split(" ");
+                alfredResponse = split[0];
+                System.out.println("Special function(s) detected - " + alfredResponse);
                 specialFunctionsReader();
             }
 

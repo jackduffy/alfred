@@ -290,6 +290,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                         //endregion
                         break;
                     case "NEWS_GENERAL":
+                        //region News General Parsing
                         JSONObject newsObject = new JSONObject(jParser.getJSONFromUrl(serviceURL));
 
                         JSONArray articlesArray = newsObject.getJSONArray("articles");
@@ -350,7 +351,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                             temp = ((articleDescriptions[4].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
                             dataMap.putString("09-articleDescription", temp);
                         }
-
+                        //endregion
                         break;
                 }
 

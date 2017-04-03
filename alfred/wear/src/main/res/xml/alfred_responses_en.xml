@@ -98,7 +98,15 @@
         <C2>-</C2>
         <C2_function>-</C2_function>
     </AL-WHO_IS_>
-    
+
+    <AL-MUSIC_TRACKS_>
+        <one>SF-LASTFM</one>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>I've got another one</C1>
+        <C1_function>VOICE_DICTATION</C1_function>
+        <C2>I've got another question</C2>
+        <C2_function>OICE_DICTATION</C2_function>
+    </AL-MUSIC_TRACKS_>
     
     
     

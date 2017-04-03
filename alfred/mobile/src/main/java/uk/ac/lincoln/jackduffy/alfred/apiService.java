@@ -112,6 +112,33 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                             System.out.println("Error with Wikipedia API");
                         }
                         break;
+                    case "LASTFM":
+                        try
+                        {
+                            searchInput = searchInput.toLowerCase();
+                            String[] normalise = searchInput.split("_");
+                            searchInput = "";
+                            for(int i = 0; i < normalise.length; i++)
+                            {
+                                normalise[i] = normalise[i].substring(0, 1).toUpperCase() + normalise[i].substring(1);
+                                if(i != (normalise.length - 1))
+                                {
+                                    normalise[i] = normalise[i] + "%20";
+                                }
+
+                                else{}
+
+                                searchInput = searchInput + normalise[i];
+                            }
+
+                            serviceURL = "http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + searchInput + "&api_key=9d1a172866af41f92990acaa0912b638&format=json=";
+                        }
+
+                        catch(Exception e)
+                        {
+                            System.out.println("Error with LastFM API");
+                        }
+                        break;
                 }
             }
 
@@ -377,6 +404,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                         //endregion
                         break;
                     case "WIKIPEDIA":
+                        //region Wikipedia Parsing
                         try
                         {
                             JSONObject wikipediaResult = new JSONObject(jParser.getJSONFromUrl(serviceURL));
@@ -408,7 +436,12 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                             System.out.println("Error reading from Wikipedia");
                             System.out.println(e);
                         }
-
+                        //endregion
+                        break;
+                    case "LASTFM":
+                        JSONObject lastFMResult = new JSONObject(jParser.getJSONFromUrl(serviceURL));
+                        lastFMResult = lastFMResult.getJSONObject("trackmatches");
+                        lastFMResult = lastFMResult.getJSONObject("track");
                         break;
                 }
 

@@ -1092,7 +1092,7 @@ public class Alfred extends WearableActivity {
             if (alfredResponse.contains("SF-WEATHER_API"))
             {
                 systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
-                sendMessageToPhone("SF-WEATHER");
+                sendMessageToPhone(alfredResponse);
                 sharedPreferencesReady = false;
                 new waitForResponse().execute();
             }
@@ -1100,7 +1100,7 @@ public class Alfred extends WearableActivity {
             if (alfredResponse.contains("SF-GOOGLE_CALENDAR"))
             {
                 systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
-                sendMessageToPhone("SF-GOOGLE_CALENDAR");
+                sendMessageToPhone(alfredResponse);
                 sharedPreferencesReady = false;
                 new waitForResponse().execute();
             }
@@ -1136,10 +1136,25 @@ public class Alfred extends WearableActivity {
                     }
 
                     userInput = userInput.substring(0,userInput.length()-1);
-                    System.out.println("Research: " + userInput);
                 }
 
+                systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
+                sendMessageToPhone(alfredResponse + "#" + userInput);
+                sharedPreferencesReady = false;
+                new waitForResponse().execute();
+            }
 
+            if(alfredResponse.contains("SF-LASTFM"))
+            {
+                if(userInput.contains("WHO_SINGS_"))
+                {
+                    if(userInput.contains("WHO_SINGS_"))
+                    {
+                        userInput = userInput.substring(9);
+                    }
+
+                    userInput = userInput.substring(0,userInput.length()-1);
+                }
 
                 systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
                 sendMessageToPhone(alfredResponse + "#" + userInput);

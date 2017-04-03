@@ -326,7 +326,7 @@ public class Alfred extends WearableActivity {
 
                     //region Debugging Enabled
                     else {
-                        userInput = "what is the latest news";
+                        userInput = "who is david bowie";
                         System.out.println(userInput);
                         try {
 
@@ -1105,11 +1105,6 @@ public class Alfred extends WearableActivity {
                 new waitForResponse().execute();
             }
 
-
-
-
-
-
             if(alfredResponse.contains("SF-CINEMAS"))
             {
                 systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
@@ -1122,6 +1117,32 @@ public class Alfred extends WearableActivity {
             {
                 systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
                 sendMessageToPhone(alfredResponse);
+                sharedPreferencesReady = false;
+                new waitForResponse().execute();
+            }
+
+            if(alfredResponse.contains("SF-WIKIPEDIA"))
+            {
+                if(userInput.contains("WHO_ARE_") || userInput.contains("WHO_WAS_") || userInput.contains("WHO_IS_")|| userInput.contains("WHAT_IS_"))
+                {
+                    if(userInput.contains("WHO_ARE_") || userInput.contains("WHO_WAS_") || userInput.contains("WHAT_IS_"))
+                    {
+                        userInput = userInput.substring(8);
+                    }
+
+                    else if(userInput.contains("WHO_IS_"))
+                    {
+                        userInput = userInput.substring(7);
+                    }
+
+                    userInput = userInput.substring(0,userInput.length()-1);
+                    System.out.println("Research: " + userInput);
+                }
+
+
+
+                systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
+                sendMessageToPhone(alfredResponse + "#" + userInput);
                 sharedPreferencesReady = false;
                 new waitForResponse().execute();
             }
@@ -1282,6 +1303,7 @@ public class Alfred extends WearableActivity {
                     //endregion
                     break;
                 case "NEWS_GENERAL":
+                    //region Top Stories News
                     alfredResponse = "I have checked the latest news articles, here are the top stories from the BBC:";
 
                     int numberOfArticles = 0;
@@ -1325,16 +1347,27 @@ public class Alfred extends WearableActivity {
                             //alfredResponse = alfredResponse + ("\n" + (((dataFromPhone[9].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(22));
                         }
                     }
+                    //endregion
+                    break;
+                case "WIKIPEDIA":
+                    //region Wikipedia References
+                    dataFromPhone[2] = (((dataFromPhone[2].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(11);
 
+                    String[] wikipediaResponse = dataFromPhone[2].split("\n");
 
+                    alfredResponse = "I have retrieved the information you requested Sir. I hope it is satisfactory.";
 
+                    for(int i = 0; i < wikipediaResponse.length; i++)
+                    {
+                        alfredResponse = alfredResponse + "\n\n" + wikipediaResponse[i];
+                    }
+
+                    //endregion
                     break;
 
 
 
 
-                case "TWITTER":
-                    break;
             }
             displayResponse();
         }

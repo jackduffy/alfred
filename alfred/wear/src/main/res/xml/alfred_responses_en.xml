@@ -75,8 +75,8 @@
     <AL-CINEMAS_NEARBY>
         <one>SF-CINEMAS_NEARBY</one>
         <!-- CONTEXTUAL FUNCTIONS -->
-        <C1>-</C1>
-        <C1_function>-</C1_function>
+        <C1>I've got another question</C1>
+        <C1_function>VOICE_DICTATION</C1_function>
         <C2>-</C2>
         <C2_function>-</C2_function>
     </AL-CINEMAS_NEARBY>
@@ -89,6 +89,15 @@
         <C2>-</C2>
         <C2_function>-</C2_function>
     </AL-NEWS_GENERAL>
+
+    <AL-WHO_IS_>
+        <one>SF-WIKIPEDIA</one>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>I've got another question</C1>
+        <C1_function>VOICE_DICTATION</C1_function>
+        <C2>-</C2>
+        <C2_function>-</C2_function>
+    </AL-WHO_IS_>
     
     
     

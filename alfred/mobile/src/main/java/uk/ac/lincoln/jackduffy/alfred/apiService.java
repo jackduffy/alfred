@@ -77,18 +77,41 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
         {
             String serviceURL = "";
 
-
-            if(apiService.contains("TWITTER"))
+            if(apiService.contains("#"))
             {
-                String twitterTemp = apiService.substring(8);
-                if(twitterTemp.contains("TRENDING"))
+                String[] input = apiService.split("#");
+                apiService = input[0];
+                String searchInput = input[1];
+
+                switch (apiService)
                 {
-                    twitterTemp = twitterTemp.substring(9);
-                    switch(twitterTemp)
-                    {
-                        case "LOCAL":
-                            break;
-                    }
+                    case "WIKIPEDIA":
+                        try
+                        {
+                            searchInput = searchInput.toLowerCase();
+                            String[] normalise = searchInput.split("_");
+                            searchInput = "";
+                            for(int i = 0; i < normalise.length; i++)
+                            {
+                                normalise[i] = normalise[i].substring(0, 1).toUpperCase() + normalise[i].substring(1);
+                                if(i != (normalise.length - 1))
+                                {
+                                    normalise[i] = normalise[i] + "%20";
+                                }
+
+                                else{}
+
+                                searchInput = searchInput + normalise[i];
+                            }
+
+                            serviceURL = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=" + searchInput;
+                        }
+
+                        catch(Exception e)
+                        {
+                            System.out.println("Error with Wikipedia API");
+                        }
+                        break;
                 }
             }
 
@@ -352,6 +375,40 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                             dataMap.putString("09-articleDescription", temp);
                         }
                         //endregion
+                        break;
+                    case "WIKIPEDIA":
+                        try
+                        {
+                            JSONObject wikipediaResult = new JSONObject(jParser.getJSONFromUrl(serviceURL));
+                            wikipediaResult = wikipediaResult.getJSONObject("query");
+                            wikipediaResult = wikipediaResult.getJSONObject("pages");
+
+                            String pageID = wikipediaResult.toString().substring(2);
+                            String[] page = pageID.split("\"");
+                            pageID = page[0];
+
+                            wikipediaResult = wikipediaResult.getJSONObject(pageID);
+
+                            String wikipediaTitle = wikipediaResult.getString("title").replaceAll("/", "");
+                            String wikipediaExtract = wikipediaResult.getString("extract").replaceAll("/", "");
+
+                            System.out.println(wikipediaExtract);
+                            dataMap.putLong("#-CONTENT:", 4);
+                            String tempWiki = "";
+
+                            dataMap.putString("00-pageID", pageID);
+                            tempWiki = ((wikipediaTitle.replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                            dataMap.putString("01-title", tempWiki);
+                            tempWiki = ((wikipediaExtract.replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                            dataMap.putString("02-extract", tempWiki);
+                        }
+
+                        catch(Exception e)
+                        {
+                            System.out.println("Error reading from Wikipedia");
+                            System.out.println(e);
+                        }
+
                         break;
                 }
 

@@ -79,6 +79,9 @@ public class ListenerServiceWear extends WearableListenerService
                 case "3":
                     apiService = "news_general";
                     break;
+                case "4":
+                    apiService = "wikipedia";
+                    break;
             }
 
             for(int i=0; i < tempData.length; i++)
@@ -123,6 +126,9 @@ public class ListenerServiceWear extends WearableListenerService
                         break;
                     case "news_general":
                         editor.putString(Integer.toString(i), "##-NEWS_GENERAL");
+                        break;
+                    case "wikipedia":
+                        editor.putString(Integer.toString(i), "##-WIKIPEDIA");
                         break;
                 }
 

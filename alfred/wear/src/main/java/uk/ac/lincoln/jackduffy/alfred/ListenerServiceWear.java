@@ -65,6 +65,7 @@ public class ListenerServiceWear extends WearableListenerService
             Arrays.sort(tempData);
             String apiService = null;
 
+            System.out.println("I've got " + tempData[0].substring(11));
             switch(tempData[0].substring(11))
             {
                 case "0":
@@ -81,6 +82,9 @@ public class ListenerServiceWear extends WearableListenerService
                     break;
                 case "4":
                     apiService = "wikipedia";
+                    break;
+                case "5":
+                    apiService = "lastfm";
                     break;
             }
 
@@ -129,6 +133,9 @@ public class ListenerServiceWear extends WearableListenerService
                         break;
                     case "wikipedia":
                         editor.putString(Integer.toString(i), "##-WIKIPEDIA");
+                        break;
+                    case "lastfm":
+                        editor.putString(Integer.toString(i), "##-LASTFM");
                         break;
                 }
 

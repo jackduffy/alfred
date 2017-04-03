@@ -47,7 +47,7 @@ public class Alfred extends WearableActivity {
     Boolean wasLastMessageUnderstood = true;
     Boolean alfredResponseReady = true;
     Boolean criticalErrorDetected = false;
-    Boolean testingMode = false;
+    Boolean testingMode = true;
     //endregion
     //region Strings
     public static String userInput;
@@ -326,7 +326,7 @@ public class Alfred extends WearableActivity {
 
                     //region Debugging Enabled
                     else {
-                        userInput = "who is david bowie";
+                        userInput = "who sings heroes";
                         System.out.println(userInput);
                         try {
 
@@ -490,136 +490,42 @@ public class Alfred extends WearableActivity {
             }
         }
 
-        //region Initialize values and disengage all active modules
         String moduleName = null;
-        Boolean module1_ENGAGED = false;
-        Boolean module2_ENGAGED = false;
-        Boolean module3_ENGAGED = false;
-        Boolean module4_ENGAGED = false;
-        Boolean module5_ENGAGED = false;
-        Boolean module6_ENGAGED = false;
-        Boolean module7_ENGAGED = false;
-        Boolean module8_ENGAGED = false;
-        Boolean module9_ENGAGED = false;
-        Boolean module10_ENGAGED = false;
-        //endregion
+        userInputUnderstood = false;
 
-        try {
-            for (int module = 1; module <= (numberOfModules + 1); module++) {
-                if (module <= numberOfModules) {
+        try
+        {
+            for (int module = 0; module <= (numberOfModules + 1); module++)
+            {
+                if(userInputUnderstood == false)
+                {
                     moduleName = null;
-                    userInputUnderstood = false;
-                    switch (module) {
-                        case 1:
-                            moduleName = modules[0];
-                            break;
-                        case 2:
-                            if (module1_ENGAGED != true) {
-                                moduleName = modules[1];
-                            }
-                            break;
-                        case 3:
-                            if (module1_ENGAGED != true) {
-                                moduleName = modules[2];
-                            }
-                            break;
-                        case 4:
-                            if (module1_ENGAGED != true) {
-                                moduleName = modules[3];
-                            }
-                            break;
-                        case 5:
-                            if (module1_ENGAGED != true) {
-                                moduleName = modules[4];
-                            }
-                            break;
-                        case 6:
-                            if (module1_ENGAGED != true) {
-                                moduleName = modules[5];
-                            }
-                            break;
-                        case 7:
-                            if (module1_ENGAGED != true) {
-                                moduleName = modules[6];
-                            }
-                            break;
-                        case 8:
-                            if (module1_ENGAGED != true) {
-                                moduleName = modules[7];
-                            }
-                            break;
-                        case 9:
-                            if (module1_ENGAGED != true) {
-                                moduleName = modules[8];
-                            }
-                            break;
-                        case 10:
-                            if (module1_ENGAGED != true) {
-                                moduleName = modules[9];
-                            }
-                            break;
-                    }
-                } else if (module == (numberOfModules + 1)) {
-                    if (module1_ENGAGED != true && module2_ENGAGED != true && module3_ENGAGED != true && module4_ENGAGED != true && module5_ENGAGED != true && module6_ENGAGED != true && module7_ENGAGED != true && module7_ENGAGED != true && module8_ENGAGED != true && module9_ENGAGED != true && module10_ENGAGED != true) {
-                        System.out.println("* Input not understood *");
-                        moduleName = null;
-                        inputNotUnderstood();
-                    } else {
-                        moduleName = null;
-                    }
-                }
-
-                if (moduleName != null) {
+                    moduleName = modules[module];
                     readXML(moduleName);
-                    if (userInputUnderstood == true) {
-                        wasLastMessageUnderstood = true;
-                        switch (module) {
-                            case 1:
-                                module1_ENGAGED = true;
-                                break;
-                            case 2:
-                                module2_ENGAGED = true;
-                                break;
-                            case 3:
-                                module3_ENGAGED = true;
-                                break;
-                            case 4:
-                                module4_ENGAGED = true;
-                                break;
-                            case 5:
-                                module5_ENGAGED = true;
-                                break;
-                            case 6:
-                                module6_ENGAGED = true;
-                                break;
-                            case 7:
-                                module7_ENGAGED = true;
-                                break;
-                            case 8:
-                                module8_ENGAGED = true;
-                                break;
-                            case 9:
-                                module9_ENGAGED = true;
-                                break;
-                            case 10:
-                                module10_ENGAGED = true;
-                                break;
-                        }
-
-                        formulateResponse(moduleName);
-
-                        if (moduleName == "FAREWELLS") {
-                            module = 10;
-                            break;
-                        }
-                    } else {
-
-                    }
                 }
+
+                else if (userInputUnderstood == true)
+                {
+                    formulateResponse(moduleName);
+                    break;
+                }
+
+                else
+                {
+                    moduleName = null;
+                    System.out.println("INPUT NOT UNDERSTOOD!!!");
+                    inputNotUnderstood();
+                }
+
+
             }
+
             displayResponse();
-        } catch (Exception e) {
-            //System.out.println("CRITICAL ERROR DETECTED: User input is invalid, if this occurs after manually closing the voice dictation tool, ignore this warning!");
+        }
+
+        catch (Exception e)
+        {
+            System.out.println("CRITICAL ERROR DETECTED: User input is invalid, if this occurs after manually closing the voice dictation tool, ignore this warning!");
         }
 
     }
@@ -629,10 +535,14 @@ public class Alfred extends WearableActivity {
         String moduleName = typeOfResponse;
         userMessageNumber = 1; //change to increment when ready
 
-        if (userInputUnderstood == true) {
+        if (userInputUnderstood == true)
+        {
             xpp = getResources().getXml(R.xml.alfred_responses_en);
             readResponseXML(moduleName);
-        } else if (userInputUnderstood == false) {
+        }
+
+        else if (userInputUnderstood == false)
+        {
             userInputUnderstood = false;
             userInput = "";
             inputNotUnderstood();
@@ -678,7 +588,7 @@ public class Alfred extends WearableActivity {
                     } else if (tagReached == true) {
 
                         if (userInput.contains(comparison)) {
-                            //System.out.println("* Match in Module: " + targetTag + "*");
+                            System.out.println("* Match in Module: " + targetTag + "*");
                             userInputUnderstood = true;
                             continueRunning = false;
                             break;
@@ -693,8 +603,10 @@ public class Alfred extends WearableActivity {
                 }
             }
 
-            if (eventType == XmlPullParser.END_DOCUMENT) {
-                if (tagReached == false) {
+            if (eventType == XmlPullParser.END_DOCUMENT)
+            {
+                if (tagReached == false)
+                {
                     moduleInstructions();
                 }
                 continueRunning = false;
@@ -711,6 +623,7 @@ public class Alfred extends WearableActivity {
     {
         try
         {
+
             System.out.println("Searching for - " + responseCriteria);
 
             //region Initialize values and XML file
@@ -1158,21 +1071,6 @@ public class Alfred extends WearableActivity {
 
                 systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
                 sendMessageToPhone(alfredResponse + "#" + userInput);
-                sharedPreferencesReady = false;
-                new waitForResponse().execute();
-            }
-
-
-
-
-
-
-
-
-            if (alfredResponse.contains("SF-TWITTER"))
-            {
-                systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
-                sendMessageToPhone(alfredResponse);
                 sharedPreferencesReady = false;
                 new waitForResponse().execute();
             }

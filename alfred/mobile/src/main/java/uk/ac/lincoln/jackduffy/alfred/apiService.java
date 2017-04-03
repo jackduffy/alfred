@@ -86,23 +86,35 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                 switch (apiService)
                 {
                     case "WIKIPEDIA":
+                        //region Wikipedia
                         try
                         {
                             searchInput = searchInput.toLowerCase();
                             String[] normalise = searchInput.split("_");
-                            searchInput = "";
-                            for(int i = 0; i < normalise.length; i++)
+
+                            try
                             {
-                                normalise[i] = normalise[i].substring(0, 1).toUpperCase() + normalise[i].substring(1);
-                                if(i != (normalise.length - 1))
+
+                                searchInput = "";
+                                for(int i = 0; i < normalise.length; i++)
                                 {
-                                    normalise[i] = normalise[i] + "%20";
+                                    normalise[i] = normalise[i].substring(0, 1).toUpperCase() + normalise[i].substring(1);
+                                    if(i != (normalise.length - 1))
+                                    {
+                                        normalise[i] = normalise[i] + "%20";
+                                    }
+
+                                    else{}
+
+                                    searchInput = searchInput + normalise[i];
                                 }
-
-                                else{}
-
-                                searchInput = searchInput + normalise[i];
                             }
+
+                            catch(Exception e)
+                            {
+                                System.out.println(e);
+                            }
+
 
                             serviceURL = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=" + searchInput;
                         }
@@ -111,32 +123,22 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                         {
                             System.out.println("Error with Wikipedia API");
                         }
+                        //endregion
                         break;
                     case "LASTFM":
                         try
                         {
-                            searchInput = searchInput.toLowerCase();
-                            String[] normalise = searchInput.split("_");
-                            searchInput = "";
-                            for(int i = 0; i < normalise.length; i++)
-                            {
-                                normalise[i] = normalise[i].substring(0, 1).toUpperCase() + normalise[i].substring(1);
-                                if(i != (normalise.length - 1))
-                                {
-                                    normalise[i] = normalise[i] + "%20";
-                                }
+                            searchInput = (searchInput.toLowerCase()).substring(1);
+                            searchInput = searchInput.replaceAll("_", "");
 
-                                else{}
-
-                                searchInput = searchInput + normalise[i];
-                            }
-
-                            serviceURL = "http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + searchInput + "&api_key=9d1a172866af41f92990acaa0912b638&format=json=";
+                            System.out.println("Search term is: " + searchInput);
+                            serviceURL = "http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + searchInput + "&api_key=9d1a172866af41f92990acaa0912b638&format=json";
                         }
 
                         catch(Exception e)
                         {
                             System.out.println("Error with LastFM API");
+                            System.out.println(e);
                         }
                         break;
                 }
@@ -439,9 +441,97 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                         //endregion
                         break;
                     case "LASTFM":
+                        //region LastFM Parsing
                         JSONObject lastFMResult = new JSONObject(jParser.getJSONFromUrl(serviceURL));
+
+                        lastFMResult = lastFMResult.getJSONObject("results");
                         lastFMResult = lastFMResult.getJSONObject("trackmatches");
-                        lastFMResult = lastFMResult.getJSONObject("track");
+
+                        JSONArray tracksArray = lastFMResult.getJSONArray("track");
+
+                        String[] tracks = new String[10];
+                        String[] artists = new String[10];
+
+                        for(int i = 0; i < 10; i++)
+                        {
+                            JSONObject tempTrack = tracksArray.getJSONObject(i);
+                            tracks[i] = tempTrack.getString("name").replaceAll("\\\\", "");
+                            artists[i] = tempTrack.getString("artist").replaceAll("\\\\", "");
+                        }
+
+                        dataMap.putLong("#-CONTENT:", 5);
+                        String tempString = "";
+                        for(int i = 0; i < 10; i++)
+                        {
+                            if(tracks[i] == null || tracks[i] == "null")
+                            {
+                                switch(i)
+                                {
+                                    case 0:
+                                        tempString = ((tracks[0].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("00-track1title", tempString);
+                                        tempString = ((artists[0].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("01-track1artist", tempString);
+                                        break;
+                                    case 1:
+                                        tempString = ((tracks[1].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("02-track2title", tempString);
+                                        tempString = ((artists[1].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("03-track2artist", tempString);
+                                        break;
+                                    case 2:
+                                        tempString = ((tracks[2].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("04-track3title", tempString);
+                                        tempString = ((artists[2].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("05-track3artist", tempString);
+                                        break;
+                                    case 3:
+                                        tempString = ((tracks[3].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("06-track4title", tempString);
+                                        tempString = ((artists[3].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("07-track4artist", tempString);
+                                        break;
+                                    case 4:
+                                        tempString = ((tracks[4].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("08-track5title", tempString);
+                                        tempString = ((artists[4].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("09-track5artist", tempString);
+                                        break;
+                                    case 5:
+                                        tempString = ((tracks[5].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("10-track6title", tempString);
+                                        tempString = ((artists[5].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("11-track6artist", tempString);
+                                        break;
+                                    case 6:
+                                        tempString = ((tracks[6].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("12-track7title", tempString);
+                                        tempString = ((artists[6].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("13-track7artist", tempString);
+                                        break;
+                                    case 7:
+                                        tempString = ((tracks[7].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("14-track8title", tempString);
+                                        tempString = ((artists[7].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("15-track8artist", tempString);
+                                        break;
+                                    case 8:
+                                        tempString = ((tracks[8].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("16-track9title", tempString);
+                                        tempString = ((artists[8].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("17-track9artist", tempString);
+                                        break;
+                                    case 9:
+                                        tempString = ((tracks[9].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("18-track10title", tempString);
+                                        tempString = ((artists[9].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
+                                        dataMap.putString("19-track10artist", tempString);
+                                        break;
+                                }
+                            }
+                        }
+
+                        //endregion
                         break;
                 }
 

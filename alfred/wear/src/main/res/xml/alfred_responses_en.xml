@@ -152,7 +152,7 @@
         <two>I know Heriberto Cuayáhuitl, yes.He is an academic currently operating at the University of Lincoln.</two>
         <!-- CONTEXTUAL FUNCTIONS -->
         <C1>What is your purpose?</C1>
-        <C1_function>-</C1_function>
+        <C1_function>AL-PROJECT_2</C1_function>
         <C2>-</C2>
         <C2_function>-</C2_function>
     </AL-PROJECT_1>
@@ -218,8 +218,8 @@
         <four>Gotham City, yes. I can't say that it's the perfect place to live, however those that I serve have always had a passion for the place and it really rubs off on you.</four>
         <five>Gotham City is an interesting place for sure. It has its fair share of interesting characters around every corner. From the jokers to the pioneers and the crime fighters, Gotham has it all.</five>
         <!-- CONTEXTUAL FUNCTIONS -->
-        <C1>Gotham City?</C1>
-        <C1_function>AL-SMALLTALK_4</C1_function>
+        <C1>How old are you?</C1>
+        <C1_function>AL-SMALLTALK_5</C1_function>
         <C2>-</C2>
         <C2_function>-</C2_function>
     </AL-SMALLTALK_4>

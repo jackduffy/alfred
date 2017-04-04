@@ -65,25 +65,25 @@ public class ListenerServiceWear extends WearableListenerService
             Arrays.sort(tempData);
             String apiService = null;
 
-            System.out.println("I've got " + tempData[0].substring(11));
-            switch(tempData[0].substring(11))
+            Integer contentIdentifier = Integer.parseInt(tempData[0].substring(11).substring(0, 1));
+            switch(contentIdentifier)
             {
-                case "0":
+                case 0:
                     apiService = "weather";
                     break;
-                case "1":
+                case 1:
                     apiService = "calendar";
                     break;
-                case "2":
+                case 2:
                     apiService = "cinema_nearby";
                     break;
-                case "3":
+                case 3:
                     apiService = "news_general";
                     break;
-                case "4":
+                case 4:
                     apiService = "wikipedia";
                     break;
-                case "5":
+                case 5:
                     apiService = "lastfm";
                     break;
             }
@@ -155,6 +155,7 @@ public class ListenerServiceWear extends WearableListenerService
         catch(Exception e)
         {
             System.out.println("The data packet is not properly configured. Did not send");
+            System.out.println(e);
         }
     }
 }

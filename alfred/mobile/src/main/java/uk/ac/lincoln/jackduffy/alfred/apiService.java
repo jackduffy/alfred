@@ -422,7 +422,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                             String wikipediaTitle = wikipediaResult.getString("title").replaceAll("/", "");
                             String wikipediaExtract = wikipediaResult.getString("extract").replaceAll("/", "");
 
-                            System.out.println(wikipediaExtract);
+                            //System.out.println(wikipediaExtract);
                             dataMap.putLong("#-CONTENT:", 4);
                             String tempWiki = "";
 
@@ -461,73 +461,69 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
 
                         dataMap.putLong("#-CONTENT:", 5);
                         String tempString = "";
-                        for(int i = 0; i < 10; i++)
-                        {
-                            if(tracks[i] == null || tracks[i] == "null")
-                            {
-                                switch(i)
-                                {
-                                    case 0:
-                                        tempString = ((tracks[0].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("00-track1title", tempString);
-                                        tempString = ((artists[0].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("01-track1artist", tempString);
-                                        break;
-                                    case 1:
-                                        tempString = ((tracks[1].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("02-track2title", tempString);
-                                        tempString = ((artists[1].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("03-track2artist", tempString);
-                                        break;
-                                    case 2:
-                                        tempString = ((tracks[2].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("04-track3title", tempString);
-                                        tempString = ((artists[2].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("05-track3artist", tempString);
-                                        break;
-                                    case 3:
-                                        tempString = ((tracks[3].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("06-track4title", tempString);
-                                        tempString = ((artists[3].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("07-track4artist", tempString);
-                                        break;
-                                    case 4:
-                                        tempString = ((tracks[4].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("08-track5title", tempString);
-                                        tempString = ((artists[4].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("09-track5artist", tempString);
-                                        break;
-                                    case 5:
-                                        tempString = ((tracks[5].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("10-track6title", tempString);
-                                        tempString = ((artists[5].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("11-track6artist", tempString);
-                                        break;
-                                    case 6:
-                                        tempString = ((tracks[6].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("12-track7title", tempString);
-                                        tempString = ((artists[6].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("13-track7artist", tempString);
-                                        break;
-                                    case 7:
-                                        tempString = ((tracks[7].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("14-track8title", tempString);
-                                        tempString = ((artists[7].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("15-track8artist", tempString);
-                                        break;
-                                    case 8:
-                                        tempString = ((tracks[8].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("16-track9title", tempString);
-                                        tempString = ((artists[8].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("17-track9artist", tempString);
-                                        break;
-                                    case 9:
-                                        tempString = ((tracks[9].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("18-track10title", tempString);
-                                        tempString = ((artists[9].replaceAll("'","[APOSTROPHE]")).replaceAll(",","[COMMA]")).replaceAll(" ", "[SPACE]");
-                                        dataMap.putString("19-track10artist", tempString);
-                                        break;
-                                }
+
+                        for(int i = 0; i < 10; i++) {
+                            switch (i) {
+                                case 0:
+                                    tempString = ((tracks[0].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("00-track1title", tempString);
+                                    tempString = ((artists[0].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("01-track1artist", tempString);
+                                    break;
+                                case 1:
+                                    tempString = ((tracks[1].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("02-track2title", tempString);
+                                    tempString = ((artists[1].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("03-track2artist", tempString);
+                                    break;
+                                case 2:
+                                    tempString = ((tracks[2].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("04-track3title", tempString);
+                                    tempString = ((artists[2].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("05-track3artist", tempString);
+                                    break;
+                                case 3:
+                                    tempString = ((tracks[3].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("06-track4title", tempString);
+                                    tempString = ((artists[3].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("07-track4artist", tempString);
+                                    break;
+                                case 4:
+                                    tempString = ((tracks[4].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("08-track5title", tempString);
+                                    tempString = ((artists[4].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("09-track5artist", tempString);
+                                    break;
+                                case 5:
+                                    tempString = ((tracks[5].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("10-track6title", tempString);
+                                    tempString = ((artists[5].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("11-track6artist", tempString);
+                                    break;
+                                case 6:
+                                    tempString = ((tracks[6].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("12-track7title", tempString);
+                                    tempString = ((artists[6].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("13-track7artist", tempString);
+                                    break;
+                                case 7:
+                                    tempString = ((tracks[7].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("14-track8title", tempString);
+                                    tempString = ((artists[7].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("15-track8artist", tempString);
+                                    break;
+                                case 8:
+                                    tempString = ((tracks[8].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("16-track9title", tempString);
+                                    tempString = ((artists[8].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("17-track9artist", tempString);
+                                    break;
+                                case 9:
+                                    tempString = ((tracks[9].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("18-track10title", tempString);
+                                    tempString = ((artists[9].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("19-track10artist", tempString);
+                                    break;
                             }
                         }
 

@@ -47,7 +47,7 @@ public class Alfred extends WearableActivity {
     Boolean wasLastMessageUnderstood = true;
     Boolean alfredResponseReady = true;
     Boolean criticalErrorDetected = false;
-    Boolean testingMode = true;
+    Boolean testingMode = false;
     //endregion
     //region Strings
     public static String userInput;
@@ -84,7 +84,8 @@ public class Alfred extends WearableActivity {
     //endregion
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState); //create the instance of Alfred
         setContentView(R.layout.activity_alfred); //set the layout
         setAmbientEnabled(); //enable the ambient mode
@@ -146,7 +147,8 @@ public class Alfred extends WearableActivity {
         }
     }
 
-    public void readModules() {
+    public void readModules()
+    {
         xpp = getResources().getXml(R.xml.alfred_responses_en);
         Boolean continueSearching = true;
         String comparison;
@@ -190,7 +192,8 @@ public class Alfred extends WearableActivity {
         }
     }
 
-    public void resetResponseInterface() {
+    public void resetResponseInterface()
+    {
         //region Reinitialize Values
         alfredResponse = null;
         contextualResponse1 = null;
@@ -215,7 +218,8 @@ public class Alfred extends WearableActivity {
         //endregion
     }
 
-    public void moduleInstructions() {
+    public void moduleInstructions()
+    {
         System.out.println("Error: Module not detected, perhaps it wasn't added correctly?");
         System.out.println("STAGES OF ADDING A MODULE :-");
         System.out.println("1) Add an entry in the 'inputs_en.xml' file, these are the trigger words");
@@ -300,7 +304,8 @@ public class Alfred extends WearableActivity {
 
     }
 
-    public void voiceDictation(View view) {
+    public void voiceDictation(View view)
+    {
         resetResponseInterface();
         if (listeningForInput == false) {
             listeningForInput = true;
@@ -354,7 +359,8 @@ public class Alfred extends WearableActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         switch(requestCode)
         {
             case SPEECH_RECOGNIZER_REQUEST_CODE:
@@ -1004,38 +1010,47 @@ public class Alfred extends WearableActivity {
 
             if (alfredResponse.contains("SF-WEATHER_API"))
             {
+                //region Request Weather Data
                 systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
                 sendMessageToPhone(alfredResponse);
                 sharedPreferencesReady = false;
                 new waitForResponse().execute();
+                //endregion
             }
 
             if (alfredResponse.contains("SF-GOOGLE_CALENDAR"))
             {
+                //region Request Google Calendar Data
                 systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
                 sendMessageToPhone(alfredResponse);
                 sharedPreferencesReady = false;
                 new waitForResponse().execute();
+                //endregion
             }
 
             if(alfredResponse.contains("SF-CINEMAS"))
             {
+                //region Request Cinema Data
                 systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
                 sendMessageToPhone(alfredResponse);
                 sharedPreferencesReady = false;
                 new waitForResponse().execute();
+                //endregion
             }
 
             if(alfredResponse.contains("SF-NEWS"))
             {
+                //region Request News Data
                 systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
                 sendMessageToPhone(alfredResponse);
                 sharedPreferencesReady = false;
                 new waitForResponse().execute();
+                //endregion
             }
 
             if(alfredResponse.contains("SF-WIKIPEDIA"))
             {
+                //region Request Wikipedia Data
                 if(userInput.contains("WHO_ARE_") || userInput.contains("WHO_WAS_") || userInput.contains("WHO_IS_")|| userInput.contains("WHAT_IS_"))
                 {
                     if(userInput.contains("WHO_ARE_") || userInput.contains("WHO_WAS_") || userInput.contains("WHAT_IS_"))
@@ -1055,12 +1070,19 @@ public class Alfred extends WearableActivity {
                 sendMessageToPhone(alfredResponse + "#" + userInput);
                 sharedPreferencesReady = false;
                 new waitForResponse().execute();
+                //endregion
             }
 
             if(alfredResponse.contains("SF-LASTFM"))
             {
-                if(userInput.contains("WHO_SINGS_"))
+                //region Request LastFM data
+                if(userInput.contains("WHO_SINGS_") || userInput.contains("WHO_SUNG_"))
                 {
+                    if(userInput.contains("WHO_SUNG_"))
+                    {
+                        userInput = userInput.substring(8);
+                    }
+
                     if(userInput.contains("WHO_SINGS_"))
                     {
                         userInput = userInput.substring(9);
@@ -1073,6 +1095,7 @@ public class Alfred extends WearableActivity {
                 sendMessageToPhone(alfredResponse + "#" + userInput);
                 sharedPreferencesReady = false;
                 new waitForResponse().execute();
+                //endregion
             }
         }
     }
@@ -1277,6 +1300,32 @@ public class Alfred extends WearableActivity {
 
                     //endregion
                     break;
+                case "LASTFM":
+                {
+                    alfredResponse = "I have queried my sources and return with the following information. I hope it is satisfactory.";
+
+                    for(int i = 0; i < dataFromPhone.length; i = i + 2)
+                    {
+                        String tempTitle = (((dataFromPhone[i].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(15);
+                        String tempArtist = (((dataFromPhone[i+1].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(16);
+
+                        if(tempTitle.substring(0, 1) == "=")
+                        {
+                            System.out.println(tempTitle + " has an = for the first character");
+                            tempTitle = tempTitle.substring(1);
+                        }
+
+                        if(tempArtist.substring(0, 1) == "=")
+                        {
+                            System.out.println(tempArtist + " has an = for the first character");
+                            tempArtist = tempArtist.substring(1);
+                        }
+
+
+                        alfredResponse = alfredResponse + "\n\n" + tempTitle + "\n" + tempArtist;
+                    }
+
+                }
 
 
 

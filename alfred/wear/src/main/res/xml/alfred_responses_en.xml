@@ -90,6 +90,15 @@
         <C2_function>-</C2_function>
     </AL-NEWS_GENERAL>
 
+    <AL-NEARBY_PLACES_>
+        <one>SF-NEARBY_PLACES</one>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>I've got another question</C1>
+        <C1_function>VOICE_DICTATION</C1_function>
+        <C2>-</C2>
+        <C2_function>-</C2_function>
+    </AL-NEARBY_PLACES_>
+
     <AL-WHO_IS_>
         <one>SF-WIKIPEDIA</one>
         <!-- CONTEXTUAL FUNCTIONS -->
@@ -107,7 +116,8 @@
         <C2>-</C2>
         <C2_function>-</C2_function>
     </AL-MUSIC_TRACKS_>
-    
+
+
     
     
     

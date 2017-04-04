@@ -163,7 +163,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
 
                         catch(Exception e)
                         {
-                            System.out.println("Error with location sensor, using defaults...");
+                            System.out.println("Error with location sensor on Weather API, using defaults...");
                             serviceURL = "https://api.darksky.net/forecast/87a57fb875fe5b8587e37d88ecfe6290/37.8267,-122.4233";
                         }
 
@@ -182,7 +182,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
 
                         catch(Exception e)
                         {
-                            System.out.println("Error with location sensor, using defaults...");
+                            System.out.println("Error with location sensor on Cinelist API, using defaults...");
                             serviceURL = "https://api.cinelist.co.uk/search/cinemas/coordinates/50.7200/-1.8800";
                         }
                         //endregion
@@ -199,6 +199,25 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                         {
                             System.out.println("Error with news API");
                         }
+                        //endregion
+                        break;
+                    case "NEARBY_PLACES":
+                        //region Places API
+                        try
+                        {
+                            LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+                            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                            double longitude = location.getLongitude();
+                            double latitude = location.getLatitude();
+                            serviceURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude + "&radius=3500&key=AIzaSyBy_gwSSO1KFNbBBIUhxdXe_8HFZP423RY";
+                        }
+
+                        catch(Exception e)
+                        {
+                            System.out.println("Error with location sensor on Nearby Places API, using defaults...");
+                            serviceURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&key=AIzaSyBy_gwSSO1KFNbBBIUhxdXe_8HFZP423RY";
+                        }
+
                         //endregion
                         break;
                 }
@@ -527,6 +546,94 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                             }
                         }
 
+                        //endregion
+                        break;
+                    case "NEARBY_PLACES":
+                        //region Nearby Places Parsing
+                        JSONObject nearbyPlaces = new JSONObject(jParser.getJSONFromUrl(serviceURL));
+
+                        JSONArray nearbyPlacesResults = nearbyPlaces.getJSONArray("results");
+
+
+                        String[] placeNames = new String[10];
+                        String[] placeVicinity = new String[10];
+
+                        for(int i = 0; i < 10; i++)
+                        {
+                            JSONObject placeResult = nearbyPlacesResults.getJSONObject(i);
+                            placeNames[i] = placeResult.getString("name");
+                            System.out.println(placeNames[i]);
+                            placeVicinity[i] = placeResult.getString("vicinity");
+                            System.out.println(placeVicinity[i]);
+                        }
+
+                        dataMap.putLong("#-CONTENT:", 6);
+                        String tempData = "";
+
+                        for(int i = 0; i < 10; i++) {
+                            switch (i) {
+                                case 0:
+                                    tempData = ((placeNames[0].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("00-place1name", tempData);
+                                    tempData = ((placeVicinity[0].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("01-place1vicinity", tempData);
+                                    break;
+                                case 1:
+                                    tempData = ((placeNames[1].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("02-place2name", tempData);
+                                    tempData = ((placeVicinity[1].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("03-place2vicinity", tempData);
+                                    break;
+                                case 2:
+                                    tempData = ((placeNames[2].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("04-place3name", tempData);
+                                    tempData = ((placeVicinity[2].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("05-place3vicinity", tempData);
+                                    break;
+                                case 3:
+                                    tempData = ((placeNames[3].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("06-place4name", tempData);
+                                    tempData = ((placeVicinity[3].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("07-place4vicinity", tempData);
+                                    break;
+                                case 4:
+                                    tempData = ((placeNames[4].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("08-place5name", tempData);
+                                    tempData = ((placeVicinity[4].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("09-place5vicinity", tempData);
+                                    break;
+                                case 5:
+                                    tempData = ((placeNames[5].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("10-place6name", tempData);
+                                    tempData = ((placeVicinity[5].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("11-place6vicinity", tempData);
+                                    break;
+                                case 6:
+                                    tempData = ((placeNames[6].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("12-place7name", tempData);
+                                    tempData = ((placeVicinity[6].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("13-place7vicinity", tempData);
+                                    break;
+                                case 7:
+                                    tempData = ((placeNames[7].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("14-place8name", tempData);
+                                    tempData = ((placeVicinity[7].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("15-place8vicinity", tempData);
+                                    break;
+                                case 8:
+                                    tempData = ((placeNames[8].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("16-place9name", tempData);
+                                    tempData = ((placeVicinity[8].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("17-place9vicinity", tempData);
+                                    break;
+                                case 9:
+                                    tempData = ((placeNames[9].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("18-place10name", tempData);
+                                    tempData = ((placeVicinity[9].replaceAll("'", "[APOSTROPHE]")).replaceAll(",", "[COMMA]")).replaceAll(" ", "[SPACE]");
+                                    dataMap.putString("19-place10vicinity", tempData);
+                                    break;
+                            }
+                        }
                         //endregion
                         break;
                 }

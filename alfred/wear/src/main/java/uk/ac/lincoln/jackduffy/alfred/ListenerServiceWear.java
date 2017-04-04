@@ -86,6 +86,9 @@ public class ListenerServiceWear extends WearableListenerService
                 case 5:
                     apiService = "lastfm";
                     break;
+                case 6:
+                    apiService = "nearby_places";
+                    break;
             }
 
             for(int i=0; i < tempData.length; i++)
@@ -136,6 +139,9 @@ public class ListenerServiceWear extends WearableListenerService
                         break;
                     case "lastfm":
                         editor.putString(Integer.toString(i), "##-LASTFM");
+                        break;
+                    case "nearby_places":
+                        editor.putString(Integer.toString(i), "##-NEARBY_PLACES");
                         break;
                 }
 

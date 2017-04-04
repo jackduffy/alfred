@@ -71,7 +71,7 @@ public class Alfred extends WearableActivity {
     //region Statics
     private static final SimpleDateFormat AMBIENT_DATE_FORMAT = new SimpleDateFormat("HH:mm", Locale.US);
     private static final int SPEECH_RECOGNIZER_REQUEST_CODE = 0;
-    private static final long CONNECTION_TIME_OUT_MS = 1000;
+    private static final long CONNECTION_TIME_OUT_MS = 2000;
     private static String MESSAGE = "default";
     static final int VERIFY_INPUT_REQUEST = 1;  // The request code
     public static String editorResponse = null;
@@ -331,7 +331,7 @@ public class Alfred extends WearableActivity {
 
                     //region Debugging Enabled
                     else {
-                        userInput = "who sings heroes";
+                        userInput = "what is nearby";
                         System.out.println(userInput);
                         try {
 
@@ -1097,6 +1097,16 @@ public class Alfred extends WearableActivity {
                 new waitForResponse().execute();
                 //endregion
             }
+
+            if (alfredResponse.contains("SF-NEARBY_PLACES"))
+            {
+                //region Request Nearby Places Data
+                systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
+                sendMessageToPhone(alfredResponse);
+                sharedPreferencesReady = false;
+                new waitForResponse().execute();
+                //endregion
+            }
         }
     }
 
@@ -1323,6 +1333,22 @@ public class Alfred extends WearableActivity {
 
 
                         alfredResponse = alfredResponse + "\n\n" + tempTitle + "\n" + tempArtist;
+                    }
+
+                }
+
+                case "NEARBY_PLACES":
+                {
+                    String searchPlace = (((dataFromPhone[0].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(14);
+                    alfredResponse = "I've performed a little research on " + searchPlace + " on your behalf. Here is what I found. I hope it is satisfactory.";
+
+                    for(int i = 0; i < dataFromPhone.length; i = i + 2)
+                    {
+                        String tempPlace = (((dataFromPhone[i].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(14);
+                        String tempLocation = (((dataFromPhone[i+1].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(18);
+
+
+                        alfredResponse = alfredResponse + "\n\n" + tempPlace + "\n(" + tempLocation + ")";
                     }
 
                 }

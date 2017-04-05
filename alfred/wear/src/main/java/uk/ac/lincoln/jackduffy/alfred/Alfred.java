@@ -39,7 +39,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Alfred extends WearableActivity {
+public class Alfred extends WearableActivity
+    {
     //region Initialize Values
     //region Booleans
     Boolean listeningForInput = false;
@@ -314,16 +315,23 @@ public class Alfred extends WearableActivity {
             alfredThinking();
 
             Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                public void run() {
+            handler.postDelayed(new Runnable()
+            {
+                public void run()
+                {
                     //region Call the voice dictation tool
                     //region Standard Operation
-                    if (testingMode == false) {
-                        try {
+                    if (testingMode == false)
+                    {
+                        try
+                        {
                             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                             startActivityForResult(intent, SPEECH_RECOGNIZER_REQUEST_CODE);
-                        } catch (Exception e) {
+                        }
+
+                        catch (Exception e)
+                        {
 
                         }
                     }

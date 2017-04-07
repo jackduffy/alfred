@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
@@ -48,7 +49,7 @@ public class Alfred extends WearableActivity
     Boolean wasLastMessageUnderstood = true;
     Boolean alfredResponseReady = true;
     Boolean criticalErrorDetected = false;
-    Boolean testingMode = false;
+    Boolean testingMode = true;
     //endregion
     //region Strings
     public static String userInput;
@@ -68,6 +69,7 @@ public class Alfred extends WearableActivity
     Integer userMessageNumber = 0;
     Integer dataFromPhoneTimestamp = 0;
     Integer systemCallTimestamp = 0;
+    Integer nodeAttempts = 0;
     //endregion
     //region Statics
     private static final SimpleDateFormat AMBIENT_DATE_FORMAT = new SimpleDateFormat("HH:mm", Locale.US);
@@ -122,7 +124,7 @@ public class Alfred extends WearableActivity
                 if (nodes.size() > 0) //if there is at least one node active
                 {
                     nodeId = nodes.get(0).getId(); //get its id
-                    //System.out.println("Node Detected: " + nodeId);
+                    System.out.println("Node Detected: " + nodeId);
                 }
 
                 googleClient.disconnect(); //disconnect from the client
@@ -132,19 +134,36 @@ public class Alfred extends WearableActivity
 
     private void sendMessageToPhone(String inputPhrase)
     {
-        if (nodeId != null) {
-            MESSAGE = inputPhrase;
-            new Thread(new Runnable() {
+        MESSAGE = inputPhrase;
+        System.out.println("Attempt " + nodeAttempts);
+
+        if (nodeId != null)
+        {
+            new Thread(new Runnable()
+            {
                 @Override
-                public void run() {
+                public void run()
+                {
                     googleClient.blockingConnect(CONNECTION_TIME_OUT_MS, TimeUnit.MILLISECONDS);
                     Wearable.MessageApi.sendMessage(googleClient, nodeId, MESSAGE, null);
                     googleClient.disconnect();
+                    nodeAttempts = 0;
                     //System.out.println("Message sent");
                 }
             }).start();
-        } else {
+        }
+
+        else if (nodeAttempts >= 15)
+        {
             System.out.println("Message - '" + inputPhrase + "' failed to send");
+            nodeAttempts = 0;
+        }
+
+        else
+        {
+            nodeAttempts++;
+            retrieveDeviceNode();
+            sendMessageToPhone(MESSAGE);
         }
     }
 
@@ -339,7 +358,7 @@ public class Alfred extends WearableActivity
 
                     //region Debugging Enabled
                     else {
-                        userInput = "what is nearby";
+                        userInput = "who is david bowie";
                         System.out.println(userInput);
                         try {
 
@@ -804,6 +823,8 @@ public class Alfred extends WearableActivity
 
     public void specialFunctionsReader()
     {
+        nodeAttempts = 0;
+
         if (alfredResponse != "" || alfredResponse != null || alfredResponse != "null")
         {
             if (alfredResponse.contains("SF-MATHMATICS"))
@@ -1379,14 +1400,32 @@ public class Alfred extends WearableActivity
 
         protected String doInBackground(Void...arg0)
         {
+            long systemTime = System.currentTimeMillis();
+            Boolean timeOut = false;
+
             while(sharedPreferencesReady == false)
             {
-                //false
+                if(systemTime - System.currentTimeMillis() == 10000)
+                {
+                    timeOut = true;
+                    System.out.println("System is timing out...");
+                    break;
+                }
+
+                else
+                {
+                    SystemClock.sleep(1000);
+                }
             }
 
-            if(sharedPreferencesReady == true)
+            if(sharedPreferencesReady == true && timeOut == false)
             {
                 readSharedPrefs();
+            }
+
+            else if(timeOut == true)
+            {
+                alfredThinking();
             }
             return null;
         }

@@ -640,7 +640,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
 
                 try
                 {
-                    //System.out.println("Attempting to send to data layer");
+                    System.out.println("Attempting to send to data layer");
                     new SendToDataLayerThread("/data_from_phone", dataMap).start();
                 }
 
@@ -718,11 +718,13 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
             PutDataMapRequest putDMR = PutDataMapRequest.create(path);
             putDMR.getDataMap().putAll(dataMap);
             PutDataRequest request = putDMR.asPutDataRequest();
+            System.out.println("Sending...");
+            System.out.println("DataMap: " + dataMap);
             DataApi.DataItemResult result = Wearable.DataApi.putDataItem(googleClient, request).await();
 
             if (result.getStatus().isSuccess())
             {
-                //Log.v("myTag", "DataMap: " + dataMap + " sent successfully to data layer ");
+                Log.v("myTag", "DataMap sent successfully to data layer ");
             }
 
             else

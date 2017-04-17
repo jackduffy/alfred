@@ -37,7 +37,7 @@
     </AL-MATHMATICS>
             
     <AL-WEATHER>
-        <one>SF-WEATHER_API</one>
+        <one>SF-WEATHER</one>
         <!-- CONTEXTUAL FUNCTIONS -->
         <C1>Show me more details</C1>
         <C1_function>AL-WEATHER_FULL</C1_function>
@@ -46,7 +46,7 @@
     </AL-WEATHER>
     
     <AL-WEATHER_FULL>
-        <one>SF-WEATHER_API_FULL</one>
+        <one>SF-WEATHER_FULL</one>
         <!-- CONTEXTUAL FUNCTIONS -->
         <C1>What about tomorrow?</C1>
         <C1_function>AL-WEATHER_TOMORROW</C1_function>

@@ -65,97 +65,107 @@ public class ListenerServiceWear extends WearableListenerService
             Arrays.sort(tempData);
             String apiService = null;
 
-            Integer contentIdentifier = Integer.parseInt(tempData[0].substring(11).substring(0, 1));
-            switch(contentIdentifier)
+            if(tempData[0].substring(11).substring(0, 1) != "99999")
             {
-                case 0:
-                    apiService = "weather";
-                    break;
-                case 1:
-                    apiService = "calendar";
-                    break;
-                case 2:
-                    apiService = "cinema_nearby";
-                    break;
-                case 3:
-                    apiService = "news_general";
-                    break;
-                case 4:
-                    apiService = "wikipedia";
-                    break;
-                case 5:
-                    apiService = "lastfm";
-                    break;
-                case 6:
-                    apiService = "nearby_places";
-                    break;
-            }
-
-            for(int i=0; i < tempData.length; i++)
-            {
-                tempData[i] = tempData[i].replaceAll(" ", "");
-            }
-
-            System.out.println("I've just recieved some " + apiService + " data!");
-
-            if (apiService != null)
-            {
-                String[] sortedData = new String[(tempData.length - 2)];
-                for(int i = 2; i < tempData.length; i++)
+                Integer contentIdentifier = Integer.parseInt(tempData[0].substring(11).substring(0, 1));
+                switch(contentIdentifier)
                 {
-                    sortedData[(i-2)] = tempData[i];
-                }
-
-                //System.out.println("Preparing to write to Shared Preferences");
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.clear();
-                editor.apply();
-                editor.putInt("contentArray_size", sortedData.length);
-
-                //System.out.println("Writing to Shared Preferences");
-                int i;
-                for(i = 0; i < sortedData.length; i++)
-                {
-                    editor.putString(Integer.toString(i), sortedData[i]);
-                }
-
-                switch(apiService)
-                {
-                    case "weather":
-                        editor.putString(Integer.toString(i), "##-WEATHER");
+                    case 0:
+                        apiService = "weather";
                         break;
-                    case "calendar":
-                        editor.putString(Integer.toString(i), "##-CALENDAR");
+                    case 1:
+                        apiService = "calendar";
                         break;
-                    case "cinema_nearby":
-                        editor.putString(Integer.toString(i), "##-CINEMAS_NEARBY");
+                    case 2:
+                        apiService = "cinema_nearby";
                         break;
-                    case "news_general":
-                        editor.putString(Integer.toString(i), "##-NEWS_GENERAL");
+                    case 3:
+                        apiService = "news_general";
                         break;
-                    case "wikipedia":
-                        editor.putString(Integer.toString(i), "##-WIKIPEDIA");
+                    case 4:
+                        apiService = "wikipedia";
                         break;
-                    case "lastfm":
-                        editor.putString(Integer.toString(i), "##-LASTFM");
+                    case 5:
+                        apiService = "lastfm";
                         break;
-                    case "nearby_places":
-                        editor.putString(Integer.toString(i), "##-NEARBY_PLACES");
+                    case 6:
+                        apiService = "nearby_places";
                         break;
                 }
 
-                editor.apply();
+                for(int i=0; i < tempData.length; i++)
+                {
+                    tempData[i] = tempData[i].replaceAll(" ", "");
+                }
 
-                System.out.println("Data Transfer Complete");
-                Alfred.sharedPreferencesReady = true;
+                System.out.println("I've just recieved some " + apiService + " data!");
 
+                if (apiService != null)
+                {
+                    String[] sortedData = new String[(tempData.length - 2)];
+                    for(int i = 2; i < tempData.length; i++)
+                    {
+                        sortedData[(i-2)] = tempData[i];
+                    }
+
+                    //System.out.println("Preparing to write to Shared Preferences");
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.clear();
+                    editor.apply();
+                    editor.putInt("contentArray_size", sortedData.length);
+
+                    //System.out.println("Writing to Shared Preferences");
+                    int i;
+                    for(i = 0; i < sortedData.length; i++)
+                    {
+                        editor.putString(Integer.toString(i), sortedData[i]);
+                    }
+
+                    switch(apiService)
+                    {
+                        case "weather":
+                            editor.putString(Integer.toString(i), "##-WEATHER");
+                            break;
+                        case "calendar":
+                            editor.putString(Integer.toString(i), "##-CALENDAR");
+                            break;
+                        case "cinema_nearby":
+                            editor.putString(Integer.toString(i), "##-CINEMAS_NEARBY");
+                            break;
+                        case "news_general":
+                            editor.putString(Integer.toString(i), "##-NEWS_GENERAL");
+                            break;
+                        case "wikipedia":
+                            editor.putString(Integer.toString(i), "##-WIKIPEDIA");
+                            break;
+                        case "lastfm":
+                            editor.putString(Integer.toString(i), "##-LASTFM");
+                            break;
+                        case "nearby_places":
+                            editor.putString(Integer.toString(i), "##-NEARBY_PLACES");
+                            break;
+                    }
+
+                    editor.apply();
+
+                    System.out.println("Data Transfer Complete");
+                    Alfred.sharedPreferencesReady = true;
+
+                }
+
+                else
+                {
+                    System.out.println("Error, do not pass data");
+                }
             }
 
             else
             {
-                System.out.println("Error, do not pass data");
+                System.out.println("Problem with API data. Abort.");
             }
+
+
         }
 
         catch(Exception e)

@@ -176,6 +176,7 @@ public class verifyInput extends WearableActivity
         final ImageView editorBackground = (ImageView) findViewById(R.id.editor_background);
         final TextView suggestionsTitle = (TextView) findViewById(R.id.suggestions_title);
         final ImageView editorIcon1 = (ImageView) findViewById(R.id.editor_icon_1);
+        final ImageView editorIconDelete = (ImageView) findViewById(R.id.editor_icon_delete);
         final ImageView editorIcon2 = (ImageView) findViewById(R.id.editor_icon_2);
         final ImageView editorIcon3 = (ImageView) findViewById(R.id.editor_icon_3);
         //endregion
@@ -463,86 +464,110 @@ public class verifyInput extends WearableActivity
                 editorBackground.setVisibility(View.VISIBLE);
                 suggestionsTitle.setVisibility(View.VISIBLE);
                 editorIcon1.setVisibility(View.VISIBLE);
+                editorIconDelete.setVisibility(View.VISIBLE);
                 //endregion
 
                 pixelPosition = 0f;
                 switch (option) {
                     case 0:
                         splitWord0.setVisibility(View.VISIBLE);
-                        pixelPosition = 700.0f;
+                        pixelPosition = 625.0f;
                         break;
                     case 1:
                         splitWord1.setVisibility(View.VISIBLE);
+                        pixelPosition = 675.0f;
                         break;
                     case 2:
                         splitWord2.setVisibility(View.VISIBLE);
+                        pixelPosition = 725.0f;
                         break;
                     case 3:
                         splitWord3.setVisibility(View.VISIBLE);
+                        pixelPosition = 775.0f;
                         break;
                     case 4:
                         splitWord4.setVisibility(View.VISIBLE);
+                        pixelPosition = 825.0f;
                         break;
                     case 5:
                         splitWord5.setVisibility(View.VISIBLE);
+                        pixelPosition = 875.0f;
                         break;
                     case 6:
                         splitWord6.setVisibility(View.VISIBLE);
+                        pixelPosition = 925.0f;
                         break;
                     case 7:
                         splitWord7.setVisibility(View.VISIBLE);
+                        pixelPosition = 975.0f;
                         break;
                     case 8:
                         splitWord8.setVisibility(View.VISIBLE);
+                        pixelPosition = 1025.0f;
                         break;
                     case 9:
                         splitWord9.setVisibility(View.VISIBLE);
+                        pixelPosition = 1075.0f;
                         break;
                     case 10:
                         splitWord10.setVisibility(View.VISIBLE);
+                        pixelPosition = 1125.0f;
                         break;
                 }
 
                 editorBackground.animate().translationY(pixelPosition).start();
                 suggestionsTitle.animate().translationY(pixelPosition).start();
                 editorIcon1.animate().translationY(pixelPosition).start();
+                editorIconDelete.animate().translationY(pixelPosition).start();
                 editorIcon2.animate().translationY(pixelPosition).start();
                 editorIcon3.animate().translationY(pixelPosition).start();
                 //endregion
                 break;
             case "stop_editing":
-
+                //region Stop Editing Word
+                editorActive = false;
                 pixelPosition = 0f;
                 switch (option)
                 {
                     case 0:
-                        pixelPosition = -700.0f;
+                        pixelPosition = -625.0f;
                         break;
                     case 1:
+                        pixelPosition = -675.0f;
                         break;
                     case 2:
+                        pixelPosition = -725.0f;
                         break;
                     case 3:
+                        pixelPosition = -775.0f;
                         break;
                     case 4:
+                        pixelPosition = -825.0f;
                         break;
                     case 5:
+                        pixelPosition = -875.0f;
                         break;
                     case 6:
+                        pixelPosition = -925.0f;
                         break;
                     case 7:
+                        pixelPosition = -975.0f;
                         break;
                     case 8:
+                        pixelPosition = -1025.0f;
                         break;
                     case 9:
+                        pixelPosition = -1075.0f;
                         break;
                     case 10:
+                        pixelPosition = -1125.0f;
                         break;
                 }
 
                 editorBackground.animate().translationY(pixelPosition).start();
                 suggestionsTitle.animate().translationY(pixelPosition).start();
                 editorIcon1.animate().translationY(pixelPosition).start();
+                editorIconDelete.animate().translationY(pixelPosition).start();
                 editorIcon2.animate().translationY(pixelPosition).start();
                 editorIcon3.animate().translationY(pixelPosition).start();
 
@@ -557,6 +582,7 @@ public class verifyInput extends WearableActivity
                 splitWord8.setVisibility(View.VISIBLE);
                 splitWord9.setVisibility(View.VISIBLE);
                 splitWord10.setVisibility(View.VISIBLE);
+                //endregion
                 break;
         }
     }
@@ -593,7 +619,16 @@ public class verifyInput extends WearableActivity
     {
         wordToEdit = view.getTag().toString();
         System.out.println("You tapped on word " + wordToEdit);
-        transformInterface("edit_word", Integer.parseInt(wordToEdit));
+
+        if(editorActive == false)
+        {
+            transformInterface("edit_word", Integer.parseInt(wordToEdit));
+        }
+
+        else
+        {
+            transformInterface("stop_editing", Integer.parseInt(wordToEdit));
+        }
     }
 
     public void editorRedoWord(View view)
@@ -615,6 +650,58 @@ public class verifyInput extends WearableActivity
 
             }
         }
+    }
+
+    public void editorDeleteWord(View view)
+    {
+        wordsInInput[Integer.parseInt(wordToEdit)] = "";
+        wordToReplace = "";
+
+        Integer targetWord = Integer.parseInt(wordToEdit);
+        final TextView word;
+        switch(targetWord)
+        {
+            default:
+                word = (TextView) findViewById(R.id.input_text_split_0);
+                break;
+            case 0:
+                word = (TextView) findViewById(R.id.input_text_split_0);
+                break;
+            case 1:
+                word = (TextView) findViewById(R.id.input_text_split_1);
+                break;
+            case 2:
+                word = (TextView) findViewById(R.id.input_text_split_2);
+                break;
+            case 3:
+                word = (TextView) findViewById(R.id.input_text_split_3);
+                break;
+            case 4:
+                word = (TextView) findViewById(R.id.input_text_split_4);
+                break;
+            case 5:
+                word = (TextView) findViewById(R.id.input_text_split_5);
+                break;
+            case 6:
+                word = (TextView) findViewById(R.id.input_text_split_6);
+                break;
+            case 7:
+                word = (TextView) findViewById(R.id.input_text_split_7);
+                break;
+            case 8:
+                word = (TextView) findViewById(R.id.input_text_split_8);
+                break;
+            case 9:
+                word = (TextView) findViewById(R.id.input_text_split_9);
+                break;
+            case 10:
+                word = (TextView) findViewById(R.id.input_text_split_10);
+                break;
+        }
+        word.setText(wordToReplace);
+
+        reconstructSplitPhrase();
+        transformInterface("stop_editing", Integer.parseInt(wordToEdit));
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -641,20 +728,55 @@ public class verifyInput extends WearableActivity
 
                 final TextView suggestionsTitle = (TextView) findViewById(R.id.suggestions_title);
                 final ImageView editorIcon1 = (ImageView) findViewById(R.id.editor_icon_1);
+                final ImageView editorIconDelete = (ImageView) findViewById(R.id.editor_icon_delete);
                 final ImageView editorIcon2 = (ImageView) findViewById(R.id.editor_icon_2);
                 final ImageView editorIcon3 = (ImageView) findViewById(R.id.editor_icon_3);
 
                 final TextView word;
                 switch(targetWord)
                 {
+                    default:
+                        word = (TextView) findViewById(R.id.input_text_split_0);
+                        break;
                     case 0:
                         word = (TextView) findViewById(R.id.input_text_split_0);
-                        word.setText(wordToReplace);
+                        break;
+                    case 1:
+                        word = (TextView) findViewById(R.id.input_text_split_1);
+                        break;
+                    case 2:
+                        word = (TextView) findViewById(R.id.input_text_split_2);
+                        break;
+                    case 3:
+                        word = (TextView) findViewById(R.id.input_text_split_3);
+                        break;
+                    case 4:
+                        word = (TextView) findViewById(R.id.input_text_split_4);
+                        break;
+                    case 5:
+                        word = (TextView) findViewById(R.id.input_text_split_5);
+                        break;
+                    case 6:
+                        word = (TextView) findViewById(R.id.input_text_split_6);
+                        break;
+                    case 7:
+                        word = (TextView) findViewById(R.id.input_text_split_7);
+                        break;
+                    case 8:
+                        word = (TextView) findViewById(R.id.input_text_split_8);
+                        break;
+                    case 9:
+                        word = (TextView) findViewById(R.id.input_text_split_9);
+                        break;
+                    case 10:
+                        word = (TextView) findViewById(R.id.input_text_split_10);
                         break;
                 }
+                word.setText(wordToReplace);
 
                 suggestionsTitle.setVisibility(View.INVISIBLE);
                 editorIcon1.setVisibility(View.INVISIBLE);
+                editorIconDelete.setVisibility(View.INVISIBLE);
                 editorIcon2.setVisibility(View.VISIBLE);
                 editorIcon3.setVisibility(View.VISIBLE);
             }
@@ -693,9 +815,18 @@ public class verifyInput extends WearableActivity
 
     public void reconstructSplitPhrase()
     {
+        for(int i = 0; i < wordsInInput.length; i++)
+        {
+            if(wordsInInput[i] == null)
+            {
+                wordsInInput[i] = "";
+            }
+        }
+
         String reconstructedString = TextUtils.join(" ", wordsInInput);
         System.out.println("Reconstructed string is...");
         System.out.println(reconstructedString);
+        Alfred.userInput = reconstructedString;
     }
 
 

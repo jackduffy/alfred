@@ -49,7 +49,7 @@ public class Alfred extends WearableActivity
     Boolean wasLastMessageUnderstood = true;
     Boolean alfredResponseReady = true;
     Boolean criticalErrorDetected = false;
-    Boolean testingMode = true;
+    Boolean testingMode = false;
     //endregion
     //region Strings
     public static String userInput;
@@ -358,7 +358,7 @@ public class Alfred extends WearableActivity
 
                     //region Debugging Enabled
                     else {
-                        userInput = "who is david bowie";
+                        userInput = "what is the weather like";
                         System.out.println(userInput);
                         try {
 
@@ -463,9 +463,10 @@ public class Alfred extends WearableActivity
                         listeningForInput = false;
                         break;
                     case "null":
-                        alfredThinking();
-                        resetResponseInterface();
-                        listeningForInput = false;
+                        optimiseInput();
+//                        alfredThinking();
+//                        resetResponseInterface();
+//                        listeningForInput = false;
                         break;
                 }
 
@@ -495,7 +496,6 @@ public class Alfred extends WearableActivity
         }
 
         userInput = userInput + "_";
-
         System.out.println("FINAL INPUT: "+ userInput);
 
         AnalyseInput();
@@ -1037,11 +1037,21 @@ public class Alfred extends WearableActivity
                 //endregion
             }
 
-            if (alfredResponse.contains("SF-WEATHER_API"))
+            if (alfredResponse.contains("SF-WEATHER"))
             {
                 //region Request Weather Data
                 systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
-                sendMessageToPhone(alfredResponse);
+
+                if(alfredResponse.equals("SF-WEATHER_FULL"))
+                {
+                    sendMessageToPhone("SF-WEATHER");
+                }
+
+                else
+                {
+                    sendMessageToPhone(alfredResponse);
+                }
+
                 sharedPreferencesReady = false;
                 new waitForResponse().execute();
                 //endregion
@@ -1154,7 +1164,7 @@ public class Alfred extends WearableActivity
                     }
 
                     //region Full Weather Details Response
-                    if (alfredResponse.contains("SF-WEATHER_API_FULL"))
+                    if (alfredResponse.contains("SF-WEATHER_FULL"))
                     {
                         Integer tempCelsius1 = (((Integer.parseInt(dataFromPhone[7].substring(0, dataFromPhone[7].length()-3))) - 32)*5)/9;
                         Integer tempCelsius2 = (((Integer.parseInt(dataFromPhone[8].substring(0, dataFromPhone[8].length()-3))) - 32)*5)/9;
@@ -1181,7 +1191,7 @@ public class Alfred extends WearableActivity
                     //endregion
 
                     //region Partial Weather Details Response
-                    else if (alfredResponse.contains("SF-WEATHER_API"))
+                    else if (alfredResponse.contains("SF-WEATHER"))
                     {
                         Integer tempCelsius = (((Integer.parseInt(dataFromPhone[7].substring(0, dataFromPhone[7].length()-3))) - 32)*5)/9;
                         alfredResponse = "Certainly sir. It is currently " + dataFromPhone[1] + " with the temperature of " + tempCelsius + "°C";
@@ -1340,7 +1350,7 @@ public class Alfred extends WearableActivity
                     //endregion
                     break;
                 case "LASTFM":
-                {
+                    //region LastFM Function
                     alfredResponse = "I have queried my sources and return with the following information. I hope it is satisfactory.";
 
                     for(int i = 0; i < dataFromPhone.length; i = i + 2)
@@ -1363,11 +1373,10 @@ public class Alfred extends WearableActivity
 
                         alfredResponse = alfredResponse + "\n\n" + tempTitle + "\n" + tempArtist;
                     }
-
-                }
-
+                    //endregion
+                    break;
                 case "NEARBY_PLACES":
-                {
+                    //region Nearby Places Function
                     String searchPlace = (((dataFromPhone[0].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(14);
                     alfredResponse = "I've performed a little research on " + searchPlace + " on your behalf. Here is what I found. I hope it is satisfactory.";
 
@@ -1379,12 +1388,8 @@ public class Alfred extends WearableActivity
 
                         alfredResponse = alfredResponse + "\n\n" + tempPlace + "\n(" + tempLocation + ")";
                     }
-
-                }
-
-
-
-
+                    //endregion
+                    break;
             }
             displayResponse();
         }
@@ -1473,6 +1478,7 @@ public class Alfred extends WearableActivity
             }
 
             dataFromPhone = new String[(sharedPrefsData.length - (100 - numberOfElements))];
+            System.out.println("Reading data...");
             for (int i = 0; i < dataFromPhone.length; i++) {
                 dataFromPhone[i] = sharedPrefsData[i];
                 //System.out.println(dataFromPhone[i]);

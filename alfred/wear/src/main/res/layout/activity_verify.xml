@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
-                android:layout_marginTop="400dp"
+                android:layout_marginTop="345dp"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:id="@+id/input_text"
@@ -155,7 +155,7 @@
                 android:onClick="editorCancel"/>
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -169,7 +169,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -183,7 +183,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -197,7 +197,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -211,7 +211,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -225,7 +225,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -239,7 +239,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -253,7 +253,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -267,7 +267,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -281,7 +281,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -295,7 +295,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -309,7 +309,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -323,7 +323,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -337,7 +337,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -351,7 +351,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -365,7 +365,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -379,7 +379,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -393,7 +393,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -407,7 +407,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -421,7 +421,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -435,7 +435,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -449,7 +449,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -463,7 +463,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -477,7 +477,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -491,7 +491,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -505,7 +505,7 @@
                 android:visibility="invisible" />
 
             <TextView
-                android:text="split"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
@@ -545,9 +545,21 @@
                 android:id="@+id/editor_icon_1"
                 android:layout_height="50dp"
                 android:layout_marginTop="50dp"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
+                android:layout_marginLeft="50dp"
                 android:visibility="invisible"
                 android:onClick="editorRedoWord"/>
+
+            <ImageView
+                android:src="@drawable/verification_delete"
+                android:layout_width="50dp"
+                android:id="@+id/editor_icon_delete"
+                android:layout_height="50dp"
+                android:layout_marginTop="-50dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="50dp"
+                android:visibility="invisible"
+                android:onClick="editorDeleteWord"/>
 
             <ImageView
                 android:src="@drawable/editor_check"

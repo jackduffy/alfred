@@ -157,6 +157,9 @@ public class Alfred extends WearableActivity
         {
             System.out.println("Message - '" + inputPhrase + "' failed to send");
             nodeAttempts = 0;
+
+            alfredResponse = "I'm really sorry sir. It seems like I'm having a few problems retrieving that information for you. Please try again again. I'm terribly sorry.";
+            displayResponse();
         }
 
         else
@@ -559,6 +562,7 @@ public class Alfred extends WearableActivity
         catch (Exception e)
         {
             System.out.println("CRITICAL ERROR DETECTED: User input is invalid, if this occurs after manually closing the voice dictation tool, ignore this warning!");
+            inputNotUnderstood();
         }
 
     }
@@ -1115,25 +1119,44 @@ public class Alfred extends WearableActivity
             if(alfredResponse.contains("SF-LASTFM"))
             {
                 //region Request LastFM data
-                if(userInput.contains("WHO_SINGS_") || userInput.contains("WHO_SUNG_"))
+                Boolean searchTermExtracted = false;
+                if(userInput.contains("WHO_SING_") || userInput.contains("WHO_SUNG_") || userInput.contains("WHO_SANG_"))
                 {
-                    if(userInput.contains("WHO_SUNG_"))
-                    {
-                        userInput = userInput.substring(8);
-                    }
-
-                    if(userInput.contains("WHO_SINGS_"))
-                    {
-                        userInput = userInput.substring(9);
-                    }
-
-                    userInput = userInput.substring(0,userInput.length()-1);
+                    userInput = userInput.substring(8);
+                    searchTermExtracted = true;
                 }
 
-                systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
-                sendMessageToPhone(alfredResponse + "#" + userInput);
-                sharedPreferencesReady = false;
-                new waitForResponse().execute();
+                else if(userInput.contains("WHO_SINGS_"))
+                {
+                    userInput = userInput.substring(9);
+                    searchTermExtracted = true;
+                }
+
+                else if(userInput.contains("WHICH_GROUP_SINGS_"))
+                {
+                    userInput = userInput.substring(15);
+                    searchTermExtracted = true;
+                }
+
+                else if(userInput.contains("WHICH_GROUP_SING_") || userInput.contains("WHICH_GROUP_SUNG_") || userInput.contains("WHICH_GROUP_SANG_"))
+                {
+                    userInput = userInput.substring(14);
+                    searchTermExtracted = true;
+                }
+
+                if(searchTermExtracted == true)
+                {
+                    userInput = userInput.substring(0,userInput.length()-1);
+                    systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
+                    sendMessageToPhone(alfredResponse + "#" + userInput);
+                    sharedPreferencesReady = false;
+                    new waitForResponse().execute();
+                }
+
+                else
+                {
+                    inputNotUnderstood();
+                }
                 //endregion
             }
 
@@ -1289,7 +1312,7 @@ public class Alfred extends WearableActivity
                     break;
                 case "NEWS_GENERAL":
                     //region Top Stories News
-                    alfredResponse = "I have checked the latest news articles, here are the top stories from the BBC:";
+                    alfredResponse = "I have checked the latest news headlines, here are the top stories from the BBC:";
 
                     int numberOfArticles = 0;
                     for(int i = 0; i < dataFromPhone.length; i++)
@@ -1385,7 +1408,17 @@ public class Alfred extends WearableActivity
                         String tempPlace = (((dataFromPhone[i].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(14);
                         String tempLocation = (((dataFromPhone[i+1].replaceAll("\\[SPACE\\]", " ")).replaceAll("\\[APOSTROPHE\\]", "'")).replaceAll("\\[COMMA\\]", ",")).substring(18);
 
+                        if(tempPlace.substring(0, 1) == "=")
+                        {
+                            System.out.println(tempPlace + " has an = for the first character");
+                            tempPlace = tempPlace.substring(1);
+                        }
 
+                        if(tempLocation.substring(0, 1) == "=")
+                        {
+                            System.out.println(tempLocation + " has an = for the first character");
+                            tempLocation = tempLocation.substring(1);
+                        }
                         alfredResponse = alfredResponse + "\n\n" + tempPlace + "\n(" + tempLocation + ")";
                     }
                     //endregion
@@ -1634,6 +1667,7 @@ public class Alfred extends WearableActivity
 
     public void inputNotUnderstood()
     {
+        System.out.println("user input not understood");
         Random rand = new Random();
         int max = 10;
         int min = 1;
@@ -1717,6 +1751,7 @@ public class Alfred extends WearableActivity
         contextualResponse1 = "Ok, I'll ask again...";
         contextualResponse1Function = "VOICE_DICTATION";
         alfredResponseReady = true;
+        displayResponse();
     }
 
     public void displayResponse()

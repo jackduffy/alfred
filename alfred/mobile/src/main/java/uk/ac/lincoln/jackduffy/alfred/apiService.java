@@ -182,7 +182,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
                             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                             double longitude = location.getLongitude();
                             double latitude = location.getLatitude();
-                            serviceURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude + "&radius=3500&key=AIzaSyBy_gwSSO1KFNbBBIUhxdXe_8HFZP423RY";
+                            serviceURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude + "&radius=500&key=AIzaSyBy_gwSSO1KFNbBBIUhxdXe_8HFZP423RY";
                         } catch (Exception e) {
                             System.out.println("Error with location sensor on Nearby Places API, using defaults...");
                             serviceURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&key=AIzaSyBy_gwSSO1KFNbBBIUhxdXe_8HFZP423RY";

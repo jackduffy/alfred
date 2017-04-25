@@ -60,6 +60,7 @@ public class verifyInput extends WearableActivity
             }
         });
 
+        verificationInterrupted = false;
         Alfred.editorResponse = "null";
         if(Alfred.userInput != null)
         {
@@ -177,8 +178,8 @@ public class verifyInput extends WearableActivity
         final TextView suggestionsTitle = (TextView) findViewById(R.id.suggestions_title);
         final ImageView editorIcon1 = (ImageView) findViewById(R.id.editor_icon_1);
         final ImageView editorIconDelete = (ImageView) findViewById(R.id.editor_icon_delete);
-        final ImageView editorIcon2 = (ImageView) findViewById(R.id.editor_icon_2);
-        final ImageView editorIcon3 = (ImageView) findViewById(R.id.editor_icon_3);
+        final ImageView editorIconConfirm = (ImageView) findViewById(R.id.editor_icon_confirm);
+        final ImageView editorIconReject = (ImageView) findViewById(R.id.editor_icon_reject);
         //endregion
 
         float pixelPosition;
@@ -458,6 +459,9 @@ public class verifyInput extends WearableActivity
                 splitWord8.setVisibility(View.INVISIBLE);
                 splitWord9.setVisibility(View.INVISIBLE);
                 splitWord10.setVisibility(View.INVISIBLE);
+
+                editorIconConfirm.setVisibility(View.INVISIBLE);
+                editorIconReject.setVisibility(View.INVISIBLE);
                 //endregion
 
                 //region Show all editor elements
@@ -519,8 +523,8 @@ public class verifyInput extends WearableActivity
                 suggestionsTitle.animate().translationY(pixelPosition).start();
                 editorIcon1.animate().translationY(pixelPosition).start();
                 editorIconDelete.animate().translationY(pixelPosition).start();
-                editorIcon2.animate().translationY(pixelPosition).start();
-                editorIcon3.animate().translationY(pixelPosition).start();
+                editorIconConfirm.animate().translationY(pixelPosition).start();
+                editorIconReject.animate().translationY(pixelPosition).start();
                 //endregion
                 break;
             case "stop_editing":
@@ -568,8 +572,8 @@ public class verifyInput extends WearableActivity
                 suggestionsTitle.animate().translationY(pixelPosition).start();
                 editorIcon1.animate().translationY(pixelPosition).start();
                 editorIconDelete.animate().translationY(pixelPosition).start();
-                editorIcon2.animate().translationY(pixelPosition).start();
-                editorIcon3.animate().translationY(pixelPosition).start();
+                editorIconConfirm.animate().translationY(pixelPosition).start();
+                editorIconReject.animate().translationY(pixelPosition).start();
 
                 splitWord0.setVisibility(View.VISIBLE);
                 splitWord1.setVisibility(View.VISIBLE);
@@ -729,8 +733,8 @@ public class verifyInput extends WearableActivity
                 final TextView suggestionsTitle = (TextView) findViewById(R.id.suggestions_title);
                 final ImageView editorIcon1 = (ImageView) findViewById(R.id.editor_icon_1);
                 final ImageView editorIconDelete = (ImageView) findViewById(R.id.editor_icon_delete);
-                final ImageView editorIcon2 = (ImageView) findViewById(R.id.editor_icon_2);
-                final ImageView editorIcon3 = (ImageView) findViewById(R.id.editor_icon_3);
+                final ImageView editorIconConfirm = (ImageView) findViewById(R.id.editor_icon_confirm);
+                final ImageView editorIconReject = (ImageView) findViewById(R.id.editor_icon_reject);
 
                 final TextView word;
                 switch(targetWord)
@@ -777,8 +781,8 @@ public class verifyInput extends WearableActivity
                 suggestionsTitle.setVisibility(View.INVISIBLE);
                 editorIcon1.setVisibility(View.INVISIBLE);
                 editorIconDelete.setVisibility(View.INVISIBLE);
-                editorIcon2.setVisibility(View.VISIBLE);
-                editorIcon3.setVisibility(View.VISIBLE);
+                editorIconConfirm.setVisibility(View.VISIBLE);
+                editorIconReject.setVisibility(View.VISIBLE);
             }
 
             catch (Exception e)

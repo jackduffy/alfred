@@ -3,6 +3,7 @@ package uk.ac.lincoln.jackduffy.alfred;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.XmlResourceParser;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +22,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -83,8 +85,11 @@ public class Alfred extends WearableActivity
     //region Miscelanious Values
     XmlResourceParser xpp;
     GoogleApiClient googleClient;
+    long systemTime;
     //endregion
     //endregion
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -158,6 +163,7 @@ public class Alfred extends WearableActivity
             System.out.println("Message - '" + inputPhrase + "' failed to send");
             nodeAttempts = 0;
 
+            alfredResponseReady = true;
             alfredResponse = "I'm really sorry sir. It seems like I'm having a few problems retrieving that information for you. Please try again again. I'm terribly sorry.";
             displayResponse();
         }
@@ -391,92 +397,95 @@ public class Alfred extends WearableActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        switch(requestCode)
-        {
-            case SPEECH_RECOGNIZER_REQUEST_CODE:
-                //region Speech Recogniser
-                try
-                {
-                    //region Bind the returned value from the dictation tool to a string (and perform some alterations for readability)
-                    List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS); //get each word detected from the speech recognition
-                    String voiceInput = results.get(0); //concatenate these into a single string
 
-                    System.out.println("The input was..." + voiceInput);
-                    userInput = voiceInput;
-                    //System.out.println(userInput);
+            switch(requestCode)
+            {
+                case SPEECH_RECOGNIZER_REQUEST_CODE:
+                    //region Speech Recogniser
                     try
                     {
+                        //region Bind the returned value from the dictation tool to a string (and perform some alterations for readability)
+                        List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS); //get each word detected from the speech recognition
+                        String voiceInput = results.get(0); //concatenate these into a single string
+
+                        System.out.println("The input was..." + voiceInput);
+
+                        if(voiceInput != "" || voiceInput != null || voiceInput != "null")
+                        {
+                            userInput = voiceInput;
+                            //System.out.println(userInput);
+                            try
+                            {
 
 
 
-                        verifyInput();
-                        //AnalyseInput();
+                                verifyInput();
+                                //AnalyseInput();
+                            }
+
+                            catch (Exception e)
+                            {
+
+                            }
+
+                        }
+
+                        else
+                        {
+                            alfredThinking();
+                        }
+
+                    //endregion
                     }
 
                     catch (Exception e)
                     {
-
+                        //region If there's an error detected, wipe the user input
+                        alfredThinking();
+                        userInput = null;
+                        //endregion
                     }
-                    //endregion
-                }
+                    listeningForInput = false;
+                    break;
 
-                catch (Exception e)
-                {
-                    //region If there's an error detected, wipe the user input
-                    userInput = null;
-                    //endregion
-                }
+                case VERIFY_INPUT_REQUEST:
+                    System.out.println("Returned from verification intent with message: " + editorResponse);
+                    switch(editorResponse)
+                    {
+                        case "continue":
+                            optimiseInput();
 
-//                if (userInput != "") {
-//                    //region If the user input is ok, proceed to verification process
-//                    verifyInput();
-//                    //endregion
-//                }
-
-                listeningForInput = false;
-                //endregion
-                break;
-
-            case VERIFY_INPUT_REQUEST:
-                System.out.println("Returned from verification intent with message: " + editorResponse);
-
-                switch(editorResponse)
-                {
-                    case "continue":
-                        optimiseInput();
-
-                        break;
-                    case "redo":
-                        alfredThinking();
-                        listeningForInput = false;
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            public void run() {
-                                try {
-                                    ImageView voiceDictationClick = (ImageView) findViewById(R.id.alfred_mustache);
-                                    voiceDictationClick.performClick();
-                                } catch (Exception e) {
+                            break;
+                        case "redo":
+                            alfredThinking();
+                            listeningForInput = false;
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                public void run() {
+                                    try {
+                                        ImageView voiceDictationClick = (ImageView) findViewById(R.id.alfred_mustache);
+                                        voiceDictationClick.performClick();
+                                    } catch (Exception e) {
+                                    }
                                 }
-                            }
-                        }, 300);
-                        break;
-                    case "cancel":
-                        alfredThinking();
-                        resetResponseInterface();
-                        listeningForInput = false;
-                        break;
-                    case "null":
-                        optimiseInput();
-//                        alfredThinking();
-//                        resetResponseInterface();
-//                        listeningForInput = false;
-                        break;
-                }
+                            }, 300);
+                            break;
+                        case "cancel":
+                            alfredThinking();
+                            resetResponseInterface();
+                            listeningForInput = false;
+                            break;
+                        case "null":
+                            optimiseInput();
+                            break;
+                    }
 
-                break;
+                    break;
+            }
         }
 
-    }
+
+
 
     public void optimiseInput()
     {
@@ -1433,17 +1442,22 @@ public class Alfred extends WearableActivity
     {
         protected void onPreExecute ()
         {
-
+            systemTime = System.currentTimeMillis();
         }
 
         protected String doInBackground(Void...arg0)
         {
-            long systemTime = System.currentTimeMillis();
+
             Boolean timeOut = false;
 
             while(sharedPreferencesReady == false)
             {
-                if(systemTime - System.currentTimeMillis() == 10000)
+                String temp = Long.toString(systemTime - System.currentTimeMillis());
+                temp = temp.substring(1);
+                int timeElapsed = Integer.parseInt(temp);
+
+                System.out.println("Time spent waiting: " + timeElapsed + "ms");
+                if(timeElapsed > 10000)
                 {
                     timeOut = true;
                     System.out.println("System is timing out...");
@@ -1463,7 +1477,10 @@ public class Alfred extends WearableActivity
 
             else if(timeOut == true)
             {
-                alfredThinking();
+                //alfredThinking();
+                alfredResponseReady = true;
+                alfredResponse = "I'm terribly sorry sir, but I'm afraid I can't do that for you just yet. Perhaps it would be best if I have a lie down and try again later.";
+                //displayResponse();
             }
             return null;
         }
@@ -1921,6 +1938,14 @@ public class Alfred extends WearableActivity
     public void onEnterAmbient(Bundle ambientDetails)
     {
         super.onEnterAmbient(ambientDetails);
+        ImageView image = (ImageView) findViewById(R.id.background);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.alfred_layout);
+
+        layout.setBackgroundColor(Color.argb(0, 255, 255, 255));
+        image.setVisibility(View.INVISIBLE);
+        image = (ImageView) findViewById(R.id.alfred_mustache);
+        image.setImageResource(R.drawable.alfred_mustache_white);
+
         updateDisplay();
     }
 
@@ -1935,6 +1960,14 @@ public class Alfred extends WearableActivity
     public void onExitAmbient()
     {
         updateDisplay();
+        ImageView image = (ImageView) findViewById(R.id.background);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.alfred_layout);
+
+        layout.setBackgroundColor(Color.argb(1, 51, 51, 51));
+        image.setVisibility(View.VISIBLE);
+        image = (ImageView) findViewById(R.id.alfred_mustache);
+        image.setImageResource(R.drawable.alfred_mustache);
+
         super.onExitAmbient();
     }
 

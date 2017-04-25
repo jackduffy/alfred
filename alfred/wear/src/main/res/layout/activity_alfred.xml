@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="uk.ac.lincoln.jackduffy.alfred.Alfred"
+    android:background="#000000"
     tools:deviceIds="wear">
 
     <ScrollView
@@ -14,13 +15,14 @@
         android:id="@+id/scroll_view"
         android:scrollbars="none"
         android:layout_marginBottom="-340dp"
+        android:background="#000000"
         android:alpha="99">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="#333333"
+            android:background="#000000"
             android:id="@+id/alfred_layout"
             android:weightSum="1">
 

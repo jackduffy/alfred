@@ -171,6 +171,55 @@
         <C2_function>AL-SMALLTALK_8</C2_function>
     </AL-SMALLTALK_9>
 
+    <AL-SMALLTALK_10> <!-- "Are you in a relationship" etc. -->
+        <one>That's quite a personal question. I'm not sure I'd like to answer it.</one>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>How old are you?</C1>
+        <C1_function>AL-SMALLTALK_4</C1_function>
+        <C2>What music do you like?</C2>
+        <C2_function>AL-SMALLTALK_8</C2_function>
+    </AL-SMALLTALK_10>
+
+    <AL-SMALLTALK_11> <!-- "What are you wearing" etc. -->
+        <one>Sir! If I was there with you I would be very visibly cross.</one>
+        <two>I've never heard such the like. If I wasn't contractually ablidged to help you I would say good-day and be done with it.</two>
+        <three>Okay then...</three>
+        <four>-_-</four>
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>Are you in a relationship?</C1>
+        <C1_function>AL-SMALLTALK_10</C1_function>
+        <C2>How old are you?</C2>
+        <C2_function>AL-SMALLTALK_6</C2_function>
+    </AL-SMALLTALK_11>
+
+
+
+
+
+    <AL-JOKES>
+        <one>What did the Buddhist ask the hot dog vendor? - “Make me one with everything.”</one>
+        <two>You know why you never see elephants hiding up in trees? - Because they’re really good at it.</two>
+        <three>What is red and smells like blue paint? - Red Paint</three>
+        <four>Where does the General keep his armies? - In his sleevies!</four>
+        <five>Why aren’t koalas actual bears? - The don’t meet the koalafications.</five>
+        <six>What do you call bears with no ears? - B</six>
+        <seven>I went in to a pet shop. I said, “Can I buy a goldfish?” The guy said, “Do you want an aquarium?” - I said, “I don’t care what star sign it is.”</seven>
+        <eight>What’s brown and sticky? - A Stick</eight>
+        <nine>What does a pepper do when it’s angry? - It gets jalapeño face!</nine>
+        <ten>Two gold fish are in a tank. - One looks at the other and says, “You know how to drive this thing?!”</ten>
+        <eleven>As a scarecrow, people say I’m outstanding in my field. - But hay, it’s in my jeans.</eleven>
+        <twelve>What is the resemblance between a green apple and a red apple? - They’re both red except for the green one.</twelve>
+        <thirteen>How did the hipster burn his mouth? - He ate the pizza before it was cool.</thirteen>
+        <fourteen>I waited and stayed up all night and tried to figure out where the sun was. - Then it dawned on me.</fourteen>
+        <fifteen>I bought the world’s worst thesaurus yesterday. - Not only is it terrible, it’s terrible.</fifteen>
+
+        <!-- CONTEXTUAL FUNCTIONS -->
+        <C1>Tell me another one</C1>
+        <C1_function>AL-JOKES</C1_function>
+        <C2>-</C2>
+        <C2_function>-</C2_function>
+    </AL-JOKES>
+
     <AL-HELP>
         <one>I'm constantly expanding my abilities so that I am able help you as much as possible. If you'd like me to produce a list of everything I know how to do, just say the word.</one>
         <!-- CONTEXTUAL FUNCTIONS -->
@@ -268,14 +317,14 @@
         <C2_function>-</C2_function>
     </AL-NEARBY_PLACES_>
 
-    <AL-WHO_IS_>
+    <AL-WIKIPEDIA>
         <one>SF-WIKIPEDIA</one>
         <!-- CONTEXTUAL FUNCTIONS -->
         <C1>I've got another question</C1>
         <C1_function>VOICE_DICTATION</C1_function>
         <C2>-</C2>
         <C2_function>-</C2_function>
-    </AL-WHO_IS_>
+    </AL-WIKIPEDIA>
 
     <AL-MUSIC_TRACKS_>
         <one>SF-LASTFM</one>

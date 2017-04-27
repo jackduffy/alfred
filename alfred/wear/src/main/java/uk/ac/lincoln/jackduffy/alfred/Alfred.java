@@ -445,10 +445,12 @@ public class Alfred extends WearableActivity
                         userInput = null;
                         //endregion
                     }
+                    //endregion
                     listeningForInput = false;
                     break;
 
                 case VERIFY_INPUT_REQUEST:
+                    //region Resolve any changes from the editor
                     System.out.println("Returned from verification intent with message: " + editorResponse);
                     switch(editorResponse)
                     {
@@ -479,7 +481,7 @@ public class Alfred extends WearableActivity
                             optimiseInput();
                             break;
                     }
-
+                    //endregion
                     break;
             }
         }
@@ -1103,20 +1105,31 @@ public class Alfred extends WearableActivity
             if(alfredResponse.contains("SF-WIKIPEDIA"))
             {
                 //region Request Wikipedia Data
-                if(userInput.contains("WHO_ARE_") || userInput.contains("WHO_WAS_") || userInput.contains("WHO_IS_")|| userInput.contains("WHAT_IS_"))
+                if(userInput.contains("_ARE_"))
                 {
-                    if(userInput.contains("WHO_ARE_") || userInput.contains("WHO_WAS_") || userInput.contains("WHAT_IS_"))
-                    {
-                        userInput = userInput.substring(8);
-                    }
 
-                    else if(userInput.contains("WHO_IS_"))
-                    {
-                        userInput = userInput.substring(7);
-                    }
-
-                    userInput = userInput.substring(0,userInput.length()-1);
+                    userInput = userInput.substring(userInput.indexOf("_ARE_") + 5);
                 }
+
+                else if(userInput.contains("_WAS_"))
+                {
+
+                    userInput = userInput.substring(userInput.indexOf("_WAS_") + 5);
+                }
+
+                else if(userInput.contains("_IS_"))
+                {
+                    userInput = userInput.substring(userInput.indexOf("_IS_") + 4);
+                }
+
+                else if(userInput.contains("_ABOUT_"))
+                {
+                    userInput = userInput.substring(userInput.indexOf("_ABOUT_") + 7);
+                }
+
+                userInput = userInput.substring(0,userInput.length()-1);
+
+
 
                 systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
                 sendMessageToPhone(alfredResponse + "#" + userInput);
@@ -1129,27 +1142,35 @@ public class Alfred extends WearableActivity
             {
                 //region Request LastFM data
                 Boolean searchTermExtracted = false;
-                if(userInput.contains("WHO_SING_") || userInput.contains("WHO_SUNG_") || userInput.contains("WHO_SANG_"))
+
+                if(userInput.contains("_SING_"))
                 {
-                    userInput = userInput.substring(8);
+                    userInput = userInput.substring(userInput.indexOf("_SING_") + 6);
                     searchTermExtracted = true;
                 }
 
-                else if(userInput.contains("WHO_SINGS_"))
+                else if(userInput.contains("_SINGS_"))
                 {
-                    userInput = userInput.substring(9);
+                    userInput = userInput.substring(userInput.indexOf("_SINGS_") + 7);
                     searchTermExtracted = true;
                 }
 
-                else if(userInput.contains("WHICH_GROUP_SINGS_"))
+                else if(userInput.contains("_SUNG_"))
                 {
-                    userInput = userInput.substring(15);
+
+                    userInput = userInput.substring(userInput.indexOf("_SUNG_") + 6);
                     searchTermExtracted = true;
                 }
 
-                else if(userInput.contains("WHICH_GROUP_SING_") || userInput.contains("WHICH_GROUP_SUNG_") || userInput.contains("WHICH_GROUP_SANG_"))
+                else if(userInput.contains("_SANG_"))
                 {
-                    userInput = userInput.substring(14);
+                    userInput = userInput.substring(userInput.indexOf("_SANG_") + 6);
+                    searchTermExtracted = true;
+                }
+
+                else if(userInput.contains("_ABOUT_"))
+                {
+                    userInput = userInput.substring(userInput.indexOf("_ABOUT_") + 7);
                     searchTermExtracted = true;
                 }
 
@@ -1157,6 +1178,7 @@ public class Alfred extends WearableActivity
                 {
                     userInput = userInput.substring(0,userInput.length()-1);
                     systemCallTimestamp = (int) (System.currentTimeMillis() / 1000l);
+                    System.out.println("search phrase is: " + userInput);
                     sendMessageToPhone(alfredResponse + "#" + userInput);
                     sharedPreferencesReady = false;
                     new waitForResponse().execute();

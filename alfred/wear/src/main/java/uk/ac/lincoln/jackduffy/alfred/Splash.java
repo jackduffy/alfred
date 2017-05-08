@@ -11,7 +11,7 @@ import android.support.wearable.activity.WearableActivity;
 public class Splash extends WearableActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState) //display the splash screen
     {
         super.onCreate(savedInstanceState);
 

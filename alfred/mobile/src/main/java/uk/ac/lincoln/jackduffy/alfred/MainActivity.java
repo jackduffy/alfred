@@ -127,13 +127,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void testProcess(View view)
+    public void testProcess(View view) //test the process defined
     {
         startActivity(new Intent(MainActivity.this, googleCalendar.class));
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -155,8 +152,5 @@ public class MainActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
 
 }

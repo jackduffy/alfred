@@ -29,7 +29,7 @@ import static java.lang.String.valueOf;
 public class ListenerServiceWear extends WearableListenerService
 {
     @Override
-    public void onDataChanged(DataEventBuffer dataEvents)
+    public void onDataChanged(DataEventBuffer dataEvents) //if a change is detected, perform these actions
     {
         String tempString = "";
         for (DataEvent event : dataEvents)

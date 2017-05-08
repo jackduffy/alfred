@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.wearable.activity.WearableActivity;
@@ -26,8 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Node;
@@ -89,8 +86,6 @@ public class Alfred extends WearableActivity
     //endregion
     //endregion
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -137,7 +132,7 @@ public class Alfred extends WearableActivity
         }).start();
     }
 
-    private void sendMessageToPhone(String inputPhrase)
+    private void sendMessageToPhone(String inputPhrase) //handles sending a string to the connected handset
     {
         MESSAGE = inputPhrase;
         System.out.println("Attempt " + nodeAttempts);
@@ -176,7 +171,7 @@ public class Alfred extends WearableActivity
         }
     }
 
-    public void readModules()
+    public void readModules() //reads all available/compatible modules in the XML files
     {
         xpp = getResources().getXml(R.xml.alfred_responses_en);
         Boolean continueSearching = true;
@@ -221,7 +216,7 @@ public class Alfred extends WearableActivity
         }
     }
 
-    public void resetResponseInterface()
+    public void resetResponseInterface() //called when tapping on a contextual action
     {
         //region Reinitialize Values
         alfredResponse = null;
@@ -247,7 +242,7 @@ public class Alfred extends WearableActivity
         //endregion
     }
 
-    public void moduleInstructions()
+    public void moduleInstructions() //print instructions on how to add the module to the command line
     {
         System.out.println("Error: Module not detected, perhaps it wasn't added correctly?");
         System.out.println("STAGES OF ADDING A MODULE :-");
@@ -257,7 +252,7 @@ public class Alfred extends WearableActivity
         System.out.println("4) You're done. Alfred will take care of the rest. Easy right?");
     }
 
-    public void alfredThinking()
+    public void alfredThinking() //fades in a progress wheel to indicate that the system is working
     {
         final ImageView mustache = (ImageView) findViewById(R.id.alfred_mustache);
         final ProgressBar progress_spinner = (ProgressBar) findViewById(R.id.alfred_progress);
@@ -333,7 +328,7 @@ public class Alfred extends WearableActivity
 
     }
 
-    public void voiceDictation(View view)
+    public void voiceDictation(View view) //calls the google voice dictation function
     {
         resetResponseInterface();
         if (listeningForInput == false) {
@@ -387,7 +382,7 @@ public class Alfred extends WearableActivity
         }
     }
 
-    public void cancelOperation(View view)
+    public void cancelOperation(View view) //tapping on the progress wheel cancels the function
     {
         alfredThinking();
         resetResponseInterface();
@@ -395,12 +390,12 @@ public class Alfred extends WearableActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) //handles intent activity results
     {
 
             switch(requestCode)
             {
-                case SPEECH_RECOGNIZER_REQUEST_CODE:
+                case SPEECH_RECOGNIZER_REQUEST_CODE: //activity result for speech recognition
                     //region Speech Recogniser
                     try
                     {
@@ -449,7 +444,7 @@ public class Alfred extends WearableActivity
                     listeningForInput = false;
                     break;
 
-                case VERIFY_INPUT_REQUEST:
+                case VERIFY_INPUT_REQUEST: //activity result for verification process
                     //region Resolve any changes from the editor
                     System.out.println("Returned from verification intent with message: " + editorResponse);
                     switch(editorResponse)
@@ -486,10 +481,7 @@ public class Alfred extends WearableActivity
             }
         }
 
-
-
-
-    public void optimiseInput()
+    public void optimiseInput() //optimise input for better reading/parsing
     {
         System.out.println("RAW INPUT: "+ userInput);
         userInput = userInput.replaceAll(" ", "_").toUpperCase(); //transform that string into upper case, replaces spaces with underscores and assign to a global value string
@@ -515,7 +507,7 @@ public class Alfred extends WearableActivity
         AnalyseInput();
     }
 
-    public void verifyInput()
+    public void verifyInput() //calls the verification intent and allows the user to view/edit their input phrase before proceeding
     {
         Intent verifyInputIntent = new Intent(Alfred.this, verifyInput.class);
         verifyInputIntent.putExtra("DATA:", userInput);
@@ -525,7 +517,7 @@ public class Alfred extends WearableActivity
 //        AnalyseInput();
     }
 
-    public void AnalyseInput()
+    public void AnalyseInput() //reads in all available modules and controls the search for an input match
     {
         int numberOfModules = 0;
         System.out.println("AVAILABLE MODULES :-");
@@ -578,7 +570,7 @@ public class Alfred extends WearableActivity
 
     }
 
-    public void formulateResponse(String typeOfResponse)
+    public void formulateResponse(String typeOfResponse) //controls the formulation of a response based on XML data
     {
         String moduleName = typeOfResponse;
         userMessageNumber = 1; //change to increment when ready
@@ -601,7 +593,7 @@ public class Alfred extends WearableActivity
         }
     }
 
-    public void readXML(String targetTag)
+    public void readXML(String targetTag) //read input XML modules
     {
         XmlResourceParser xpp = getResources().getXml(R.xml.inputs_en);
         int eventType = 0;
@@ -667,7 +659,7 @@ public class Alfred extends WearableActivity
 
     }
 
-    public void readResponseXML(String responseCriteria)
+    public void readResponseXML(String responseCriteria) //read response XML modules
     {
         try
         {
@@ -836,7 +828,7 @@ public class Alfred extends WearableActivity
         }
     }
 
-    public void specialFunctionsReader()
+    public void specialFunctionsReader() //analyses the XML response
     {
         nodeAttempts = 0;
 
@@ -1203,7 +1195,7 @@ public class Alfred extends WearableActivity
         }
     }
 
-    public void specialFunctionsController()
+    public void specialFunctionsController() //control the response
     {
         //region Generate Response from retrieved data
         if (dataFromPhoneSubject != null)
@@ -1460,7 +1452,7 @@ public class Alfred extends WearableActivity
         //endregion
     }
 
-    class waitForResponse extends AsyncTask<Void, Integer, String>
+    class waitForResponse extends AsyncTask<Void, Integer, String> //await a response from the handset
     {
         protected void onPreExecute ()
         {
@@ -1499,10 +1491,8 @@ public class Alfred extends WearableActivity
 
             else if(timeOut == true)
             {
-                //alfredThinking();
                 alfredResponseReady = true;
                 alfredResponse = "I'm terribly sorry sir, but I'm afraid I can't do that for you just yet. Perhaps it would be best if I have a lie down and try again later.";
-                //displayResponse();
             }
             return null;
         }
@@ -1518,7 +1508,7 @@ public class Alfred extends WearableActivity
         }
     }
 
-    public void readSharedPrefs()
+    public void readSharedPrefs() //read the shared preferences to get data
     {
         try
         {
@@ -1538,7 +1528,6 @@ public class Alfred extends WearableActivity
                         if (temp2.equals("##")) {
                             temp2 = temp.substring(3);
                             dataFromPhoneSubject = temp2;
-                            //System.out.println("Subject data - " + dataFromPhoneSubject);
                         } else {
                             sharedPrefsData[i] = temp;
                             numberOfElements++;
@@ -1553,10 +1542,8 @@ public class Alfred extends WearableActivity
             System.out.println("Reading data...");
             for (int i = 0; i < dataFromPhone.length; i++) {
                 dataFromPhone[i] = sharedPrefsData[i];
-                //System.out.println(dataFromPhone[i]);
             }
 
-            //System.out.println("Read shared preferences successfully");
             specialFunctionsController();
         }
 
@@ -1567,7 +1554,7 @@ public class Alfred extends WearableActivity
         }
     }
 
-    public void readContextualOptions(String responseCriteria)
+    public void readContextualOptions(String responseCriteria) //read contextual options from the XML file
     {
         xpp = getResources().getXml(R.xml.alfred_responses_en);
         Boolean valuePositionsCalculated = false;
@@ -1600,14 +1587,12 @@ public class Alfred extends WearableActivity
                 //endregion
 
                 comparison = xpp.getName();
-                //System.out.println(comparison);
                 currentPositionCounter++;
 
                 if(valuePositionsCalculated != true)
                 {
                     if (responseCriteria.equals(comparison) && eventType == XmlPullParser.END_TAG)
                     {
-                        //System.out.println(comparison + " end tag located");
                         xpp = getResources().getXml(R.xml.alfred_responses_en);
                         targetPositionCounter = currentPositionCounter;
                         currentPositionCounter = 0;
@@ -1620,7 +1605,6 @@ public class Alfred extends WearableActivity
                     if(currentPositionCounter == (targetPositionCounter - 3))
                     {
                         comparison = xpp.getText();
-                        //System.out.println(comparison);
                         if(comparison.equals("-"))
                         {
                             comparison = null;
@@ -1628,7 +1612,6 @@ public class Alfred extends WearableActivity
 
                         else if(comparison != null)
                         {
-                            //System.out.println("C2 Function = " + comparison);
                             contextualResponse2Function = comparison;
                             continueSearching = false;
                         }
@@ -1637,7 +1620,6 @@ public class Alfred extends WearableActivity
                     if(currentPositionCounter == (targetPositionCounter - 6))
                     {
                         comparison = xpp.getText();
-                        //System.out.println(comparison);
                         if(comparison.equals("-"))
                         {
                             comparison = null;
@@ -1645,7 +1627,6 @@ public class Alfred extends WearableActivity
 
                         else if(comparison != null)
                         {
-                            //System.out.println("C2 = " + comparison);
                             contextualResponse2 = comparison;
                         }
                     }
@@ -1653,7 +1634,6 @@ public class Alfred extends WearableActivity
                     if(currentPositionCounter == (targetPositionCounter - 9))
                     {
                         comparison = xpp.getText();
-                        //System.out.println(comparison);
                         if(comparison.equals("-"))
                         {
                             comparison = null;
@@ -1661,7 +1641,6 @@ public class Alfred extends WearableActivity
 
                         else if(comparison != null)
                         {
-                            //System.out.println("C1 Function = " + comparison);
                             contextualResponse1Function = comparison;
                         }
                     }
@@ -1669,7 +1648,6 @@ public class Alfred extends WearableActivity
                     if(currentPositionCounter == (targetPositionCounter - 12))
                     {
                         comparison = xpp.getText();
-                        //System.out.println(comparison);
                         if(comparison.equals("-"))
                         {
                             comparison = null;
@@ -1677,7 +1655,6 @@ public class Alfred extends WearableActivity
 
                         else if(comparison != null)
                         {
-                            //System.out.println("C1 = " + comparison);
                             contextualResponse1 = comparison;
                         }
                     }
@@ -1695,7 +1672,6 @@ public class Alfred extends WearableActivity
 
                 if (eventType == XmlPullParser.END_DOCUMENT)
                 {
-                    //System.out.println("No dialogue options found");
                     continueSearching = false;
                     break;
                 }
@@ -1704,7 +1680,7 @@ public class Alfred extends WearableActivity
         }
     }
 
-    public void inputNotUnderstood()
+    public void inputNotUnderstood() //generate a basic response if the input is not understood by Alfred
     {
         System.out.println("user input not understood");
         Random rand = new Random();
@@ -1793,13 +1769,12 @@ public class Alfred extends WearableActivity
         displayResponse();
     }
 
-    public void displayResponse()
+    public void displayResponse() //display the response in the interface
     {
         if(alfredResponse.contains("AL-") || alfredResponse.contains("SF-"))
         {
             System.out.println("Not displaying this...");
             System.out.println(alfredResponse);
-            //do nothing
         }
 
         else
@@ -1881,17 +1856,17 @@ public class Alfred extends WearableActivity
         }
     }
 
-    public void contextualResponse1(View view)
+    public void contextualResponse1(View view) //activate contextual response 1
     {
         performContextualAction(contextualResponse1Function);
     }
 
-    public void contextualResponse2(View view)
+    public void contextualResponse2(View view) //activate contextual response 2
     {
         performContextualAction(contextualResponse2Function);
     }
 
-    public void performContextualAction(String function)
+    public void performContextualAction(String function) //perform the contextual action provided
     {
         alfredThinking();
         if(function.equals("VOICE_DICTATION"))
@@ -1945,7 +1920,7 @@ public class Alfred extends WearableActivity
         }
     }
 
-    public void contextualRefresh()
+    public void contextualRefresh() //refresh the interface when a contextual response is called - i.e scroll up and allow the system to refresh
     {
         ScrollView myScroller = (ScrollView) findViewById(R.id.scroll_view);
         myScroller.smoothScrollTo( 0, myScroller.getChildAt( 0 ).getTop() );
@@ -1957,7 +1932,7 @@ public class Alfred extends WearableActivity
     }
 
     @Override
-    public void onEnterAmbient(Bundle ambientDetails)
+    public void onEnterAmbient(Bundle ambientDetails) //allow the app to enter ambient mode
     {
         super.onEnterAmbient(ambientDetails);
         ImageView image = (ImageView) findViewById(R.id.background);
@@ -1972,14 +1947,14 @@ public class Alfred extends WearableActivity
     }
 
     @Override
-    public void onUpdateAmbient()
+    public void onUpdateAmbient() //when ambient mode updates
     {
         super.onUpdateAmbient();
         updateDisplay();
     }
 
     @Override
-    public void onExitAmbient()
+    public void onExitAmbient() //allows the app to exit ambient mode
     {
         updateDisplay();
         ImageView image = (ImageView) findViewById(R.id.background);
@@ -1993,19 +1968,11 @@ public class Alfred extends WearableActivity
         super.onExitAmbient();
     }
 
-    private void updateDisplay()
+    private void updateDisplay() //update the display
     {
         if (isAmbient())
         {
-//            mContainerView.setBackgroundColor(getResources().getColor(android.R.color.black));
-//            mTextView.setTextColor(getResources().getColor(android.R.color.white));
-//            mClockView.setVisibility(View.VISIBLE);
-//
-//            mClockView.setText(AMBIENT_DATE_FORMAT.format(new Date()));
-//        } else {
-//            mContainerView.setBackground(null);
-//            mTextView.setTextColor(getResources().getColor(android.R.color.black));
-//            mClockView.setVisibility(View.GONE);
+
         }
     }
 }

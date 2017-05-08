@@ -15,7 +15,7 @@ public class ListenerService extends WearableListenerService
         parseInput(messageEvent.getPath());
     }
 
-    private void parseInput(String input)
+    private void parseInput(String input) //parse the input from the watch
     {
         System.out.println("Message from Wearable :- " + input);
         Toast.makeText(this, input, Toast.LENGTH_LONG).show();

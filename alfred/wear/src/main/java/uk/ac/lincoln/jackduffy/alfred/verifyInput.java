@@ -47,7 +47,8 @@ public class verifyInput extends WearableActivity
     private static final int SPEECH_RECOGNIZER_REQUEST_CODE = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState); //create the instance of Alfred
         setContentView(R.layout.activity_verify); //set the layout
         ScrollView scroller = (ScrollView)findViewById(R.id.verify_scroller);
@@ -107,7 +108,7 @@ public class verifyInput extends WearableActivity
         }
     }
 
-    public void fadeOutProgressBar()
+    public void fadeOutProgressBar() //fade out the progress bar if the timer is interrupted
     {
         if(verificationInterrupted != true)
         {
@@ -132,7 +133,7 @@ public class verifyInput extends WearableActivity
         }
     }
 
-    public void transformInterface(String mode, Integer option)
+    public void transformInterface(String mode, Integer option) //transform the interface depending on what is required
     {
         //region Initialize All Views
         final View linearLayout = findViewById(R.id.verify_layout);
@@ -591,13 +592,13 @@ public class verifyInput extends WearableActivity
         }
     }
 
-    public void editorRedo(View view)
+    public void editorRedo(View view) //if the user wants to redo their entire input
     {
         Alfred.editorResponse = "redo";
         finish();
     }
 
-    public void editorEdit(View view)
+    public void editorEdit(View view) //if the user wants to edit their input
     {
         final TextView userTextInput = (TextView) findViewById(R.id.input_text);
         userTextInput.setVisibility(view.INVISIBLE);
@@ -607,19 +608,19 @@ public class verifyInput extends WearableActivity
         transformInterface("init_editor", 0);
     }
 
-    public void editorBack(View view)
+    public void editorBack(View view) //if the user wants to return to the main activity and continue the process
     {
         Alfred.editorResponse = "continue";
         finish();
     }
 
-    public void editorCancel(View view)
+    public void editorCancel(View view) //if the user wants to cancel the process
     {
         Alfred.editorResponse = "cancel";
         finish();
     }
 
-    public void editWord(View view)
+    public void editWord(View view) //select the word that the user wants to edit
     {
         wordToEdit = view.getTag().toString();
         System.out.println("You tapped on word " + wordToEdit);
@@ -635,7 +636,7 @@ public class verifyInput extends WearableActivity
         }
     }
 
-    public void editorRedoWord(View view)
+    public void editorRedoWord(View view) //redo the selected word
     {
         System.out.println("Redo word!");
         if (listeningForInput == false)
@@ -656,7 +657,7 @@ public class verifyInput extends WearableActivity
         }
     }
 
-    public void editorDeleteWord(View view)
+    public void editorDeleteWord(View view) //delete the selected word
     {
         wordsInInput[Integer.parseInt(wordToEdit)] = "";
         wordToReplace = "";
@@ -708,7 +709,7 @@ public class verifyInput extends WearableActivity
         transformInterface("stop_editing", Integer.parseInt(wordToEdit));
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) //when the google voice dictation tool returns
     {
         try
         {
@@ -799,7 +800,7 @@ public class verifyInput extends WearableActivity
         listeningForInput = false;
     }
 
-    public void editorConfirmChange(View view)
+    public void editorConfirmChange(View view) //confirm the changes made to the input
     {
         wordsInInput[Integer.parseInt(wordToEdit)] = wordToReplace;
         System.out.println("Input after modification");
@@ -812,12 +813,12 @@ public class verifyInput extends WearableActivity
         transformInterface("stop_editing", Integer.parseInt(wordToEdit));
     }
 
-    public void editorRejectChange (View view)
+    public void editorRejectChange (View view) //cancel the changes made to the input
     {
 
     }
 
-    public void reconstructSplitPhrase()
+    public void reconstructSplitPhrase() //reconstruct the phrase and save
     {
         for(int i = 0; i < wordsInInput.length; i++)
         {

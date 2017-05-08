@@ -268,8 +268,8 @@
         <!-- CONTEXTUAL FUNCTIONS -->
         <C1>What about tomorrow?</C1>
         <C1_function>AL-WEATHER_TOMORROW</C1_function>
-        <C2>-</C2>
-        <C2_function>-</C2_function>
+        <C2>What calendar events do I have?</C2>
+        <C2_function>AL-CALENDAR_TODAY</C2_function>
     </AL-WEATHER_FULL>
     
     <AL-WEATHER_TOMORROW>

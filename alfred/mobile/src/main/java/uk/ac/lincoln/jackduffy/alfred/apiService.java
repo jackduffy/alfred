@@ -31,7 +31,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
     String apiService = "";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState) //on create function
     {
         super.onCreate(savedInstanceState);
 
@@ -58,7 +58,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
 
     }
 
-    public void APIController(String input)
+    public void APIController(String input) //build the API object
     {
         System.out.println("Input: " + input);
         apiService = input;
@@ -67,10 +67,8 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
 
     }
 
-//    public void buildGoogleApiClient()
-//    {    }
-
-    private class accessAPIData extends AsyncTask<Integer, Void, String> {
+    private class accessAPIData extends AsyncTask<Integer, Void, String> //controls access to the API data
+    {
         @Override
         protected String doInBackground(Integer[] service) {
             String serviceURL = "";
@@ -602,7 +600,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
             }
 
             return null;
-        }
+        } //allows access to the API service running in the background
 
         @Override
         protected void onPostExecute(String message) {
@@ -612,7 +610,7 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
 
     //region DataLayer Transmission
     @Override
-    protected void onStart()
+    protected void onStart() //build the google client
     {
         super.onStart();
         if (googleClient != null)
@@ -622,13 +620,13 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
     }
 
     @Override
-    public void onConnected(Bundle bundle)
+    public void onConnected(Bundle bundle) //when connected to the watch
     {
 
     }
 
     @Override
-    protected void onStop()
+    protected void onStop() //when the connection is stopped
     {
         if (googleClient != null && googleClient.isConnected()) {
             googleClient.disconnect();
@@ -637,10 +635,13 @@ public class apiService extends AppCompatActivity implements GoogleApiClient.Con
     }
 
     @Override
-    public void onConnectionSuspended(int i) {}
+    public void onConnectionSuspended(int i) //if the connection is suspended
+    {
+
+    }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult)
+    public void onConnectionFailed(ConnectionResult connectionResult) //if the connection fails
     {
         System.out.println("Connection to watch has failed");
     }
